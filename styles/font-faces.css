@@ -1,0 +1,22 @@
+@font-face {
+	font-family: "Open-Sans";
+	src: url("/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf") format("opentype");
+}
+
+@font-face {
+	font-family: "Open-Sans-Italic";
+	src: url("/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf") format("opentype");
+}
+
+@font-face {
+	font-family: "Crimson-Pro";
+	src: url("/fonts/Crimson_Pro/CrimsonPro-VariableFont_wght.ttf") format("opentype");
+}
+
+@font-face {
+	font-family: "Amiri";
+	font-style: normal;
+	font-weight: normal;
+	font-display: auto;
+	src: local("Amiri-Regular"), url("/fonts/Amiri/Amiri-Regular.ttf") format("opentype");
+}

@@ -1,0 +1,59 @@
+@import "./font-faces.css";
+
+body {
+	font-family: "Open-Sans";
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3 {
+	@apply text-primary;
+	font-family: "Amiri";
+	font-weight: 500;
+}
+
+h1,
+.h1 {
+	@apply text-3xl uppercase;
+}
+
+h2,
+.h2 {
+	@apply text-2xl uppercase;
+}
+
+h3,
+.h3 {
+	@apply text-xl leading-5;
+}
+
+p,
+.p {
+	@apply text-base leading-6;
+}
+
+i,
+.i {
+	@apply text-sm uppercase;
+}
+
+span,
+.span {
+	@apply text-xs;
+}
+
+strong,
+.strong {
+	@apply text-xl leading-5;
+	font-family: "Crimson-Pro";
+	font-weight: 400;
+}
+
+small,
+.small {
+	@apply text-[0.625rem] uppercase;
+	font-family: "Open-Sans-Italic";
+}

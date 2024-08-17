@@ -1,0 +1,31 @@
+.burger {
+	@apply w-7 min-h-8 flex relative justify-center items-center cursor-pointer;
+}
+.burger__stick {
+	@apply w-7 h-[0.188rem] transition-all duration-500 ease-in-out bg-primary;
+}
+.burger__stick::before,
+.burger__stick::after {
+	@apply content-[''] absolute w-7 h-[0.188rem] transition-all duration-500 ease-in-out bg-primary;
+}
+
+.burger__stick::before {
+	@apply transform translate-y-[-9px];
+}
+
+.burger__stick::after {
+	@apply transform translate-y-[9px];
+}
+
+.burger--open .burger__stick {
+	@apply transform translate-x-[-50px];
+	background-color: transparent;
+}
+
+.burger--open .burger__stick::before {
+	@apply transform rotate-45 translate-x-[50px] translate-y-[0px];
+}
+
+.burger--open .burger__stick::after {
+	@apply transform rotate-[-45deg] translate-x-[50px] translate-y-[0px];
+}
