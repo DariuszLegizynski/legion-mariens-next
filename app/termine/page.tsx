@@ -4,9 +4,9 @@ import { LandingPageData, Content, Child } from "@/types/LandingPage"
 import EventList from "@/app/_components/event/EventList"
 
 export default async function termine() {
-	const appointmentsPageData = await getStrapiData("termine?populate=*")
+	const appointmentsPageData: LandingPageData = await getStrapiData("termine?populate=*")
 	const termine = await appointmentsPageData?.data?.attributes?.content
-	console.log(termine)
+
 	return (
 		<article className="mt-20 mb-40 max-container">
 			<section className="mx-4">

@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "@/styles/animations.css";
-@import "@/styles/typography.css";
-
 *,
 *::before,
 *::after {
@@ -37,7 +34,8 @@ a {
 }
 
 select,
-input {
+input,
+option {
 	@apply cursor-pointer border-2 border-primary py-1.5 px-2.5 min-w-56 w-full max-w-96;
 }
 
