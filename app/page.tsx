@@ -3,22 +3,12 @@ import Image from "next/image"
 // type
 import { LandingPageData, Content, Child } from "@/types/LandingPage"
 
+import { getStrapiData } from "@/app/_utils/getStrapiData"
+
 // components
 import Separator from "@/components/base/Separator"
 import EventComponent from "@/components/event/EventComponent"
 import BaseButton from "@/components/base/BaseButton"
-
-async function getLandingPageData() {
-	try {
-		const response = await fetch(
-			`${process.env.API_URL}/api/landing-page?populate[introduction][populate][avatar][populate]=true&populate[about][populate]=true&populate[termine][populate]=true`
-		)
-		const data = await response.json()
-		return data
-	} catch (error) {
-		console.error(error)
-	}
-}
 
 async function getEvents() {
 	try {
@@ -32,10 +22,16 @@ async function getEvents() {
 }
 
 export default async function Home() {
-	const landingPageData = await getLandingPageData()
+	const landingPageData = await getStrapiData(
+		"landing-page?populate[introduction][populate][avatar][populate]=true&populate[about][populate]=true&populate[termine][populate]=true"
+	)
 	const { introduction, about, termine } = await landingPageData.data.attributes
 
-	const events = await getEvents()
+	const today = new Date().toISOString()
+	const eventsData = await getStrapiData(`events?filters[startTime][$gte]=${today}&pagination[pageSize]=10&populate=*&sort=startTime:ASC`)
+	const events = await eventsData.data
+
+	console.log({ events })
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between mx-4 my-20 md:mx-8">

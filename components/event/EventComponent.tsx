@@ -1,9 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import dynamic from "next/dynamic"
-
-const EventModal = dynamic(() => import("./EventModal"), { ssr: false })
-
+import EventModal from "./EventModal"
 import { Event } from "@/types/Event"
 
 const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible: boolean }) => {
@@ -61,12 +58,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 				</section>
 			)}
-			{isModalOpen && (
-				<EventModal
-					eventItem={eventItem}
-					onClose={() => setIsModalOpen(false)} // Close modal
-				/>
-			)}
+			{isModalOpen && <EventModal eventItem={eventItem} onClose={() => setIsModalOpen(false)} />}
 		</>
 	)
 }

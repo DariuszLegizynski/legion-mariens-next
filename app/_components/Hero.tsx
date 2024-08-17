@@ -5,7 +5,7 @@ import { getStrapiData } from "@/app/_utils/getStrapiData"
 const Hero = async () => {
 	const heroData = await getStrapiData("main-layout?populate[hero][populate]=*")
 	const { leftImage, centerImage, rightImage } = await heroData?.data?.attributes.hero[0]
-	console.log(leftImage, centerImage, rightImage)
+
 	return (
 		<section className="flex flex-col items-center justify-items-center gap-y-4 mt-12 mx-4 md:grid md:grid-cols-[5fr_2fr_5fr] md:gap-x-8 md:mt-20">
 			{leftImage?.data?.attributes && (
