@@ -1,20 +1,39 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { getStrapiData } from "@/app/_utils/getStrapiData"
 
 // components
 import EventComponent from "./EventComponent"
 import EventCalendar from "./EventCalendar"
 
-import { Event } from "@/types/Event"
+// type
+import type { Event } from "@/types/Event"
+import type { Category } from "@/types/Category"
 
-const EventList = ({ initialEvents, initialCategories }) => {
-	const [eventList, setEventList] = useState<Event[]>(initialEvents)
-	const [filteredEvents, setFilteredEvents] = useState(initialEvents)
-	const [categories, setCategories] = useState(initialCategories)
-	const [startDate, setStartDate] = useState("")
-	const [endDate, setEndDate] = useState("")
-	const [category, setCategory] = useState("Alle Kategorien")
+const EventList = () => {
+	const [eventList, setEventList] = useState<Event[]>([])
+	const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
+	const [categories, setCategories] = useState<Category[]>([])
+	const [startDate, setStartDate] = useState<string>("")
+	const [endDate, setEndDate] = useState<string>("")
+	const [category, setCategory] = useState<string>("Alle Kategorien")
+
+	useEffect(() => {
+		const fetchEvents = async () => {
+			const today = new Date().toISOString()
+			const response = await getStrapiData(`events?filters[startTime][$gte]=${today}&populate=*&sort=startTime:ASC`)
+
+			setEventList(response.data)
+		}
+		fetchEvents()
+
+		const fetchCategories = async () => {
+			const response = await getStrapiData("categories?populate=*&sort=category:ASC")
+			setCategories(response.data)
+		}
+		fetchCategories()
+	}, [])
 
 	useEffect(() => {
 		let filtered = eventList
@@ -46,26 +65,6 @@ const EventList = ({ initialEvents, initialCategories }) => {
 			</div>
 		</>
 	)
-}
-
-// This function runs on the server side at request time
-export async function getServerSideProps() {
-	const today = new Date().toISOString()
-
-	// Fetch events
-	const eventsResponse = await fetch(`${process.env.API_URL}/api/events?filters[startTime][$gte]=${today}&populate=*&sort=startTime:ASC`)
-	const eventsData = await eventsResponse.json()
-
-	// Fetch categories
-	const categoriesResponse = await fetch(`${process.env.API_URL}/api/categories?populate=*&sort=category:ASC`)
-	const categoriesData = await categoriesResponse.json()
-
-	return {
-		props: {
-			initialEvents: eventsData.data, // Pass events data to the component as props
-			initialCategories: categoriesData.data, // Pass categories data to the component as props
-		},
-	}
 }
 
 export default EventList

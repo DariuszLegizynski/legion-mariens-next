@@ -7,19 +7,8 @@ import { getStrapiData } from "@/app/_utils/getStrapiData"
 
 // components
 import Separator from "@/components/base/Separator"
-import EventComponent from "@/components/event/EventComponent"
+import EventComponent from "@/app/_components/event/EventComponent"
 import BaseButton from "@/components/base/BaseButton"
-
-async function getEvents() {
-	try {
-		const today = new Date().toISOString()
-		const response = await fetch(`${process.env.API_URL}/api/events?filters[startTime][$gte]=${today}&pagination[pageSize]=10&populate=*&sort=startTime:ASC`)
-		const data = await response.json()
-		return data
-	} catch (error) {
-		console.error(error)
-	}
-}
 
 export default async function Home() {
 	const landingPageData = await getStrapiData(
@@ -30,8 +19,6 @@ export default async function Home() {
 	const today = new Date().toISOString()
 	const eventsData = await getStrapiData(`events?filters[startTime][$gte]=${today}&pagination[pageSize]=10&populate=*&sort=startTime:ASC`)
 	const events = await eventsData.data
-
-	console.log({ events })
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between mx-4 my-20 md:mx-8">
