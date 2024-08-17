@@ -11,7 +11,7 @@ import EventComponent from "@/app/_components/event/EventComponent"
 import BaseButton from "@/components/base/BaseButton"
 
 export default async function Home() {
-	const landingPageData = await getStrapiData(
+	const landingPageData: LandingPageData = await getStrapiData(
 		"landing-page?populate[introduction][populate][avatar][populate]=true&populate[about][populate]=true&populate[termine][populate]=true"
 	)
 	const { introduction, about, termine } = await landingPageData.data.attributes
