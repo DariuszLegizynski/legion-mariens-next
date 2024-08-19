@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import Cookies from "js-cookie"
 
 import { getStrapiData } from "@/app/_utils/getStrapiData"
 import { logoutAction } from "@/app/_utils/actions/auth-actions"
@@ -13,11 +14,10 @@ import IconItems from "@/components/base/IconItems"
 import BaseButton from "@/components/base/BaseButton"
 
 const HeaderMobile = () => {
-	const [isActive, setIsActive] = useState<boolean>(false)
-	const [isLoginActive, setIsLoginActive] = useState<boolean>(false)
+	const [isBurgerActive, setIsBurgerActive] = useState<boolean>(false)
+	const [isUserIconActive, setIsUserIconActive] = useState<boolean>(false)
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
-
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -29,14 +29,10 @@ const HeaderMobile = () => {
 		fetchData()
 	}, [])
 
+	const isCookie = Cookies.get("jwt")
 	useEffect(() => {
-		const allCookies = document.cookie
-		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
-
-		if (jwtCookie) {
-			setIsAuthenticated(jwtCookie.split("=")[1] ? true : false)
-		}
-	}, [isAuthenticated])
+		setIsAuthenticated(Cookies.get("jwt") ? true : false)
+	}, [isCookie])
 
 	const handleCategoryClick = (categoryId: number) => {
 		if (expandedCategoryId === categoryId) {
@@ -46,18 +42,16 @@ const HeaderMobile = () => {
 		}
 	}
 
-	console.log({ isAuthenticated })
-
 	return (
 		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-10 bg-white border-b-2 border-grey w-full lg:hidden`}>
 			<section className="grid grid-cols-[1fr_1fr_1fr]">
 				<div
 					onClick={() => {
-						setIsActive(!isActive)
-						setIsLoginActive(false)
+						setIsBurgerActive(!isBurgerActive)
+						setIsUserIconActive(false)
 					}}
 				>
-					<Burger isActive={isActive} />
+					<Burger isActive={isBurgerActive} />
 				</div>
 				<Link href="/">
 					<Image className="h-8 mx-auto" src="/images/Standarte_LM.svg" alt="Logo der Standarde von der Legion Mariens" width={32} height={60} />
@@ -66,8 +60,8 @@ const HeaderMobile = () => {
 					<div
 						className="cursor-pointer grid justify-items-end"
 						onClick={() => {
-							setIsLoginActive(!isLoginActive)
-							setIsActive(false)
+							setIsBurgerActive(false)
+							setIsUserIconActive(!isUserIconActive)
 						}}
 					>
 						<IconItems type="user" width="2rem" height="2rem" strokeColor="none" fillColor="#3C52A3" />
@@ -75,7 +69,7 @@ const HeaderMobile = () => {
 				)}
 			</section>
 			<section>
-				{isActive && (
+				{isBurgerActive && (
 					<nav className={`text-left uppercase grid gap-y-4 max-w-[72vw] mx-auto my-8`}>
 						{headerData?.map(item => (
 							<div key={item.id + item.linkName}>
@@ -116,7 +110,7 @@ const HeaderMobile = () => {
 						))}
 					</nav>
 				)}
-				{isAuthenticated && isLoginActive && (
+				{isAuthenticated && isUserIconActive && (
 					<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8`}>
 						<Link href="/cart" className="w-full max-w-72">
 							<p className="text-primary">Warenkorb</p>

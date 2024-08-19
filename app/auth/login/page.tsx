@@ -1,9 +1,10 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 import { loginUserAction } from "@/app/_utils/actions/auth-actions"
 
-import { useEffect, useState } from "react"
+import Cookies from "js-cookie"
 
 import BaseButton from "@/components/base/BaseButton"
 
@@ -15,19 +16,12 @@ const initialState = {
 
 const login = () => {
 	const [formState, formAction] = useFormState(loginUserAction, initialState)
-
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
+	const isCookie = Cookies.get("jwt")
 	useEffect(() => {
-		const allCookies = document.cookie
-		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
-
-		if (jwtCookie) {
-			setIsAuthenticated(jwtCookie.split("=")[1] ? true : false)
-		}
-	}, [])
-
-	console.log({ isAuthenticated })
+		setIsAuthenticated(Cookies.get("jwt") ? true : false)
+	}, [isCookie])
 
 	return (
 		<article className="my-20 mx-8 flex flex-col items-center">

@@ -13,7 +13,6 @@ import IconItems from "@/components/base/IconItems"
 
 const HeaderDesktop = () => {
 	const [isActive, setIsActive] = useState<boolean>(false)
-	const [isLoginActive, setIsLoginActive] = useState<boolean>(false)
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
@@ -105,7 +104,6 @@ const HeaderDesktop = () => {
 						<div
 							className="cursor-pointer grid justify-items-end"
 							onClick={() => {
-								setIsLoginActive(!isLoginActive)
 								setIsActive(false)
 							}}
 						>
@@ -155,7 +153,7 @@ const HeaderDesktop = () => {
 							))}
 						</nav>
 					)}
-					{isAuthenticated && isLoginActive && (
+					{isAuthenticated && (
 						<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8`}>
 							<Link href="/cart" className="w-full max-w-72">
 								<p className="text-primary">Warenkorb</p>
