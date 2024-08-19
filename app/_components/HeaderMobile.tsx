@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-// import { useRouter } from "next/router"
+
+import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { logoutAction } from "@/app/_utils/actions/auth-actions"
 
 // components
 import Burger from "@/app/_components/burger/Burger"
@@ -15,33 +17,28 @@ const HeaderMobile = () => {
 	const [isLoginActive, setIsLoginActive] = useState<boolean>(false)
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
-	const [isClient, setIsClient] = useState<boolean>(false)
 
-	// const router = useRouter()
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await fetch(`${process.env.API_URL}/api/header?populate[headerContent][populate]=*`)
-			const data = await response.json()
-			setHeaderData(data.data.attributes.headerContent)
+			const response = await getStrapiData(`header?populate[headerContent][populate]=*`)
+			setHeaderData(response.data.attributes.headerContent)
 		}
 
 		fetchData()
 	}, [])
 
 	useEffect(() => {
-		setIsClient(true)
-	}, [])
+		const allCookies = document.cookie
+		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
 
-	if (!isClient) {
-		return null
-	}
+		if (jwtCookie) {
+			setIsAuthenticated(jwtCookie.split("=")[1])
+		}
+	}, [isAuthenticated])
 
-	const handleSignOut = () => {
-		sessionStorage.clear()
-		// router.push("/")
-	}
+	console.log({ isAuthenticated })
 
 	const handleCategoryClick = (categoryId: number) => {
 		if (expandedCategoryId === categoryId) {
@@ -62,14 +59,9 @@ const HeaderMobile = () => {
 				>
 					<Burger isActive={isActive} />
 				</div>
-				<Image
-					onClick={() => setIsAuthenticated(!isAuthenticated)}
-					className="h-8 mx-auto"
-					src="/images/Standarte_LM.svg"
-					alt="Logo der Standarde von der Legion Mariens"
-					width={32}
-					height={60}
-				/>
+				<Link href="/">
+					<Image className="h-8 mx-auto" src="/images/Standarte_LM.svg" alt="Logo der Standarde von der Legion Mariens" width={32} height={60} />
+				</Link>
 				{isAuthenticated && (
 					<div
 						className="cursor-pointer grid justify-items-end"
@@ -129,7 +121,7 @@ const HeaderMobile = () => {
 						<Link href="/cart" className="w-full max-w-72">
 							<p className="text-primary">Warenkorb</p>
 						</Link>
-						<BaseButton onClick={handleSignOut} buttonType="logout" text="Abmelden" />
+						<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
 					</nav>
 				)}
 			</section>

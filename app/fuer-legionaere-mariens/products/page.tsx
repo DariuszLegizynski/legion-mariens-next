@@ -11,34 +11,6 @@ import ProductComponent from "@/app/_components/product/ProductComponent"
 import ProductCategories from "@/app/_components/product/ProductCategories"
 
 const Materialstelle = () => {
-	// const { token } = req.cookies
-
-	// if (!token) {
-	// 	return {
-	// 		redirect: {
-	// 			destination: "/login",
-	// 			permanent: false,
-	// 		},
-	// 	}
-	// }
-
-	// const res = await fetch(`${process.env.STRAPI_API_URL}/users/me`, {
-	// 	headers: {
-	// 		Authorization: `Bearer ${token}`,
-	// 	},
-	// })
-
-	// if (!res.ok) {
-	// 	return {
-	// 		redirect: {
-	// 			destination: "/login",
-	// 			permanent: false,
-	// 		},
-	// 	}
-	// }
-
-	// const user = await res.json()
-
 	const [productsData, setProductsData] = useState<Product[]>([])
 	const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
 	const [productCategories, setProductCategories] = useState<any[]>([])

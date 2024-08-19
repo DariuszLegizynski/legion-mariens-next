@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-// import { useRouter } from "next/router"
+
+import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { logoutAction } from "@/app/_utils/actions/auth-actions"
 
 // components
 import BaseButton from "@/components/base/BaseButton"
@@ -14,33 +16,25 @@ const HeaderDesktop = () => {
 	const [isLoginActive, setIsLoginActive] = useState<boolean>(false)
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
-	const [isClient, setIsClient] = useState<boolean>(false)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
-
-	// const router = useRouter()
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await fetch(`${process.env.API_URL}/api/header?populate[headerContent][populate]=*`)
-			const data = await response.json()
-			setHeaderData(data.data.attributes.headerContent)
+			const response = await getStrapiData(`header?populate[headerContent][populate]=*`)
+			setHeaderData(response.data.attributes.headerContent)
 		}
 
 		fetchData()
 	}, [])
 
 	useEffect(() => {
-		setIsClient(true)
-	}, [])
+		const allCookies = document.cookie
+		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
 
-	if (!isClient) {
-		return null
-	}
-
-	const handleSignOut = () => {
-		sessionStorage.clear()
-		// router.push("/")
-	}
+		if (jwtCookie) {
+			setIsAuthenticated(jwtCookie.split("=")[1])
+		}
+	}, [isAuthenticated])
 
 	const handleCategoryClick = (categoryId: number) => {
 		if (expandedCategoryId === categoryId) {
@@ -166,7 +160,7 @@ const HeaderDesktop = () => {
 							<Link href="/cart" className="w-full max-w-72">
 								<p className="text-primary">Warenkorb</p>
 							</Link>
-							<BaseButton onClick={handleSignOut} buttonType="logout" text="Abmelden" />
+							<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
 						</nav>
 					)}
 				</section>
