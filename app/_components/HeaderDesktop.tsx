@@ -32,7 +32,7 @@ const HeaderDesktop = () => {
 		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
 
 		if (jwtCookie) {
-			setIsAuthenticated(jwtCookie.split("=")[1])
+			setIsAuthenticated(jwtCookie.split("=")[1] ? true : false)
 		}
 	}, [isAuthenticated])
 

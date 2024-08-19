@@ -1,7 +1,6 @@
 "use client"
 
-import { useFormStatus } from "react-dom"
-import { useFormState } from "react-dom"
+import { useFormState, useFormStatus } from "react-dom"
 import { loginUserAction } from "@/app/_utils/actions/auth-actions"
 
 import { useEffect, useState } from "react"
@@ -24,10 +23,12 @@ const login = () => {
 		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
 
 		if (jwtCookie) {
-			setIsAuthenticated(jwtCookie.split("=")[1])
+			setIsAuthenticated(jwtCookie.split("=")[1] ? true : false)
 		}
 	}, [])
-	console.log(useFormStatus(), formState)
+
+	console.log({ isAuthenticated })
+
 	return (
 		<article className="my-20 mx-8 flex flex-col items-center">
 			<div className={`text-left mb-8 ${isAuthenticated ? "h2" : "h3"}`}>{isAuthenticated ? "Legionsleben" : "Anmelden (Geschützte Seite)"}</div>

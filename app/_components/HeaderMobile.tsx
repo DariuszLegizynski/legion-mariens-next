@@ -34,11 +34,9 @@ const HeaderMobile = () => {
 		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
 
 		if (jwtCookie) {
-			setIsAuthenticated(jwtCookie.split("=")[1])
+			setIsAuthenticated(jwtCookie.split("=")[1] ? true : false)
 		}
 	}, [isAuthenticated])
-
-	console.log({ isAuthenticated })
 
 	const handleCategoryClick = (categoryId: number) => {
 		if (expandedCategoryId === categoryId) {
@@ -47,6 +45,8 @@ const HeaderMobile = () => {
 			setExpandedCategoryId(categoryId)
 		}
 	}
+
+	console.log({ isAuthenticated })
 
 	return (
 		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-10 bg-white border-b-2 border-grey w-full lg:hidden`}>
