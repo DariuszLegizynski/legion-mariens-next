@@ -8,7 +8,7 @@ import { getStrapiAuthData } from "@/app/_utils/getStrapiData"
 import type { Product } from "@/types/Product"
 
 // components
-import ProductComponent from "@/app/_components/product/ProductComponent"
+import ProductItem from "@/app/_components/product/ProductItem"
 import ProductCategories from "@/app/_components/product/ProductCategories"
 
 const Materialstelle = () => {
@@ -51,7 +51,7 @@ const Materialstelle = () => {
 			<ProductCategories productCategories={productCategories} setProductCategory={setProductCategory} />
 			<section className="grid grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
 				{filteredProducts?.length > 0 ? (
-					filteredProducts?.map((productItem: Product) => <ProductComponent key={`product_${productItem.id}`} productItem={productItem} />)
+					filteredProducts?.map((productItem: Product) => <ProductItem key={`product_${productItem.id}`} productItem={productItem} />)
 				) : (
 					<p className="my-16 col-span-2 text-center text-accent">Keine Produkte für diese Kategorie gefunden.</p>
 				)}

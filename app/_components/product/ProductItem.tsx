@@ -12,6 +12,7 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 	const [warehouseQuantity, setWarehouseQuantity] = useState<number>(productItem.attributes?.quantity)
 	const [amount, setAmount] = useState<number>(0)
 	const [endPrice, setEndPrice] = useState<number>(0)
+	const [loading, setLoading] = useState<boolean>(false)
 
 	const handleDecrease = () => {
 		if (amount > 0) {
@@ -45,19 +46,24 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 
 	const jwt = Cookies.get("jwt")
 	const handleToCart = async () => {
+		setLoading(true)
+
 		const data = {
-			products: productItem.id,
-			amount: amount,
-			price: endPrice.toFixed(2),
-			quantity: warehouseQuantity,
-			session_id: jwt,
+			data: {
+				products: productItem.id,
+				amount: amount,
+				price: endPrice.toFixed(2),
+				quantity: warehouseQuantity,
+				session_id: jwt,
+			},
 		}
 		try {
-			const result = await postStrapiAuthData("user-carts", data, jwt)
+			await postStrapiAuthData("user-carts", data, jwt)
 				.then(res => res)
 				.catch(err => err)
-			console.log("added to cart: ", result)
+			setLoading(false)
 		} catch (error: any) {
+			setLoading(false)
 			throw new Error("Fehler beim Hinzufügen zum Warenkorb: ", error.message)
 		}
 	}
@@ -97,9 +103,10 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 						<b>&nbsp;=&nbsp;€&nbsp;{endPrice.toFixed(2).replace(".", ",")}</b>
 					</div>
 				</div>
-				<div className="flex justify-center w-full mt-4">
+				<div className="flex flex-col items-center w-full mt-4">
 					<BaseButton
 						onClick={handleToCart}
+						isDisabled={loading}
 						buttonType="cart"
 						text="Zum Warenkorb"
 						iconType="cart"
@@ -108,6 +115,7 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 						fillColor="white"
 						strokeColor="none"
 					/>
+					{loading && <p className="mt-2 text-center">Lade...</p>}
 				</div>
 			</section>
 		</article>

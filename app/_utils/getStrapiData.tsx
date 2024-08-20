@@ -33,7 +33,7 @@ export async function postStrapiAuthData(query: string, data: any, jwt: string) 
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${jwt}`,
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify(data),
 			cache: "no-cache",
 		})
 
