@@ -46,7 +46,7 @@ const Materialstelle = () => {
 	}, [productCategory, productsData])
 
 	return (
-		<section className="max-container mb-24">
+		<section className="max-container my-24">
 			<h1 className="text-center">Materiallstelle</h1>
 			<ProductCategories productCategories={productCategories} setProductCategory={setProductCategory} />
 			<section className="grid grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">

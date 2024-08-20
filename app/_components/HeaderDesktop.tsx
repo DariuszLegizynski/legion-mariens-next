@@ -13,7 +13,8 @@ import BaseButton from "@/components/base/BaseButton"
 import IconItems from "@/components/base/IconItems"
 
 const HeaderDesktop = () => {
-	const [isActive, setIsActive] = useState<boolean>(false)
+	const [isHeaderActive, setIsHeaderActive] = useState<boolean>(false)
+	const [isUserIconActive, setIsUserIconActive] = useState<boolean>(false)
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
@@ -33,6 +34,7 @@ const HeaderDesktop = () => {
 	}, [isCookie])
 
 	const handleCategoryClick = (categoryId: number) => {
+		setIsUserIconActive(false)
 		if (expandedCategoryId === categoryId) {
 			setExpandedCategoryId(null)
 		} else {
@@ -96,7 +98,8 @@ const HeaderDesktop = () => {
 						<div
 							className="cursor-pointer grid justify-items-end"
 							onClick={() => {
-								setIsActive(false)
+								setIsUserIconActive(!isUserIconActive)
+								setExpandedCategoryId(null)
 							}}
 						>
 							<IconItems type="user" width="2rem" height="2rem" strokeColor="none" fillColor="#3C52A3" />
@@ -106,7 +109,7 @@ const HeaderDesktop = () => {
 					)}
 				</section>
 				<section>
-					{isActive && (
+					{isHeaderActive && (
 						<nav className={`text-left uppercase grid gap-y-4 max-w-[72vw] mx-auto my-8`}>
 							{headerData?.map(item => (
 								<div key={item.id + item.linkName}>
@@ -147,9 +150,9 @@ const HeaderDesktop = () => {
 							))}
 						</nav>
 					)}
-					{isAuthenticated && (
-						<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8`}>
-							<Link href="/cart" className="w-full max-w-72">
+					{isAuthenticated && isUserIconActive && (
+						<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8 pr-2`}>
+							<Link href="/fuer-legionaere-mariens/cart" className="max-w-72">
 								<p className="text-primary">Warenkorb</p>
 							</Link>
 							<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
