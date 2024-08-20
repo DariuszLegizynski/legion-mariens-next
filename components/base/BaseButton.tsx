@@ -19,7 +19,7 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 	return (
 		<>
 			{buttonType === "close" && (
-				<button className="p-2 text-grey">
+				<button onClick={onClick} className="pt-1 hover:scale-105">
 					<IconItems type={iconType} width={width} height={height} />
 				</button>
 			)}

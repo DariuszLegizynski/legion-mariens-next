@@ -10,14 +10,14 @@ interface IconItemsProps {
 	rotation?: string
 }
 
-const IconItems: FC<IconItemsProps> = ({ type, fillColor, strokeColor, width, height, baseClass = "", rotation = "rotate-0" }) => {
+const IconItems: FC<IconItemsProps> = ({ type, fillColor = "none", strokeColor = "#000", width, height, baseClass = "", rotation = "rotate-0" }) => {
 	return (
 		<>
 			{type === "everything" && (
 				<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 48 48">
-					<circle cx="14.25" cy="28.875" r="9.75" fill="none" stroke="#FFF" strokeLinecap="round" strokeLinejoin="round" />
-					<circle cx="33.75" cy="28.875" r="9.75" fill="none" stroke="#FFF" strokeLinecap="round" strokeLinejoin="round" />
-					<circle cx="24" cy="19.125" r="9.75" fill="none" stroke="#FFF" strokeLinejoin="round" strokeLinecap="round" />
+					<circle cx="14.25" cy="28.875" r="9.75" fill={fillColor} stroke={strokeColor} strokeLinecap="round" strokeLinejoin="round" />
+					<circle cx="33.75" cy="28.875" r="9.75" fill={fillColor} stroke={strokeColor} strokeLinecap="round" strokeLinejoin="round" />
+					<circle cx="24" cy="19.125" r="9.75" fill={fillColor} stroke={strokeColor} strokeLinejoin="round" strokeLinecap="round" />
 				</svg>
 			)}
 			{type === "diverse" && (
@@ -88,8 +88,14 @@ const IconItems: FC<IconItemsProps> = ({ type, fillColor, strokeColor, width, he
 				</svg>
 			)}
 			{type === "close" && (
-				<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill="none" viewBox="0 0 24 24">
+				<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill={fillColor} viewBox="0 0 24 24">
 					<path stroke="hsl(0, 0%, 50%)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 16-4-4m0 0L8 8m4 4 4-4m-4 4-4 4" />
+				</svg>
+			)}
+			{type === "delete" && (
+				<svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width={width} height={height} fill={fillColor} stroke={strokeColor} viewBox="0 0 32 32">
+					<path d="M26 31.36H6a.36.36 0 0 1-.36-.36V5.36H2v-.72h8.64V1A.36.36 0 0 1 11 .64h10a.36.36 0 0 1 .36.36v3.64H30v.72h-3.64V31a.36.36 0 0 1-.36.36zm-19.64-.72h19.28V5.36H6.36v25.28zm5-26h9.28V1.36h-9.28v3.28z" />
+					<path d="M21 27.36a.36.36 0 0 1-.36-.36V9a.36.36 0 1 1 .72 0v18a.36.36 0 0 1-.36.36zm-5 0a.36.36 0 0 1-.36-.36V9a.36.36 0 1 1 .72 0v18a.36.36 0 0 1-.36.36zm-5 0a.36.36 0 0 1-.36-.36V9a.36.36 0 1 1 .72 0v18a.36.36 0 0 1-.36.36z" />
 				</svg>
 			)}
 			{type === "separator" && (

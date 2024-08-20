@@ -50,7 +50,7 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 
 		const data = {
 			data: {
-				products: productItem.id,
+				product: productItem.id,
 				amount: amount,
 				price: endPrice.toFixed(2),
 				quantity: warehouseQuantity,
