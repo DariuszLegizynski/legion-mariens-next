@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import Cookies from "js-cookie"
 
-import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { logoutAction } from "@/app/_utils/actions/auth-actions"
 
 // components
@@ -26,14 +27,10 @@ const HeaderDesktop = () => {
 		fetchData()
 	}, [])
 
+	const isCookie = Cookies.get("jwt")
 	useEffect(() => {
-		const allCookies = document.cookie
-		const jwtCookie = allCookies.split("; ").find(row => row.startsWith("jwt="))
-
-		if (jwtCookie) {
-			setIsAuthenticated(jwtCookie.split("=")[1] ? true : false)
-		}
-	}, [isAuthenticated])
+		setIsAuthenticated(Cookies.get("jwt") ? true : false)
+	}, [isCookie])
 
 	const handleCategoryClick = (categoryId: number) => {
 		if (expandedCategoryId === categoryId) {
@@ -46,22 +43,17 @@ const HeaderDesktop = () => {
 	return (
 		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-10 bg-white border-b-2 border-grey w-full hidden lg:block`}>
 			<div className="max-container">
-				<section className="grid grid-cols-[auto_1fr_auto]">
-					<Image
-						onClick={() => setIsAuthenticated(!isAuthenticated)}
-						className="h-8 w-auto"
-						src="/images/Standarte_LM.svg"
-						alt="Logo der Standarde von der Legion Mariens"
-						width={32}
-						height={60}
-					/>
+				<section className="grid grid-cols-[auto_auto_auto]">
+					<Link href="/">
+						<Image className="h-8 w-auto" src="/images/Standarte_LM.svg" alt="Logo der Standarde von der Legion Mariens" width={32} height={60} />
+					</Link>
 					<nav className={`uppercase flex items-center justify-center`}>
 						{headerData?.map((item, index) => (
-							<div key={item.id + item.linkName} className="relative leading-[0]">
+							<div key={item.id + item.linkName} className="relative">
 								{item.subCategory ? (
 									<p
 										onClick={() => handleCategoryClick(item.id + item.linkName)}
-										className={`text-primary text-xs xl:text-sm cursor-pointer ${
+										className={`text-primary !leading-[0] text-xs xl:text-sm cursor-pointer ${
 											index === headerData.length - 1
 												? ""
 												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
@@ -73,7 +65,7 @@ const HeaderDesktop = () => {
 									<Link
 										onClick={() => handleCategoryClick(item.id + item.linkName)}
 										href={`${item.linkPath}`}
-										className={`text-primary text-xs xl:text-sm ${
+										className={`text-primary text-xs xl:text-sm !leading-[0] ${
 											index === headerData.length - 1
 												? ""
 												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
@@ -100,7 +92,7 @@ const HeaderDesktop = () => {
 							</div>
 						))}
 					</nav>
-					{isAuthenticated && (
+					{isAuthenticated ? (
 						<div
 							className="cursor-pointer grid justify-items-end"
 							onClick={() => {
@@ -109,6 +101,8 @@ const HeaderDesktop = () => {
 						>
 							<IconItems type="user" width="2rem" height="2rem" strokeColor="none" fillColor="#3C52A3" />
 						</div>
+					) : (
+						<div />
 					)}
 				</section>
 				<section>

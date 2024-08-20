@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
 const Hero = async () => {
 	const heroData = await getStrapiData("main-layout?populate[hero][populate]=*")

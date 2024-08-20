@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import Cookies from "js-cookie"
 
-import { getStrapiAuthData } from "@/app/_utils/getStrapiData"
+import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
 // types
 import type { Product } from "@/types/Product"

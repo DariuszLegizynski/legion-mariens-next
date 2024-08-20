@@ -1,4 +1,4 @@
-import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
 import { LandingPageData, Content, Child } from "@/types/LandingPage"
 import EventList from "@/app/_components/event/EventList"

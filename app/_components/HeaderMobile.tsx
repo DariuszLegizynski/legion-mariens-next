@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import Cookies from "js-cookie"
 
-import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { logoutAction } from "@/app/_utils/actions/auth-actions"
 
 // components
@@ -87,19 +87,37 @@ const HeaderMobile = () => {
 										</p>
 									</div>
 								) : (
-									<Link onClick={() => handleCategoryClick(item.id + item.linkName)} href={`${item.linkPath}`}>
+									<Link
+										onClick={() => {
+											setIsBurgerActive(false)
+											setIsUserIconActive(false)
+										}}
+										href={`${item.linkPath}`}
+									>
 										<p className="text-primary cursor-pointer">{item.linkName}</p>
 									</Link>
 								)}
 								{item.subCategory && expandedCategoryId === item.id + item.linkName && (
 									<ul className="text-start slide-in-from-left">
-										<Link onClick={() => handleCategoryClick(item.id + item.linkName)} href={`${item.linkPath}`}>
+										<Link
+											onClick={() => {
+												setIsBurgerActive(false)
+												setIsUserIconActive(false)
+											}}
+											href={`${item.linkPath}`}
+										>
 											<span className={`text-primary cursor-pointer`}>{item.linkName}</span>
 										</Link>
 										{item.subCategory &&
 											item.subCategory.map(subItem => (
 												<li key={subItem.id + subItem.linkName}>
-													<Link href={`${subItem.linkPath}`}>
+													<Link
+														onClick={() => {
+															setIsBurgerActive(false)
+															setIsUserIconActive(false)
+														}}
+														href={`${subItem.linkPath}`}
+													>
 														<span className="text-primary">{subItem.linkName}</span>
 													</Link>
 												</li>
@@ -112,7 +130,7 @@ const HeaderMobile = () => {
 				)}
 				{isAuthenticated && isUserIconActive && (
 					<nav className={`text-center uppercase grid justify-items-start justify-end gap-y-4 my-8 pr-2`}>
-						<Link href="/cart" className="max-w-72">
+						<Link onClick={() => setIsBurgerActive(false)} href="/fuer-legionaere-mariens/cart" className="max-w-72">
 							<p className="text-primary">Warenkorb</p>
 						</Link>
 						<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />

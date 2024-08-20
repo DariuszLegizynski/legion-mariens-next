@@ -3,7 +3,7 @@ import Image from "next/image"
 // type
 import { LandingPageData, Content, Child } from "@/types/LandingPage"
 
-import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
 // components
 import Separator from "@/components/base/Separator"

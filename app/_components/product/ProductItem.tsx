@@ -6,7 +6,7 @@ import Cookies from "js-cookie"
 import type { Product } from "@/types/Product"
 import Image from "next/image"
 import BaseButton from "@/components/base/BaseButton"
-import { postStrapiAuthData } from "@/app/_utils/getStrapiData"
+import { postStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
 const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 	const [warehouseQuantity, setWarehouseQuantity] = useState<number>(productItem.attributes?.quantity)
