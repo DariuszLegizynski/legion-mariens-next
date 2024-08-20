@@ -1,9 +1,12 @@
 "use client"
 
 import { FC, useState, useEffect } from "react"
+import Cookies from "js-cookie"
+
 import type { Product } from "@/types/Product"
 import Image from "next/image"
 import BaseButton from "@/components/base/BaseButton"
+import { postStrapiAuthData } from "@/app/_utils/getStrapiData"
 
 const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 	const [warehouseQuantity, setWarehouseQuantity] = useState<number>(productItem.attributes?.quantity)
@@ -40,8 +43,23 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 		calculateEndPrice()
 	}, [amount])
 
-	const addToCart = price => {
-		console.log("hello from cart: ", price)
+	const jwt = Cookies.get("jwt")
+	const handleToCart = async () => {
+		const data = {
+			products: productItem.id,
+			amount: amount,
+			price: endPrice.toFixed(2),
+			quantity: warehouseQuantity,
+			session_id: jwt,
+		}
+		try {
+			const result = await postStrapiAuthData("user-carts", data, jwt)
+				.then(res => res)
+				.catch(err => err)
+			console.log("added to cart: ", result)
+		} catch (error: any) {
+			throw new Error("Fehler beim Hinzufügen zum Warenkorb: ", error.message)
+		}
 	}
 
 	return (
@@ -81,7 +99,7 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 				</div>
 				<div className="flex justify-center w-full mt-4">
 					<BaseButton
-						onClick={addToCart(endPrice)}
+						onClick={handleToCart}
 						buttonType="cart"
 						text="Zum Warenkorb"
 						iconType="cart"

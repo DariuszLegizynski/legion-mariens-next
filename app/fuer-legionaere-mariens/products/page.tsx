@@ -1,7 +1,8 @@
 "use client"
 import { useState, useEffect } from "react"
+import Cookies from "js-cookie"
 
-import { getStrapiData } from "@/app/_utils/getStrapiData"
+import { getStrapiAuthData } from "@/app/_utils/getStrapiData"
 
 // types
 import type { Product } from "@/types/Product"
@@ -16,16 +17,18 @@ const Materialstelle = () => {
 	const [productCategories, setProductCategories] = useState<any[]>([])
 	const [productCategory, setProductCategory] = useState<string>("")
 
+	const jwt = Cookies.get("jwt")
+
 	useEffect(() => {
 		const fetchProducts = async () => {
-			const response = await getStrapiData(`products?populate=*&pagination[pageSize]=150&sort=article_code:ASC`)
+			const response = await getStrapiAuthData(`products?populate=*&pagination[pageSize]=150&sort=article_code:ASC`, jwt)
 
 			setProductsData(response)
 		}
 		fetchProducts()
 
 		const fetchProductCategories = async () => {
-			const response = await getStrapiData(`product-categories?populate=*`)
+			const response = await getStrapiAuthData(`product-categories?populate=*`, jwt)
 
 			setProductCategories(response.data)
 		}
