@@ -111,8 +111,8 @@ const HeaderMobile = () => {
 					</nav>
 				)}
 				{isAuthenticated && isUserIconActive && (
-					<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8`}>
-						<Link href="/cart" className="w-full max-w-72">
+					<nav className={`text-center uppercase grid justify-items-start justify-end gap-y-4 my-8 pr-2`}>
+						<Link href="/cart" className="max-w-72">
 							<p className="text-primary">Warenkorb</p>
 						</Link>
 						<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
