@@ -7,7 +7,7 @@ import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
 // components
 import Separator from "@/components/base/Separator"
-import EventComponent from "@/app/_components/event/EventComponent"
+import EventComponent from "@/app/termine/_components/EventComponent"
 import BaseButton from "@/components/base/BaseButton"
 
 export default async function Home() {

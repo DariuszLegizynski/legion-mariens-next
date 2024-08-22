@@ -1,6 +1,6 @@
 "use client"
 
-import CartProduct from "@/app/_components/cart/CartProduct"
+import CartProduct from "@/app/fuer-legionaere-mariens/cart/_components/CartProduct"
 import type { CartItem as CartItemProduct } from "@/types/Cart"
 
 const CartItem = ({ cartItem, cartId, onCartChange }: { cartItem: CartItemProduct; cartId: number; onCartChange: () => void }) => {

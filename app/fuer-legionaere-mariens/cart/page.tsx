@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
-import CartItem from "@/app/_components/cart/CartItem"
+import CartItem from "@/app/fuer-legionaere-mariens/cart/_components/CartItem"
 
 import type { Cart as CartType } from "@/types/Cart"
 import BaseButton from "@/components/base/BaseButton"

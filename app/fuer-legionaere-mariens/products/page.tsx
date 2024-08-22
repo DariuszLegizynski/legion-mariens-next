@@ -8,8 +8,8 @@ import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import type { Product } from "@/types/Product"
 
 // components
-import ProductItem from "@/app/_components/product/ProductItem"
-import ProductCategories from "@/app/_components/product/ProductCategories"
+import ProductItem from "@/app/fuer-legionaere-mariens/products/_components/ProductItem"
+import ProductCategories from "@/app/fuer-legionaere-mariens/products/_components/ProductCategories"
 
 const Materialstelle = () => {
 	const [productsData, setProductsData] = useState<Product[]>([])
