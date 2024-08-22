@@ -1,4 +1,4 @@
-export async function getStrapiData(query: string) {
+export const getStrapiData = async (query: string) => {
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}`)
 		const data = await response.json()
@@ -8,7 +8,7 @@ export async function getStrapiData(query: string) {
 	}
 }
 
-export async function getStrapiAuthData(query: string, jwt: string) {
+export const getStrapiAuthData = async (query: string, jwt: string) => {
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}`, {
 			headers: {
@@ -23,7 +23,7 @@ export async function getStrapiAuthData(query: string, jwt: string) {
 	}
 }
 
-export async function postStrapiAuthData(query: string, data: any, jwt: string) {
+export const createStrapiAuthData = async (query: string, data: any, jwt: string) => {
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}`, {
 			method: "POST",
@@ -47,23 +47,8 @@ export async function postStrapiAuthData(query: string, data: any, jwt: string) 
 	}
 }
 
-export async function getStrapiCartData(query: string, jwt: string) {
-	try {
-		const response = await fetch(`${process.env.API_URL}/api/${query}`, {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${jwt}`,
-			},
-		})
-		const result = await response.json()
-
-		return result
-	} catch (error) {
-		throw new Error(`Fehler bei fetchen der Daten: ${error}`)
-	}
-}
-
-export async function deleteStrapiCartData(query: string, jwt: string, productId: number) {
+export const deleteStrapiAuthData = async (query: string, jwt: string, productId: number) => {
+	console.log({ query, jwt, productId })
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}/${productId}`, {
 			method: "DELETE",

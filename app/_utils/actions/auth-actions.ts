@@ -4,6 +4,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { loginUserService } from "@/app/_utils/services/auth-services"
+import { deleteStrapiAuthData, getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
 const config = {
 	maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -41,7 +42,16 @@ export const loginUserAction = async (prevState: any, formData: FormData) => {
 	redirect("/fuer-legionaere-mariens/products")
 }
 
-export async function logoutAction() {
+export const logoutAction = async () => {
+	const jwt = cookies().get("jwt").value
+	const { data } = await getStrapiAuthData(`user-carts?filters[session_id][$eq]=${jwt}&populate=*`, jwt)
+
+	data.length > 0 &&
+		data?.forEach(async cartItem => {
+			await deleteStrapiAuthData("user-carts", jwt!, cartItem.id)
+				.then(res => res)
+				.catch(err => err)
+		})
 	cookies().set("jwt", "", { ...config, maxAge: 0 })
 	redirect("/auth/login")
 }

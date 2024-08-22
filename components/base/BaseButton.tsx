@@ -43,6 +43,7 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 			{buttonType === "cart" && (
 				<button
 					onClick={onClick}
+					type="submit"
 					onMouseUp={e => e.currentTarget.blur()}
 					className="p-2 capitalize w-full max-w-52 text-white bg-primary-light border border-grey rounded-xl hover:text-white active:text-white hover:bg-primary active:bg-primary transition-transform ease-in-out hover:scale-105"
 				>
@@ -51,6 +52,15 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 						{text}
 					</p>
 				</button>
+			)}
+			{buttonType === "link" && (
+				<Link
+					href={`${linkPath}`}
+					onMouseUp={e => e.currentTarget.blur()}
+					className="p-2 capitalize w-full max-w-52 text-white bg-primary-light border border-grey rounded-xl hover:text-white active:text-white hover:bg-primary active:bg-primary transition-transform ease-in-out hover:scale-105"
+				>
+					<p className="flex items-center justify-center gap-x-2">{text}</p>
+				</Link>
 			)}
 		</>
 	)

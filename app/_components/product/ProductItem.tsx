@@ -6,7 +6,7 @@ import Cookies from "js-cookie"
 import type { Product } from "@/types/Product"
 import Image from "next/image"
 import BaseButton from "@/components/base/BaseButton"
-import { postStrapiAuthData } from "@/app/_utils/services/getStrapiData"
+import { createStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
 const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 	const [warehouseQuantity, setWarehouseQuantity] = useState<number>(productItem.attributes?.quantity)
@@ -58,7 +58,7 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 			},
 		}
 		try {
-			await postStrapiAuthData("user-carts", data, jwt)
+			await createStrapiAuthData("user-carts", data, jwt)
 				.then(res => res)
 				.catch(err => err)
 			setLoading(false)

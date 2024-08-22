@@ -2,14 +2,14 @@
 
 import BaseButton from "@/components/base/BaseButton"
 import type { CartItem as CartItemProduct } from "@/types/Cart"
-import { deleteStrapiCartData } from "@/app/_utils/services/getStrapiData"
+import { deleteStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import Cookies from "js-cookie"
 
 const CartProduct = ({ cartProduct, cartId, onCartChange }: { cartProduct: CartItemProduct; cartId: number; onCartChange: () => void }) => {
 	const jwt = Cookies.get("jwt")
 
 	const handleDelete = async () => {
-		await deleteStrapiCartData("user-carts", jwt!, cartId)
+		await deleteStrapiAuthData("user-carts", jwt!, cartId)
 		onCartChange() // Re-fetch the cart data
 	}
 

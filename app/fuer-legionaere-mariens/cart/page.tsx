@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
-import { getStrapiCartData } from "@/app/_utils/services/getStrapiData"
+import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
 import CartItem from "@/app/_components/cart/CartItem"
 
 import type { Cart as CartType } from "@/types/Cart"
+import BaseButton from "@/components/base/BaseButton"
 
 const Cart = () => {
 	const [cartData, setCartData] = useState<CartType[]>([])
@@ -14,7 +15,7 @@ const Cart = () => {
 
 	const fetchCartData = async () => {
 		const authToken: string = Cookies.get("jwt")
-		const { data } = await getStrapiCartData(`user-carts?filters[session_id][$eq]=${authToken}&populate=*`, authToken)
+		const { data } = await getStrapiAuthData(`user-carts?filters[session_id][$eq]=${authToken}&populate=*`, authToken)
 		setCartData(data)
 		setLoading(false)
 	}
@@ -39,6 +40,9 @@ const Cart = () => {
 			<h3 className="mt-12 text-end">
 				Insgesamt: <b>{sum().toFixed(2).replace(".", ",")}&nbsp;€</b>
 			</h3>
+			<div className="flex flex-col items-center mt-20">
+				<BaseButton buttonType="link" text="Zur Bestellung" linkPath="/fuer-legionaere-mariens/checkout" />
+			</div>
 		</article>
 	)
 }
