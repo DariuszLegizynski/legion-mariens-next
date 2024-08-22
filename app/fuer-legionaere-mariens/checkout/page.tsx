@@ -43,8 +43,6 @@ const Checkout = () => {
 		return cartData.map(cartItem => cartItem.attributes.price).reduce((acc, curr) => acc + curr, 0)
 	}
 
-	console.log({ cartData })
-
 	const handleOrder = async () => {
 		setLoading(true)
 

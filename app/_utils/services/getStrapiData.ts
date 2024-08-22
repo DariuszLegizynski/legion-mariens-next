@@ -48,7 +48,6 @@ export const createStrapiAuthData = async (query: string, data: any, jwt: string
 }
 
 export const deleteStrapiAuthData = async (query: string, jwt: string, productId: number) => {
-	console.log({ query, jwt, productId })
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}/${productId}`, {
 			method: "DELETE",
