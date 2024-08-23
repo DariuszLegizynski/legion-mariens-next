@@ -3,7 +3,6 @@ const nextConfig = {
 	reactStrictMode: false,
 	env: {
 		API_URL: process.env.API_URL,
-		GOOGLE_MAP_API_KEY: process.env.GOOGLE_MAP_API_KEY,
 	},
 	images: {
 		remotePatterns: [

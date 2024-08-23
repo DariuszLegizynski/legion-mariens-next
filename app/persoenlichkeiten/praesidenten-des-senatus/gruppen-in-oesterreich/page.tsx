@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
-import GoogleMaps from "@/app/persoenlichkeiten/praesidenten-des-senatus/gruppen-in-oesterreich/_components/GoogleMaps"
+
 import TitleContext from "@/components/base/common/TitleContent"
+import GeoMap from "@/app/persoenlichkeiten/praesidenten-des-senatus/gruppen-in-oesterreich/_components/GeoMap"
 
 const groupsInAustria = () => {
 	const [presidiumData, setPresidiumData] = useState([])
@@ -17,7 +18,7 @@ const groupsInAustria = () => {
 	}, [])
 
 	return (
-		<article>
+		<article className="max-container mx-4">
 			<TitleContext title="Gruppen in Österreich" />
 			<section>
 				<div>
@@ -25,7 +26,7 @@ const groupsInAustria = () => {
 					<input type="text" id="search" name="search" />
 				</div>
 			</section>
-			<GoogleMaps presidiumData={presidiumData} />
+			<GeoMap presidiumData={presidiumData} />
 		</article>
 	)
 }

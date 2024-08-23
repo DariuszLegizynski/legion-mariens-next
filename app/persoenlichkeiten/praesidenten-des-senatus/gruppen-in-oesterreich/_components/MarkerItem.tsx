@@ -1,18 +1,25 @@
-import { MarkerF, OverlayView } from "@react-google-maps/api"
-import { useState } from "react"
+import { Marker, Popup } from "react-leaflet"
 import MarkerOverlay from "./MarkerOverlay"
+import { Icon } from "leaflet"
 
 const MarkerItem = ({ presidium }) => {
-	const [selected, setSelected] = useState(null)
+	const { lat, lng } = presidium.location.coordinates
+
+	const lmIcon = new Icon({
+		iconUrl: "/images/Standarte_LM_bg_white.svg",
+		iconSize: [32, 32],
+		iconAnchor: [16, 32],
+		popupAnchor: [0, -32],
+	})
+
+	console.log(presidium)
 
 	return (
-		<MarkerF onClick={() => setSelected(presidium)} position={presidium.location.coordinates}>
-			{selected && (
-				<OverlayView position={selected.location.coordinates} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-					<MarkerOverlay selected={selected} onClose={() => setSelected(null)} />
-				</OverlayView>
-			)}
-		</MarkerF>
+		<Marker position={[lat, lng]} icon={lmIcon}>
+			<Popup>
+				<MarkerOverlay presidium={presidium} />
+			</Popup>
+		</Marker>
 	)
 }
 
