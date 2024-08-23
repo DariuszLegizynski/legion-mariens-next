@@ -7,7 +7,7 @@ const MarkerItem = ({ presidium }) => {
 
 	const lmIcon = new Icon({
 		iconUrl: "/images/Standarte_LM_bg_white.svg",
-		iconSize: [32, 32],
+		iconSize: [40, 40],
 		iconAnchor: [16, 32],
 		popupAnchor: [0, -32],
 	})

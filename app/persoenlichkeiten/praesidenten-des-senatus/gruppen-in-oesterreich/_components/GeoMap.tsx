@@ -1,16 +1,15 @@
 "use client"
 
 import "leaflet/dist/leaflet.css"
-import { useState } from "react"
-import { MapContainer, TileLayer } from "react-leaflet"
+import { useEffect, useState } from "react"
+import { MapContainer, TileLayer, useMap } from "react-leaflet"
 import { divIcon } from "leaflet"
 import MarkerClusterGroup from "react-leaflet-cluster"
 import MarkerItem from "@/app/persoenlichkeiten/praesidenten-des-senatus/gruppen-in-oesterreich/_components/MarkerItem"
 
-const GeoMap = ({ presidiumData }) => {
+const GeoMap = ({ presidiumData, selectedPresidium }) => {
 	const [center, setCenter] = useState([47.3939887, 13.6861309])
-
-	console.log({ presidiumData })
+	const [zoom, setZoom] = useState(7)
 
 	const createCustomClusterIcon = cluster => {
 		const svgIcon = `
@@ -22,12 +21,26 @@ const GeoMap = ({ presidiumData }) => {
 		})
 	}
 
+	const MapControl = () => {
+		const map = useMap()
+
+		useEffect(() => {
+			if (selectedPresidium) {
+				const { lat, lng } = selectedPresidium?.location?.coordinates || {}
+				map.flyTo([lat, lng], 15, { animate: true })
+			}
+		}, [selectedPresidium, map])
+
+		return null
+	}
+
 	return (
-		<MapContainer center={center} zoom={7} scrollWithZoom={false}>
+		<MapContainer center={center} zoom={zoom} scrollWithZoom={false}>
 			<TileLayer
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 			/>
+			<MapControl />
 			<MarkerClusterGroup chunkedLoading iconCreateFunction={createCustomClusterIcon}>
 				{presidiumData.map((presidium, index) => (
 					<MarkerItem key={`presidium_${index}`} presidium={presidium.attributes} />
@@ -36,4 +49,5 @@ const GeoMap = ({ presidiumData }) => {
 		</MapContainer>
 	)
 }
+
 export default GeoMap

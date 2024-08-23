@@ -33,20 +33,22 @@ const HeaderDesktop = () => {
 		setIsAuthenticated(Cookies.get("jwt") ? true : false)
 	}, [isCookie])
 
-	const handleCategoryClick = (categoryId: number) => {
+	const handleCategoryClick = (categoryId: number | null = null) => {
 		setIsUserIconActive(false)
 		if (expandedCategoryId === categoryId) {
 			setExpandedCategoryId(null)
 		} else {
 			setExpandedCategoryId(categoryId)
 		}
+		// Collapse the header when a link is clicked
+		setIsHeaderActive(false)
 	}
 
 	return (
-		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-10 bg-white border-b-2 border-grey w-full hidden lg:block`}>
+		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[3000] bg-white border-b-2 border-grey w-full hidden lg:block`}>
 			<div className="max-container">
 				<section className="grid grid-cols-[auto_auto_auto]">
-					<Link href="/">
+					<Link href="/" onClick={() => handleCategoryClick(null)}>
 						<Image className="h-8 w-auto" src="/images/Standarte_LM.svg" alt="Logo der Standarde von der Legion Mariens" width={32} height={60} />
 					</Link>
 					<nav className={`uppercase flex items-center justify-center`}>
@@ -58,33 +60,33 @@ const HeaderDesktop = () => {
 										className={`text-primary !leading-[0] text-xs xl:text-sm cursor-pointer ${
 											index === headerData.length - 1
 												? ""
-												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
+												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"] after:!leading-[0]'
 										}`}
 									>
 										{item.linkName}
 									</p>
 								) : (
 									<Link
-										onClick={() => handleCategoryClick(item.id + item.linkName)}
+										onClick={() => handleCategoryClick(null)}
 										href={`${item.linkPath}`}
 										className={`text-primary text-xs xl:text-sm !leading-[0] ${
 											index === headerData.length - 1
 												? ""
-												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
+												: 'after:!leading-[0] after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
 										}`}
 									>
 										{item.linkName}
 									</Link>
 								)}
 								{item.subCategory && expandedCategoryId === item.id + item.linkName && (
-									<ul className="text-start slide-in-from-top absolute top-9 -left-8 bg-white z-10 px-8 pb-8 w-auto flex flex-col items-start gap-y-2 mt-2">
-										<Link onClick={() => handleCategoryClick(item.id + item.linkName)} href={`${item.linkPath}`}>
+									<ul className="text-start slide-in-from-top absolute top-[1.65rem] -left-8 bg-white z-[3000] px-8 pb-8 w-auto flex flex-col items-start gap-y-2 pt-3">
+										<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>
 											<p className={`text-primary cursor-pointer text-nowrap`}>{item.linkName}</p>
 										</Link>
 										{item.subCategory &&
 											item.subCategory.map(subItem => (
 												<li key={subItem.id + subItem.linkName}>
-													<Link href={`${subItem.linkPath}`}>
+													<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
 														<p className="text-primary text-nowrap">{subItem.linkName}</p>
 													</Link>
 												</li>
@@ -127,19 +129,19 @@ const HeaderDesktop = () => {
 											</p>
 										</div>
 									) : (
-										<Link onClick={() => handleCategoryClick(item.id + item.linkName)} href={`${item.linkPath}`}>
+										<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>
 											<p className="text-primary cursor-pointer">{item.linkName}</p>
 										</Link>
 									)}
 									{item.subCategory && expandedCategoryId === item.id + item.linkName && (
 										<ul className="text-start slide-in-from-left">
-											<Link onClick={() => handleCategoryClick(item.id + item.linkName)} href={`${item.linkPath}`}>
+											<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>
 												<span className={`text-primary cursor-pointer`}>{item.linkName}</span>
 											</Link>
 											{item.subCategory &&
 												item.subCategory.map(subItem => (
 													<li key={subItem.id + subItem.linkName}>
-														<Link href={`${subItem.linkPath}`}>
+														<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
 															<span className="text-primary">{subItem.linkName}</span>
 														</Link>
 													</li>
@@ -152,7 +154,7 @@ const HeaderDesktop = () => {
 					)}
 					{isAuthenticated && isUserIconActive && (
 						<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8 pr-2`}>
-							<Link href="/fuer-legionaere-mariens/cart" className="max-w-72">
+							<Link href="/fuer-legionaere-mariens/cart" className="max-w-72" onClick={() => handleCategoryClick(null)}>
 								<p className="text-primary">Warenkorb</p>
 							</Link>
 							<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
