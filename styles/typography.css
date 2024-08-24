@@ -36,7 +36,7 @@ p,
 }
 
 p:after {
-	vertical-align: 9.25%;
+	@apply align-text-top;
 }
 
 i,
