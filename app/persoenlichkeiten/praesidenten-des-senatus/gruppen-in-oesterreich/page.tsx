@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
 import TitleContext from "@/components/base/common/TitleContent"
-import GeoMap from "@/app/persoenlichkeiten/praesidenten-des-senatus/gruppen-in-oesterreich/_components/GeoMap"
 import SearchAdress from "./_components/SearchAdress"
+
+import dynamic from "next/dynamic"
+export const GeoMap = dynamic(() => import("@/app/persoenlichkeiten/praesidenten-des-senatus/gruppen-in-oesterreich/_components/GeoMap"), { ssr: false })
 
 const groupsInAustria = () => {
 	const [pageContent, setPageContent] = useState(null)
@@ -25,8 +27,6 @@ const groupsInAustria = () => {
 		}
 		fetchPresidium()
 	}, [])
-
-	console.log({ pageContent })
 
 	return (
 		<article className="max-container my-24 mx-4">

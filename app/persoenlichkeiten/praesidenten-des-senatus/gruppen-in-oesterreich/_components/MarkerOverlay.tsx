@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 const MarkerOverlay = ({ presidium }: { presidium: any }) => {
-	console.log({ presidium })
 	const { lat, lng } = presidium.location.coordinates
 	return (
 		<section className="bg-white rounded-xl pt-2">
