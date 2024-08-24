@@ -79,7 +79,7 @@ const HeaderDesktop = () => {
 									</Link>
 								)}
 								{item.subCategory && expandedCategoryId === item.id + item.linkName && (
-									<ul className="text-start slide-in-from-top absolute top-[1.65rem] -left-8 bg-white z-[3000] px-8 pb-8 w-auto flex flex-col items-start gap-y-2 pt-3">
+									<ul className="text-start slide-in-from-top absolute top-[2.2rem] xl:top-[2.3rem] -left-8 bg-white z-[3000] px-8 pb-8 w-auto flex flex-col items-start gap-y-2 pt-3">
 										<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>
 											<p className={`text-primary cursor-pointer text-nowrap`}>{item.linkName}</p>
 										</Link>
