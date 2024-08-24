@@ -11,7 +11,7 @@ const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => v
 		e.stopPropagation()
 	}
 
-	const startTime = new Date(eventItem.attributes.startTime)
+	const startTime = new Date(eventItem.attributes?.startTime)
 	const startDate = startTime.toLocaleDateString("de-DE", {
 		day: "numeric",
 		month: "long",
@@ -21,7 +21,7 @@ const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => v
 	let endDate: string | undefined
 
 	if (eventItem.attributes?.endTime) {
-		const endTime = new Date(eventItem.attributes.endTime)
+		const endTime = new Date(eventItem.attributes?.endTime)
 		endDate = endTime.toLocaleDateString("de-DE", {
 			day: "numeric",
 			month: "long",
@@ -64,18 +64,18 @@ const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => v
 					</p>
 				</section>
 				<section className="my-4">
-					<div className="h1 !normal-case">{eventItem.attributes.title}</div>
-					<i>{eventItem.attributes.category.data.attributes.category}</i>
+					<div className="h1 !normal-case">{eventItem.attributes?.title}</div>
+					<i>{eventItem.attributes?.category.data?.attributes?.category}</i>
 				</section>
 				<section>
 					<div
 						className="mb-6"
 						dangerouslySetInnerHTML={{
-							__html: eventItem.attributes.description?.content?.map((item: Content) => item.children.map((child: Child) => child.text).join("")).join(""),
+							__html: eventItem.attributes?.description?.content?.map((item: Content) => item.children.map((child: Child) => child.text).join("")).join(""),
 						}}
 					/>
-					{eventItem.attributes.description?.registration && <b className="text-primary">Eine Anmeldung ist notwendig.</b>}
-					{eventItem.attributes.description?.registrationDescription && <p className="mt-2">{eventItem.attributes.description?.registrationDescription}</p>}
+					{eventItem.attributes?.description?.registration && <b className="text-primary">Eine Anmeldung ist notwendig.</b>}
+					{eventItem.attributes?.description?.registrationDescription && <p className="mt-2">{eventItem.attributes?.description?.registrationDescription}</p>}
 				</section>
 			</div>
 			<div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>

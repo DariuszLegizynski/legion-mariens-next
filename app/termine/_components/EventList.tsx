@@ -39,15 +39,15 @@ const EventList = () => {
 		let filtered = eventList
 
 		if (startDate) {
-			filtered = filtered.filter(event => new Date(event.attributes.startTime) >= new Date(startDate))
+			filtered = filtered.filter(event => new Date(event.attributes?.startTime) >= new Date(startDate))
 		}
 
 		if (endDate) {
-			filtered = filtered.filter(event => new Date(event.attributes.startTime) <= new Date(endDate))
+			filtered = filtered.filter(event => new Date(event.attributes?.startTime) <= new Date(endDate))
 		}
 
 		if (category && category !== "Alle Kategorien") {
-			filtered = filtered.filter(event => event.attributes?.category?.data?.attributes.category === category)
+			filtered = filtered.filter(event => event.attributes?.category?.data?.attributes?.category === category)
 		}
 
 		setFilteredEvents(filtered)

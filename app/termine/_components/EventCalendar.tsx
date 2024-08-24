@@ -22,8 +22,8 @@ const EventCalendar = ({
 				<option value="Alle Kategorien">Alle Kategorien</option>
 				{categories.length > 0 &&
 					categories.map(cat => (
-						<option key={cat.id} value={cat.attributes.category}>
-							{cat.attributes.category}
+						<option key={cat.id} value={cat.attributes?.category}>
+							{cat.attributes?.category}
 						</option>
 					))}
 			</select>

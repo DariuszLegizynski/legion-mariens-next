@@ -13,7 +13,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 		}
 	}, [isVisible])
 
-	const startTime = new Date(eventItem.attributes.startTime)
+	const startTime = new Date(eventItem.attributes?.startTime)
 	const day = startTime.toLocaleDateString("de-DE", {
 		day: "numeric",
 	})
@@ -48,8 +48,8 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 					<div className="flex flex-col justify-between">
 						<div className="mb-2">
-							<small>{eventItem.attributes?.category?.data?.attributes.category}</small>
-							<div className="strong">{eventItem.attributes.title}</div>
+							<small>{eventItem.attributes?.category?.data?.attributes?.category}</small>
+							<div className="strong">{eventItem.attributes?.title}</div>
 						</div>
 						<div className="flex justify-between">
 							<p>ab {time}</p>

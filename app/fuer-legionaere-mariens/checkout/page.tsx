@@ -40,7 +40,7 @@ const Checkout = () => {
 	}, [])
 
 	const sum = () => {
-		return cartData.map(cartItem => cartItem.attributes.price).reduce((acc, curr) => acc + curr, 0)
+		return cartData.map(cartItem => cartItem.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}
 
 	const handleOrder = async () => {
@@ -54,9 +54,9 @@ const Checkout = () => {
 				email: email,
 				presidium: presidium.id,
 				orderItemList: cartData.map(cartItem => ({
-					product: cartItem.attributes.product?.data[0].id,
-					amount: cartItem.attributes.amount,
-					price: cartItem.attributes.price,
+					product: cartItem.attributes?.product?.data[0].id,
+					amount: cartItem.attributes?.amount,
+					price: cartItem.attributes?.price,
 				})),
 			},
 		}
@@ -121,7 +121,7 @@ const Checkout = () => {
 							{presidiumData.length > 0 &&
 								presidiumData.map(presidium => (
 									<option key={presidium.id} value={JSON.stringify(presidium)}>
-										{`${presidium.attributes.city} | ${presidium.attributes.title}`}
+										{`${presidium.attributes?.city} | ${presidium.attributes?.title}`}
 									</option>
 								))}
 						</select>
@@ -129,9 +129,9 @@ const Checkout = () => {
 					{presidium && (
 						<div className="mb-16">
 							<h2 className="mt-4 mb-2">Lieferadresse:</h2>
-							<h3>{presidium.attributes.title}</h3>
-							<p>{presidium.attributes.address}</p>
-							<p>{presidium.attributes.city}</p>
+							<h3>{presidium.attributes?.title}</h3>
+							<p>{presidium.attributes?.address}</p>
+							<p>{presidium.attributes?.city}</p>
 						</div>
 					)}
 					<BaseButton

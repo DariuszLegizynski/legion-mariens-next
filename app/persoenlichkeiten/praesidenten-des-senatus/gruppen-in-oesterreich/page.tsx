@@ -17,7 +17,7 @@ const groupsInAustria = () => {
 	useEffect(() => {
 		const fetchPage = async () => {
 			const response = await getStrapiData(`groups-in-austria?populate=*`)
-			setPageContent(response.data.attributes.content)
+			setPageContent(response.data?.attributes?.content)
 		}
 		fetchPage()
 

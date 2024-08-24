@@ -25,7 +25,7 @@ const Cart = () => {
 	}, [])
 
 	const sum = () => {
-		return cartData.map(cartItem => cartItem.attributes.price).reduce((acc, curr) => acc + curr, 0)
+		return cartData.map(cartItem => cartItem.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}
 
 	if (loading) return <p>Loading...</p>

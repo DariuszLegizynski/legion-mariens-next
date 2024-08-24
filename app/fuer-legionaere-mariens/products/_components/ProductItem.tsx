@@ -72,8 +72,8 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 		<article className="border border-grey rounded-lg p-2 max-w-64 w-full sm:max-w-72 h-full">
 			<Image
 				className="h-80 p-1.5 w-full object-contain mx-auto"
-				src={`${process.env.API_URL}${productItem.attributes.image.data.attributes.url}`}
-				alt={`${process.env.API_URL}/${productItem.attributes.image.data.attributes.alternativeText}`}
+				src={`${process.env.API_URL}${productItem.attributes?.image.data?.attributes?.url}`}
+				alt={`${process.env.API_URL}/${productItem.attributes?.image.data?.attributes?.alternativeText}`}
 				width={100}
 				height={200}
 			/>

@@ -39,7 +39,7 @@ const Materialstelle = () => {
 		let filtered = productsData.data
 
 		if (productCategory && productCategory != "Alles") {
-			filtered = filtered.filter(productItem => productItem.attributes?.product_category?.data?.attributes.name === productCategory)
+			filtered = filtered.filter(productItem => productItem.attributes?.product_category?.data?.attributes?.name === productCategory)
 		}
 
 		setFilteredProducts(filtered)

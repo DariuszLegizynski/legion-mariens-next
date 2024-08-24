@@ -30,7 +30,7 @@ const SearchAddress = ({ presidiumData, setSelectedPresidium }) => {
 	}, [])
 
 	const handleOptionSelect = selectedOption => {
-		setSearchTerm(`${selectedOption.attributes.title} - ${selectedOption.attributes.address}, ${selectedOption.attributes.city}`)
+		setSearchTerm(`${selectedOption.attributes?.title} - ${selectedOption.attributes?.address}, ${selectedOption.attributes?.city}`)
 		setSelectedPresidium(selectedOption)
 		setIsDropdownVisible(false)
 	}
@@ -55,7 +55,7 @@ const SearchAddress = ({ presidiumData, setSelectedPresidium }) => {
 						{filteredPresidium.length > 0 ? (
 							filteredPresidium.map(item => (
 								<li key={item.id} onClick={() => handleOptionSelect(item)} className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-									{item.attributes.title} - {item.attributes.address}, {item.attributes.city}
+									{item.attributes?.title} - {item.attributes?.address}, {item.attributes?.city}
 								</li>
 							))
 						) : (

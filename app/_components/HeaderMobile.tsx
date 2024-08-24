@@ -23,7 +23,7 @@ const HeaderMobile = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const response = await getStrapiData(`header?populate[headerContent][populate]=*`)
-			setHeaderData(response.data.attributes.headerContent)
+			setHeaderData(response.data?.attributes?.headerContent)
 		}
 
 		fetchData()

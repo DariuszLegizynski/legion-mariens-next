@@ -14,7 +14,7 @@ export default async function Home() {
 	const landingPageData: LandingPageData = await getStrapiData(
 		"landing-page?populate[introduction][populate][avatar][populate]=true&populate[about][populate]=true&populate[termine][populate]=true"
 	)
-	const { introduction, about, termine } = await landingPageData.data.attributes
+	const { introduction, about, termine } = await landingPageData.data?.attributes
 
 	const today = new Date().toISOString()
 	const eventsData = await getStrapiData(`events?filters[startTime][$gte]=${today}&pagination[pageSize]=10&populate=*&sort=startTime:ASC`)
@@ -27,8 +27,8 @@ export default async function Home() {
 					<section className="flex flex-col mb-8">
 						<div className="flex items-center">
 							<Image
-								src={`${process.env.API_URL}${introduction?.avatar.data.attributes.url}`}
-								alt={introduction?.avatar.data.attributes.alternativeText || "Avatar"}
+								src={`${process.env.API_URL}${introduction?.avatar.data?.attributes?.url}`}
+								alt={introduction?.avatar.data?.attributes?.alternativeText || "Avatar"}
 								width={64}
 								height={64}
 								className="float-left mr-5 rounded-full"
@@ -82,4 +82,3 @@ export default async function Home() {
 		</main>
 	)
 }
-
