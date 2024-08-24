@@ -1,5 +1,5 @@
 import { FC } from "react"
-import ProductCategory from "@/app/_components/product/ProductCategory"
+import ProductCategory from "@/app/fuer-legionaere-mariens/products/_components/ProductCategory"
 
 type SetProductCategoryCallback = (category: string) => void
 
