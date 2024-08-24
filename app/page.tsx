@@ -25,7 +25,7 @@ export default async function Home() {
 			<div className="md:grid md:grid-cols-2 md:gap-x-16">
 				{introduction && (
 					<section className="flex flex-col mb-8">
-						<div>
+						<div className="flex items-center">
 							<Image
 								src={`${process.env.API_URL}${introduction?.avatar.data.attributes.url}`}
 								alt={introduction?.avatar.data.attributes.alternativeText || "Avatar"}
