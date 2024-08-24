@@ -130,7 +130,14 @@ const HeaderMobile = () => {
 				)}
 				{isAuthenticated && isUserIconActive && (
 					<nav className={`text-center uppercase grid justify-items-start justify-end gap-y-4 my-8 pr-2`}>
-						<Link onClick={() => setIsBurgerActive(false)} href="/fuer-legionaere-mariens/cart" className="max-w-72">
+						<Link
+							onClick={() => {
+								setIsBurgerActive(false)
+								setIsUserIconActive(false)
+							}}
+							href="/fuer-legionaere-mariens/cart"
+							className="max-w-72"
+						>
 							<p className="text-primary">Warenkorb</p>
 						</Link>
 						<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
