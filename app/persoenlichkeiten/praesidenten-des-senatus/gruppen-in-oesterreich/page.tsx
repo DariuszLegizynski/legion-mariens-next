@@ -8,22 +8,29 @@ import GeoMap from "@/app/persoenlichkeiten/praesidenten-des-senatus/gruppen-in-
 import SearchAdress from "./_components/SearchAdress"
 
 const groupsInAustria = () => {
+	const [pageContent, setPageContent] = useState(null)
 	const [presidiumData, setPresidiumData] = useState([])
 	const [selectedPresidium, setSelectedPresidium] = useState(null)
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchPage = async () => {
+			const response = await getStrapiData(`groups-in-austria?populate=*`)
+			setPageContent(response.data.attributes.content)
+		}
+		fetchPage()
+
+		const fetchPresidium = async () => {
 			const response = await getStrapiData(`presidiums?populate=*`)
 			setPresidiumData(response.data)
 		}
-		fetchData()
+		fetchPresidium()
 	}, [])
 
-	console.log({ selectedPresidium })
+	console.log({ pageContent })
 
 	return (
 		<article className="max-container my-24 mx-4">
-			<TitleContext title="Gruppen in Österreich" />
+			<TitleContext title={pageContent?.title} content={pageContent?.content} />
 			<SearchAdress presidiumData={presidiumData} setSelectedPresidium={setSelectedPresidium} />
 			<GeoMap presidiumData={presidiumData} selectedPresidium={selectedPresidium?.attributes} />
 		</article>

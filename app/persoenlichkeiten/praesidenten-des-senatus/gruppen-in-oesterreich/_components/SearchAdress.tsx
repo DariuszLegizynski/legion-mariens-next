@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useRef, useEffect } from "react"
 
 const SearchAddress = ({ presidiumData, setSelectedPresidium }) => {
@@ -36,9 +38,6 @@ const SearchAddress = ({ presidiumData, setSelectedPresidium }) => {
 	return (
 		<section className="relative">
 			<div className="mb-5">
-				<label htmlFor="search" className="block text-sm font-medium text-gray-700">
-					Suche nach einer PLZ oder Stadt:
-				</label>
 				<input
 					type="text"
 					id="search"
@@ -51,7 +50,7 @@ const SearchAddress = ({ presidiumData, setSelectedPresidium }) => {
 				/>
 			</div>
 			{isDropdownVisible && (
-				<div ref={dropdownRef} className="absolute top-20 max-h-72 overflow-y-auto border border-gray-300 rounded-md z-[2000] bg-white">
+				<div ref={dropdownRef} className="absolute top-10 max-h-72 overflow-y-auto border border-gray-300 rounded-md z-[2000] bg-white">
 					<ul className="block w-full text-sm">
 						{filteredPresidium.length > 0 ? (
 							filteredPresidium.map(item => (

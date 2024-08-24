@@ -43,7 +43,7 @@ const HeaderMobile = () => {
 	}
 
 	return (
-		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-10 bg-white border-b-2 border-grey w-full lg:hidden`}>
+		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[5000] bg-white border-b-2 border-grey w-full lg:hidden`}>
 			<section className="grid grid-cols-[1fr_1fr_1fr]">
 				<div
 					onClick={() => {

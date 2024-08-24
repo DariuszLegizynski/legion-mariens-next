@@ -32,7 +32,11 @@ h3,
 
 p,
 .p {
-	@apply text-base leading-6;
+	@apply text-base;
+}
+
+p:after {
+	vertical-align: 9.25%;
 }
 
 i,

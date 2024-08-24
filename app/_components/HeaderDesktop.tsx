@@ -40,12 +40,12 @@ const HeaderDesktop = () => {
 		} else {
 			setExpandedCategoryId(categoryId)
 		}
-		// Collapse the header when a link is clicked
+
 		setIsHeaderActive(false)
 	}
 
 	return (
-		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[3000] bg-white border-b-2 border-grey w-full hidden lg:block`}>
+		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[5000] bg-white border-b-2 border-grey w-full hidden lg:block`}>
 			<div className="max-container">
 				<section className="grid grid-cols-[auto_auto_auto]">
 					<Link href="/" onClick={() => handleCategoryClick(null)}>
@@ -57,25 +57,25 @@ const HeaderDesktop = () => {
 								{item.subCategory ? (
 									<p
 										onClick={() => handleCategoryClick(item.id + item.linkName)}
-										className={`text-primary !leading-[0] text-xs xl:text-sm cursor-pointer ${
+										className={`text-primary text-xs xl:text-sm cursor-pointer ${
 											index === headerData.length - 1
 												? ""
-												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"] after:!leading-[0]'
+												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
 										}`}
 									>
 										{item.linkName}
 									</p>
 								) : (
-									<Link
-										onClick={() => handleCategoryClick(null)}
-										href={`${item.linkPath}`}
-										className={`text-primary text-xs xl:text-sm !leading-[0] ${
-											index === headerData.length - 1
-												? ""
-												: 'after:!leading-[0] after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
-										}`}
-									>
-										{item.linkName}
+									<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>
+										<p
+											className={`text-primary text-xs xl:text-sm ${
+												index === headerData.length - 1
+													? ""
+													: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
+											}`}
+										>
+											{item.linkName}
+										</p>
 									</Link>
 								)}
 								{item.subCategory && expandedCategoryId === item.id + item.linkName && (
