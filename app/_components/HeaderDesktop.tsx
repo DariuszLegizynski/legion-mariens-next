@@ -33,6 +33,14 @@ const HeaderDesktop = () => {
 		setIsAuthenticated(Cookies.get("jwt") ? true : false)
 	}, [isCookie])
 
+	const handleLogout = async () => {
+		try {
+			await logoutAction()
+		} catch (error) {
+			console.error("Logout failed:", error)
+		}
+	}
+
 	const handleCategoryClick = (categoryId: number | null = null) => {
 		setIsUserIconActive(false)
 		if (expandedCategoryId === categoryId) {
@@ -157,7 +165,7 @@ const HeaderDesktop = () => {
 							<Link href="/fuer-legionaere-mariens/cart" className="max-w-72" onClick={() => handleCategoryClick(null)}>
 								<p className="text-primary">Warenkorb</p>
 							</Link>
-							<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
+							<BaseButton onClick={handleLogout} buttonType="logout" buttonType="logout" text="Abmelden" />
 						</nav>
 					)}
 				</section>

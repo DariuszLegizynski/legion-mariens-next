@@ -34,6 +34,14 @@ const HeaderMobile = () => {
 		setIsAuthenticated(Cookies.get("jwt") ? true : false)
 	}, [isCookie])
 
+	const handleLogout = async () => {
+		try {
+			await logoutAction()
+		} catch (error) {
+			console.error("Logout failed:", error)
+		}
+	}
+
 	const handleCategoryClick = (categoryId: number) => {
 		if (expandedCategoryId === categoryId) {
 			setExpandedCategoryId(null)
@@ -140,7 +148,7 @@ const HeaderMobile = () => {
 						>
 							<p className="text-primary">Warenkorb</p>
 						</Link>
-						<BaseButton onClick={logoutAction} buttonType="logout" text="Abmelden" />
+						<BaseButton onClick={handleLogout} buttonType="logout" text="Abmelden" />
 					</nav>
 				)}
 			</section>

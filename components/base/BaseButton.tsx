@@ -34,11 +34,11 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 				</button>
 			)}
 			{buttonType === "logout" && (
-				<form action={onClick}>
-					<button type="button" className="p-2 text-accent uppercase w-full max-w-72">
+				<div>
+					<button type="button" onClick={onClick} className="p-2 text-accent uppercase w-full max-w-72">
 						<p>{text}</p>
 					</button>
-				</form>
+				</div>
 			)}
 			{buttonType === "cart" && (
 				<button
