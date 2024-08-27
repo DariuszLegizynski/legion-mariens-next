@@ -37,6 +37,7 @@ const HeaderMobile = () => {
 	const handleLogout = async () => {
 		try {
 			await logoutAction()
+			Cookies.remove("jwt")
 		} catch (error) {
 			console.error("Logout failed:", error)
 		}

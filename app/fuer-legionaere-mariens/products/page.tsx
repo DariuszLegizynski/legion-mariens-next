@@ -53,7 +53,7 @@ const Materialstelle = () => {
 				{filteredProducts?.length > 0 ? (
 					filteredProducts?.map((productItem: Product) => <ProductItem key={`product_${productItem.id}`} productItem={productItem} />)
 				) : (
-					<p className="my-16 col-span-2 text-center text-accent">Keine Produkte für diese Kategorie gefunden.</p>
+					<p className="my-16 col-span-full text-center text-accent">Keine Produkte für diese Kategorie gefunden.</p>
 				)}
 			</section>
 		</section>

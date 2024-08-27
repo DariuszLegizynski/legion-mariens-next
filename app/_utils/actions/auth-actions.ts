@@ -38,7 +38,7 @@ export const loginUserAction = async (prevState: any, formData: FormData) => {
 		}
 	}
 
-	cookies().set("jwt", responseData.jwt)
+	cookies().set("jwt", responseData.jwt, config)
 	redirect("/fuer-legionaere-mariens/products")
 }
 
@@ -52,6 +52,6 @@ export const logoutAction = async () => {
 				.then(res => res)
 				.catch(err => err)
 		})
-	cookies().set("jwt", "", { ...config, maxAge: 0 })
+	cookies().set("jwt", "", { ...config, maxAge: -1 })
 	redirect("/auth/login")
 }
