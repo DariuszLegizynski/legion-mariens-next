@@ -29,9 +29,8 @@ const nextConfig = {
 				pathname: "/**",
 			},
 			{
-				protocol: "http",
-				hostname: "89.58.8.55",
-				port: "7001",
+				protocol: "https",
+				hostname: "api.legion-mariens-test.at",
 				pathname: "/**",
 			},
 		],
