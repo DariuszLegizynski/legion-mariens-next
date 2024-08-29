@@ -3,9 +3,10 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 
 import BaseButton from "@/components/base/BaseButton"
-import { deleteStrapiAuthData, createStrapiAuthData, getStrapiAuthData, getStrapiData } from "@/app/_utils/services/getStrapiData"
+import { deleteStrapiAuthData, createStrapiAuthData, getStrapiAuthData, getStrapiData, updateStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 
 import type { Cart as CartType } from "@/types/Cart"
+import { useRouter } from "next/navigation"
 
 const Checkout = () => {
 	const [cartData, setCartData] = useState<CartType[]>([])
@@ -21,6 +22,7 @@ const Checkout = () => {
 	const [loading, setLoading] = useState(false)
 
 	const jwt: string = Cookies.get("jwt")
+	const router = useRouter()
 
 	const fetchCartData = async () => {
 		const { data } = await getStrapiAuthData(`user-carts?filters[session_id][$eq]=${jwt}&populate=*`, jwt)
@@ -40,19 +42,19 @@ const Checkout = () => {
 	}, [])
 
 	const sum = () => {
-		return cartData.map(cartItem => cartItem.attributes?.price).reduce((acc, curr) => acc + curr, 0)
+		return cartData.map(cartItem => cartItem?.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}
 
 	const handleOrder = async () => {
 		setLoading(true)
 
-		const data = {
+		const orderData = {
 			data: {
 				name: name,
 				surname: surname,
 				phone: phone,
 				email: email,
-				presidium: presidium.id,
+				presidium: presidium?.id,
 				orderItemList: cartData.map(cartItem => ({
 					product: cartItem.attributes?.product?.data[0].id,
 					amount: cartItem.attributes?.amount,
@@ -62,24 +64,34 @@ const Checkout = () => {
 		}
 
 		try {
-			await createStrapiAuthData("orders", data, jwt)
-				.then(res => res)
-				.catch(err => err)
-		} catch (error: any) {
-			setLoading(false)
-			throw new Error("Fehler beim Hinzufügen zum Warenkorb: ", error.message)
-		}
+			// Create the order in Strapi
+			await createStrapiAuthData("orders", orderData, jwt)
 
-		try {
-			cartData.forEach(async cartItem => {
+			// Update product quantities in Strapi
+			for (const cartItem of cartData) {
+				const productId = cartItem?.attributes?.product?.data[0]?.id
+				const purchasedAmount = cartItem?.attributes?.amount
+
+				// Fetch current product data
+				const productData = await getStrapiAuthData(`products/${productId}`, jwt)
+				const currentQuantity = productData.data.attributes?.quantity
+
+				const newQuantity = currentQuantity - purchasedAmount
+
+				// Update product quantity in Strapi
+				await updateStrapiAuthData(`products/${productId}`, { data: { quantity: newQuantity } }, jwt)
+			}
+
+			// Clear the cart
+			for (const cartItem of cartData) {
 				await deleteStrapiAuthData("user-carts", jwt!, cartItem.id)
-					.then(res => res)
-					.catch(err => err)
-			})
+			}
 
 			setLoading(false)
-		} catch (error: any) {
+			router.push("/fuer-legionaere-mariens/confirmation")
+		} catch (error) {
 			setLoading(false)
+			console.error("Error during order processing: ", error.message)
 			throw new Error("Fehler beim Hinzufügen zum Warenkorb: ", error.message)
 		}
 	}
@@ -120,8 +132,8 @@ const Checkout = () => {
 							</option>
 							{presidiumData.length > 0 &&
 								presidiumData.map(presidium => (
-									<option key={presidium.id} value={JSON.stringify(presidium)}>
-										{`${presidium.attributes?.city} | ${presidium.attributes?.title}`}
+									<option key={presidium?.id} value={JSON.stringify(presidium)}>
+										{`${presidium?.attributes?.city} | ${presidium?.attributes?.title}`}
 									</option>
 								))}
 						</select>
@@ -129,18 +141,12 @@ const Checkout = () => {
 					{presidium && (
 						<div className="mb-16">
 							<h2 className="mt-4 mb-2">Lieferadresse:</h2>
-							<h3>{presidium.attributes?.title}</h3>
-							<p>{presidium.attributes?.address}</p>
-							<p>{presidium.attributes?.city}</p>
+							<h3>{presidium?.attributes?.title}</h3>
+							<p>{presidium?.attributes?.address}</p>
+							<p>{presidium?.attributes?.city}</p>
 						</div>
 					)}
-					<BaseButton
-						onClick={() => handleOrder()}
-						isDisabled={loading}
-						buttonType="link"
-						text="Kostenpflichtig bestellen"
-						linkPath="/fuer-legionaere-mariens/confirmation"
-					/>
+					<BaseButton onClick={handleOrder} isDisabled={loading} buttonType="cart" text="Kostenpflichtig bestellen" />
 				</form>
 			</section>
 		</article>

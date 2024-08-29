@@ -49,8 +49,6 @@ const Materialstelle = () => {
 		setFilteredProducts(filtered)
 	}, [productCategory, productsData])
 
-	console.log({ cartData })
-
 	const handleToCart = async (productItem: Product, amount: number, warehouseQuantity: number) => {
 		if (amount <= 0) return
 
@@ -59,7 +57,7 @@ const Materialstelle = () => {
 		try {
 			// Check if product is already in cart
 			const existingCartItem = cartData?.find((item: any) => item?.attributes?.product?.data[0]?.id === productItem.id)
-			console.log({ existingCartItem })
+
 			if (existingCartItem) {
 				const updatedData = {
 					data: {
