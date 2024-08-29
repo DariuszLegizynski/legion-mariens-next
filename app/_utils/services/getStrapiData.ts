@@ -47,6 +47,25 @@ export const createStrapiAuthData = async (query: string, data: any, jwt: string
 	}
 }
 
+export const updateStrapiAuthData = async (query: string, data: any, jwt: string) => {
+	try {
+		const response = await fetch(`${process.env.API_URL}/api/${query}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${jwt}`,
+			},
+			body: JSON.stringify(data),
+			cache: "no-cache",
+		})
+		const result = await response.json()
+
+		return result
+	} catch (error) {
+		throw new Error(`Fehler bei fetchen der Daten: ${error}`)
+	}
+}
+
 export const deleteStrapiAuthData = async (query: string, jwt: string, productId: number) => {
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}/${productId}`, {

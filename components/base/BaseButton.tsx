@@ -44,8 +44,10 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 				<button
 					onClick={onClick}
 					type="submit"
+					disabled={isDisabled}
 					onMouseUp={e => e.currentTarget.blur()}
-					className="p-2 capitalize w-full max-w-52 text-white bg-primary-light border border-grey rounded-xl hover:text-white active:text-white hover:bg-primary active:bg-primary transition-transform ease-in-out hover:scale-105"
+					className={`p-2 capitalize w-full max-w-52 text-white border border-grey rounded-xl transition-transform ease-in-out 
+						${isDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-primary-light hover:text-white active:text-white hover:bg-primary active:bg-primary hover:scale-105"}`}
 				>
 					<p className="flex items-center justify-center gap-x-2">
 						<IconItems type={iconType} width={width} height={height} fillColor={fillColor} strokeColor={strokeColor} />
