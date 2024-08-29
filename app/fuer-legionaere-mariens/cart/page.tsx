@@ -24,6 +24,8 @@ const Cart = () => {
 		fetchCartData()
 	}, [])
 
+	console.log({ cartData })
+
 	const sum = () => {
 		return cartData.map(cartItem => cartItem?.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}
@@ -44,6 +46,9 @@ const Cart = () => {
 			</h3>
 			<div className="flex flex-col items-center mt-20">
 				<BaseButton buttonType="link" text="Zur Bestellung" linkPath="/fuer-legionaere-mariens/checkout" />
+			</div>
+			<div className="flex flex-col items-center mt-12">
+				<BaseButton buttonType="link" text="Zur Materiallstelle" linkPath="/fuer-legionaere-mariens/products" />
 			</div>
 		</article>
 	)
