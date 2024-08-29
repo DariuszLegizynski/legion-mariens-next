@@ -25,7 +25,7 @@ const Cart = () => {
 	}, [])
 
 	const sum = () => {
-		return cartData.map(cartItem => cartItem.attributes?.price).reduce((acc, curr) => acc + curr, 0)
+		return cartData.map(cartItem => cartItem?.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}
 
 	if (loading) return <p>Loading...</p>
@@ -35,7 +35,9 @@ const Cart = () => {
 			<h1 className="mb-12">Warenkorb</h1>
 			<section className="grid gap-8">
 				{cartData.length > 0 &&
-					cartData.map(cartItem => <CartItem cartItem={cartItem.attributes} cartId={cartItem.id} key={`cart_${cartItem.id}`} onCartChange={fetchCartData} />)}
+					cartData.map(cartItem => (
+						<CartItem cartItem={cartItem?.attributes} cartId={cartItem?.id} key={`cart_${cartItem?.id}`} onCartChange={fetchCartData} />
+					))}
 			</section>
 			<h3 className="mt-12 text-end">
 				Insgesamt: <b>{sum().toFixed(2).replace(".", ",")}&nbsp;€</b>

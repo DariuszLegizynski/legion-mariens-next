@@ -1,72 +1,32 @@
 "use client"
 
 import { FC, useState, useEffect } from "react"
-import Cookies from "js-cookie"
-
-import type { Product } from "@/types/Product"
 import Image from "next/image"
 import BaseButton from "@/components/base/BaseButton"
-import { createStrapiAuthData } from "@/app/_utils/services/getStrapiData"
+import type { Product } from "@/types/Product"
 
-const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
+const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: boolean }> = ({ productItem, handleToCart, loading }) => {
 	const [warehouseQuantity, setWarehouseQuantity] = useState<number>(productItem.attributes?.quantity)
 	const [amount, setAmount] = useState<number>(0)
 	const [endPrice, setEndPrice] = useState<number>(0)
-	const [loading, setLoading] = useState<boolean>(false)
 
 	const handleDecrease = () => {
 		if (amount > 0) {
 			setAmount(amount - 1)
 			setWarehouseQuantity(warehouseQuantity + 1)
-
-			return
 		}
-		setAmount(0)
-		setWarehouseQuantity(warehouseQuantity)
 	}
 
 	const handleIncrease = () => {
 		if (warehouseQuantity > 0) {
 			setAmount(amount + 1)
 			setWarehouseQuantity(warehouseQuantity - 1)
-
-			return
 		}
-		setAmount(0)
-		setWarehouseQuantity(warehouseQuantity)
-	}
-
-	const calculateEndPrice = () => {
-		setEndPrice(amount * productItem.attributes?.price)
 	}
 
 	useEffect(() => {
-		calculateEndPrice()
+		setEndPrice(amount * productItem.attributes?.price)
 	}, [amount])
-
-	const jwt = Cookies.get("jwt")
-	const handleToCart = async () => {
-		setLoading(true)
-
-		const data = {
-			data: {
-				product: productItem.id,
-				amount: amount,
-				price: endPrice.toFixed(2),
-				quantity: warehouseQuantity,
-				session_id: jwt,
-			},
-		}
-		try {
-			await createStrapiAuthData("user-carts", data, jwt)
-				.then(res => res)
-				.catch(err => err)
-			setLoading(false)
-		} catch (error: any) {
-			setLoading(false)
-			throw new Error("Fehler beim Hinzufügen zum Warenkorb: ", error.message)
-		}
-	}
 
 	return (
 		<article className="border border-grey rounded-lg p-2 max-w-64 w-full sm:max-w-72 h-full">
@@ -105,17 +65,18 @@ const ProductComponent: FC<{ productItem: Product }> = ({ productItem }) => {
 				</div>
 				<div className="flex flex-col items-center w-full mt-4">
 					<BaseButton
-						onClick={handleToCart}
-						isDisabled={loading}
+						onClick={() => handleToCart(productItem, amount, warehouseQuantity)}
+						isDisabled={loading || amount <= 0}
 						buttonType="cart"
 						text="Zum Warenkorb"
 						iconType="cart"
 						width="1.4rem"
 						height="1.4rem"
 						fillColor="white"
-						strokeColor="none"
+						fontFamily="Open-Sans, sans-serif"
+						textSize="0.95rem"
+						className="bg-primary hover:bg-primary-800"
 					/>
-					{loading && <p className="mt-2 text-center">Lade...</p>}
 				</div>
 			</section>
 		</article>
