@@ -24,8 +24,6 @@ const Cart = () => {
 		fetchCartData()
 	}, [])
 
-	console.log({ cartData })
-
 	const sum = () => {
 		return cartData.map(cartItem => cartItem?.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}

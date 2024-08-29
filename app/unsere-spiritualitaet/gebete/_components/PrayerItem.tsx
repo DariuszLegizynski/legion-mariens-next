@@ -2,7 +2,6 @@ import Image from "next/image"
 import BaseButton from "@/components/base/BaseButton"
 
 const PrayerItem = ({ prayerItem }) => {
-	console.log({ prayerItem })
 	return (
 		<div>
 			<div className={`grid ${prayerItem.image.data ? "sm:grid-cols-[auto_1fr] gap-x-8" : "mb-16"}`}>

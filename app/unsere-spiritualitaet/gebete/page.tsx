@@ -6,7 +6,6 @@ const Prayer = async () => {
 	const data = await getStrapiData("spiritualitaet-gebete?populate[content][populate][content][populate]=*")
 	const prayerContentData = data.data.attributes
 
-	console.log({ prayerContentData })
 	return (
 		<article className="mt-24 mx-4">
 			<h1>{prayerContentData.title}</h1>
