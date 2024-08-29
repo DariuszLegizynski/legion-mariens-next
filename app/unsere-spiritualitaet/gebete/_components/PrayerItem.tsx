@@ -27,12 +27,7 @@ const PrayerItem = ({ prayerItem }) => {
 			</div>
 			{prayerItem.pdf.data && (
 				<div className="mb-16 flex flex-col w-full items-center sm:items-end">
-					<BaseButton
-						buttonType="accent"
-						text="download PDF"
-						linkPath={`${process.env.API_URL}${prayerItem.pdf.data.attributes.url}`}
-						isDownload={prayerItem.pdf.data.attributes.url ? true : false}
-					>
+					<BaseButton buttonType="download" text="download PDF" linkPath={`${process.env.API_URL}${prayerItem.pdf.data.attributes.url}`}>
 						Download PDF
 					</BaseButton>
 				</div>

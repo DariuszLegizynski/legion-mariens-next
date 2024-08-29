@@ -23,6 +23,11 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 					<IconItems type={iconType} width={width} height={height} />
 				</button>
 			)}
+			{buttonType === "download" && (
+				<a href={`${linkPath}`} className="p-2 min-w-56 text-accent text-sm text-center uppercase border-2 border-accent w-full max-w-72">
+					{text}
+				</a>
+			)}
 			{buttonType === "accent" && (
 				<Link href={`${linkPath}`} className="p-2 min-w-56 text-accent text-sm text-center uppercase border-2 border-accent w-full max-w-72">
 					{text}
