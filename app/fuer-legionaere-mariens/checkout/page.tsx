@@ -10,14 +10,17 @@ import { useRouter } from "next/navigation"
 
 const Checkout = () => {
 	const [cartData, setCartData] = useState<CartType[]>([])
-	const [presidiumData, setPresidiumData] = useState([])
-	const [presidium, setPresidium] = useState(null)
 
 	// Form
 	const [name, setName] = useState("")
 	const [surname, setSurname] = useState("")
 	const [phone, setPhone] = useState("")
 	const [email, setEmail] = useState("")
+	const [address, setAddress] = useState("")
+	const [place, setPlace] = useState("")
+	const [legion, setLegion] = useState("")
+	const [zip, setZip] = useState("")
+	const [land, setLand] = useState("")
 
 	const [loading, setLoading] = useState(false)
 
@@ -33,14 +36,6 @@ const Checkout = () => {
 		fetchCartData()
 	}, [])
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await getStrapiData(`presidiums?populate=*`)
-			setPresidiumData(response.data)
-		}
-		fetchData()
-	}, [])
-
 	const sum = () => {
 		return cartData.map(cartItem => cartItem?.attributes?.price).reduce((acc, curr) => acc + curr, 0)
 	}
@@ -54,7 +49,11 @@ const Checkout = () => {
 				surname: surname,
 				phone: phone,
 				email: email,
-				presidium: presidium?.id,
+				address: address,
+				place: place,
+				legion: legion,
+				zip: zip,
+				land: land,
 				orderItemList: cartData.map(cartItem => ({
 					product: cartItem.attributes?.product?.data[0].id,
 					amount: cartItem.attributes?.amount,
@@ -106,47 +105,46 @@ const Checkout = () => {
 			</section>
 			<section className="flex flex-col items-center">
 				<h2 className="mt-12">Anschrift:</h2>
-				<form className="flex flex-col items-center mt-8 gap-y-4 w-full">
-					<div className="grid grid-rows-[auto_1fr] justify-stretch gap-2 w-full">
+				<form className="grid grid-cols-1 sm:grid-cols-2 items-center mt-8 gap-4">
+					<div className="grid grid-rows-[26px_1fr]  justify-center gap-2">
 						<label htmlFor="name">Vorname: *</label>
-						<input id="name" name="name" required onChange={e => setName(e.target.value)} />
+						<input className="w-72 max-w-full" id="name" name="name" required onChange={e => setName(e.target.value)} />
 					</div>
-					<div className="grid grid-rows-[auto_1fr] justify-stretch gap-2 w-full">
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
 						<label htmlFor="surname">Nachname: *</label>
-						<input id="surname" name="surname" required onChange={e => setSurname(e.target.value)} />
+						<input className="w-72 max-w-full" id="surname" name="surname" required onChange={e => setSurname(e.target.value)} />
 					</div>
-					<div className="grid grid-rows-[auto_1fr] justify-stretch gap-2 w-full">
-						<label htmlFor="phone">Telefon:</label>
-						<input type="phone" id="phone" name="phone" onChange={e => setPhone(e.target.value)} />
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
+						<label htmlFor="email">Anschrift: *</label>
+						<textarea className="w-72 max-w-full" id="address" name="address" onChange={e => setAddress(e.target.value)} />
 					</div>
-					<div className="grid grid-rows-[auto_1fr] justify-stretch gap-2 w-full">
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full self-start">
+						<label htmlFor="email">Ort: *</label>
+						<input className="w-72 max-w-full" type="place" id="place" name="place" onChange={e => setPlace(e.target.value)} />
+					</div>
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
+						<label htmlFor="email">Legionsrat:</label>
+						<input className="w-72 max-w-full" type="legion" id="legion" name="legion" onChange={e => setLegion(e.target.value)} />
+					</div>
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
+						<label htmlFor="email">PLZ: *</label>
+						<input className="w-72 max-w-full" type="zip" id="zip" name="zip" onChange={e => setZip(e.target.value)} />
+					</div>
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
+						<label htmlFor="email">Land:</label>
+						<input className="w-72 max-w-full" type="land" id="land" name="land" onChange={e => setLand(e.target.value)} />
+					</div>
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
+						<label htmlFor="phone">Telefon: *</label>
+						<input className="w-72 max-w-full" type="phone" name="phone" required onChange={e => setPhone(e.target.value)} />
+					</div>
+					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
 						<label htmlFor="email">Email:</label>
-						<input type="email" id="email" name="email" onChange={e => setEmail(e.target.value)} />
+						<input className="w-72 max-w-full" type="email" id="email" name="email" onChange={e => setEmail(e.target.value)} />
 					</div>
-
-					<div className={`grid grid-rows-[auto_1fr] justify-stretch gap-2 w-full ${presidium ? "" : "mb-16"}`}>
-						<label htmlFor="hq">Präsidium:</label>
-						<select defaultValue="" onChange={e => setPresidium(JSON.parse(e.target.value))} required>
-							<option value="" disabled hidden>
-								Präsidium wählen
-							</option>
-							{presidiumData.length > 0 &&
-								presidiumData.map(presidium => (
-									<option key={presidium?.id} value={JSON.stringify(presidium)}>
-										{`${presidium?.attributes?.city} | ${presidium?.attributes?.title}`}
-									</option>
-								))}
-						</select>
+					<div className="col-span-full mx-auto mt-12">
+						<BaseButton onClick={handleOrder} isDisabled={loading} buttonType="cart" text="Kostenpflichtig bestellen" />
 					</div>
-					{presidium && (
-						<div className="mb-16">
-							<h2 className="mt-4 mb-2">Lieferadresse:</h2>
-							<h3>{presidium?.attributes?.title}</h3>
-							<p>{presidium?.attributes?.address}</p>
-							<p>{presidium?.attributes?.city}</p>
-						</div>
-					)}
-					<BaseButton onClick={handleOrder} isDisabled={loading} buttonType="cart" text="Kostenpflichtig bestellen" />
 				</form>
 			</section>
 		</article>

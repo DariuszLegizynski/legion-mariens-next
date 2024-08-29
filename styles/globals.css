@@ -33,6 +33,7 @@ a {
 	@apply cursor-pointer;
 }
 
+textarea,
 select,
 input,
 option {
