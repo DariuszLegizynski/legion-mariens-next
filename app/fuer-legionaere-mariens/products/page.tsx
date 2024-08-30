@@ -9,6 +9,7 @@ import type { Product } from "@/types/Product"
 // components
 import ProductItem from "@/app/fuer-legionaere-mariens/products/_components/ProductItem"
 import ProductCategories from "@/app/fuer-legionaere-mariens/products/_components/ProductCategories"
+import SearchProduct from "@/app/fuer-legionaere-mariens/products/_components/SearchProduct"
 
 const Materialstelle = () => {
 	const [productsData, setProductsData] = useState<Product[]>([])
@@ -16,6 +17,7 @@ const Materialstelle = () => {
 	const [productCategories, setProductCategories] = useState<any[]>([])
 	const [productCategory, setProductCategory] = useState<string>("")
 	const [cartData, setCartData] = useState<any[]>([])
+	const [searchTerm, setSearchTerm] = useState<string>("") // <-- Add this state
 	const [loading, setLoading] = useState(false)
 
 	const jwt = Cookies.get("jwt")
@@ -43,12 +45,24 @@ const Materialstelle = () => {
 
 	useEffect(() => {
 		let filtered = productsData.data
+
 		if (productCategory && productCategory !== "Alles") {
 			filtered = filtered.filter(productItem => productItem.attributes?.product_category?.data?.attributes?.name === productCategory)
 		}
-		setFilteredProducts(filtered)
-	}, [productCategory, productsData])
 
+		if (searchTerm) {
+			const lowerSearchTerm = searchTerm.toLowerCase()
+			filtered = filtered.filter(productItem => {
+				const { title, article_code } = productItem.attributes
+				const searchableText = `${title} ${article_code}`.toLowerCase()
+				return searchableText.includes(lowerSearchTerm)
+			})
+		}
+
+		setFilteredProducts(filtered)
+	}, [productCategory, productsData, searchTerm]) // <-- Add searchTerm as a dependency
+
+	// add to cart logic
 	const handleToCart = async (productItem: Product, amount: number, warehouseQuantity: number) => {
 		if (amount <= 0) return
 
@@ -94,6 +108,7 @@ const Materialstelle = () => {
 		<section className="max-container my-24 mx-4">
 			<h1 className="text-center">Materiallstelle</h1>
 			<ProductCategories productCategories={productCategories} setProductCategory={setProductCategory} />
+			<SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 			<section className="grid grid-cols-1 items-center justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
 				{filteredProducts?.length > 0 ? (
 					filteredProducts?.map((productItem: Product) => (
