@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
-import TitleContext from "@/components/base/common/TitleContent"
+import TitleContent from "@/components/common/TitleContent"
 import SearchAdress from "./_components/SearchAdress"
 
 import dynamic from "next/dynamic"
@@ -30,7 +30,7 @@ const groupsInAustria = () => {
 
 	return (
 		<article className="max-container my-24 mx-4">
-			<TitleContext title={pageContent?.title} content={pageContent?.content} />
+			<TitleContent title={pageContent?.title} content={pageContent?.content} />
 			<SearchAdress presidiumData={presidiumData} setSelectedPresidium={setSelectedPresidium} />
 			<GeoMap presidiumData={presidiumData} selectedPresidium={selectedPresidium?.attributes} />
 		</article>
