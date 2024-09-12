@@ -29,6 +29,8 @@ const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => v
 		})
 	}
 
+	console.log({ eventItem })
+
 	return (
 		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
 			<div className="bg-white m-4 p-6 shadow-lg w-full max-h-full overflow-y-auto z-30" onClick={handleModalClick}>
@@ -65,7 +67,7 @@ const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => v
 				</section>
 				<section className="my-4">
 					<div className="h1 !normal-case">{eventItem.attributes?.title}</div>
-					<i>{eventItem.attributes?.category.data?.attributes?.category}</i>
+					<i>{eventItem?.attributes?.categories?.data?.map(cat => cat.attributes?.category)}</i>
 				</section>
 				<section>
 					<div

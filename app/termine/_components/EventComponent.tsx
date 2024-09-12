@@ -48,7 +48,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 					<div className="flex flex-col justify-between">
 						<div className="mb-2">
-							<small>{eventItem.attributes?.category?.data?.attributes?.category}</small>
+							<small>{eventItem.attributes?.categories?.data?.map(cat => cat.attributes?.category)}</small>
 							<div className="strong">{eventItem.attributes?.title}</div>
 						</div>
 						<div className="flex justify-between">

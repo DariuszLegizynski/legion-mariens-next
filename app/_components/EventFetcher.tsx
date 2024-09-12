@@ -2,37 +2,39 @@ import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { Event } from "@/types/Event"
 
 const generateRecurringEvents = (event: Event) => {
-	console.log({ event })
 	const occurrences = []
-	const { startTime, repeat } = event.attributes
+	const { startTime, endTime, repeat } = event.attributes
 
 	if (!repeat) return [event]
 
 	const recurrenceType = repeat.recurrenceType
 	const recurrenceEndDate = new Date(repeat.recurrenceEndDate)
-	let currentDate = new Date(startTime)
+	const currentDate = new Date(startTime)
+	const endDate = endTime ? new Date(endTime) : null
 
 	while (currentDate <= recurrenceEndDate) {
 		occurrences.push({
 			...event,
-			attributes: { ...event.attributes, startTime: currentDate.toISOString() },
+			attributes: { ...event.attributes, startTime: currentDate.toISOString(), endTime: endDate?.toISOString() },
 		})
 
 		switch (recurrenceType) {
 			case "weekly":
 				currentDate.setDate(currentDate.getDate() + 7)
+				endDate?.setDate(endDate.getDate() + 7)
 				break
 			case "monthly":
 				currentDate.setMonth(currentDate.getMonth() + 1)
+				endDate?.setMonth(endDate.getMonth() + 1)
 				break
 			case "yearly":
 				currentDate.setFullYear(currentDate.getFullYear() + 1)
+				endDate?.setFullYear(endDate.getFullYear() + 1)
 				break
 			default:
 				break
 		}
 	}
-	console.log({ occurrences })
 	return occurrences
 }
 
