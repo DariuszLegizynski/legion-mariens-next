@@ -26,7 +26,6 @@ const EventCalendar = ({
 	assignments: Category[]
 	setAssignment: SetAssignmentFn
 }) => {
-	console.log({ states, assignments })
 	return (
 		<>
 			<section className="grid grid-cols-1 justify-items-center gap-4 my-8 md:gap md:grid-cols-[1fr_1fr_1fr] md:gap-x-8 md:justify-between mx-4">

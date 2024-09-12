@@ -6,6 +6,7 @@ import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 // components
 import EventComponent from "./EventComponent"
 import EventCalendar from "./EventCalendar"
+import { fetchEvents } from "@/app/_components/EventFetcher"
 
 // type
 import type { Event } from "@/types/Event"
@@ -24,13 +25,11 @@ const EventList = () => {
 	const [assignment, setAssignment] = useState<string>("Beides")
 
 	useEffect(() => {
-		const fetchEvents = async () => {
-			const today = new Date().toISOString()
-			const response = await getStrapiData(`events?filters[startTime][$gte]=${today}&populate=*&sort=startTime:ASC`)
-
-			setEventList(response.data)
+		const fetchEventsData = async () => {
+			const events = await fetchEvents()
+			setEventList(events)
 		}
-		fetchEvents()
+		fetchEventsData()
 
 		const fetchCategories = async () => {
 			const response = await getStrapiData("categories?populate=*&sort=category:ASC")
@@ -39,13 +38,13 @@ const EventList = () => {
 		fetchCategories()
 
 		const fetchStates = async () => {
-			const response = await getStrapiData("event-states?populate=*") //&sort=event-states:ASC")
+			const response = await getStrapiData("event-states?populate=*")
 			setStates(response.data)
 		}
 		fetchStates()
 
 		const fetchAssignments = async () => {
-			const response = await getStrapiData("event-assignments?populate=*") //&sort=event-assignments:ASC")
+			const response = await getStrapiData("event-assignments?populate=*")
 			setAssignments(response.data)
 		}
 		fetchAssignments()
@@ -53,7 +52,6 @@ const EventList = () => {
 
 	useEffect(() => {
 		let filtered = eventList
-		console.log({ filtered })
 
 		if (startDate) {
 			filtered = filtered.filter(event => new Date(event.attributes?.startTime) >= new Date(startDate))
