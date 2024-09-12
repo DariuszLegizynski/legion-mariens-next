@@ -3,7 +3,7 @@ import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { LandingPageData, Content, Child } from "@/types/LandingPage"
 import EventList from "@/app/termine/_components/EventList"
 
-export default async function termine() {
+const Termine = async () => {
 	const appointmentsPageData: LandingPageData = await getStrapiData("termine?populate=*")
 	const termine = await appointmentsPageData?.data?.attributes?.content
 
@@ -22,3 +22,5 @@ export default async function termine() {
 		</article>
 	)
 }
+
+export default Termine

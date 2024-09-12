@@ -8,6 +8,6 @@ export interface Event {
 		createdAt: string
 		updatedAt: string
 		publishedAt: string
-		category: Category
+		categories: Category[]
 	}
 }
