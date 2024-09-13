@@ -1,6 +1,19 @@
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { Event } from "@/types/Event"
 
+const applyExceptions = async (events: any[]) => {
+	const response = await getStrapiData(`event-exceptions?populate=*`)
+	const exceptions = response?.data ? response.data : []
+
+	const exceptionDates = new Set(exceptions.map(exc => new Date(exc.attributes.exceptionDate).toDateString()))
+
+	console.log({ events, exceptions })
+
+	return events.filter(eventItem => {
+		return !exceptionDates.has(new Date(eventItem.attributes.startTime).toDateString())
+	})
+}
+
 const generateRecurringEvents = (event: Event) => {
 	const occurrences = []
 	const { startTime, endTime, repeat } = event.attributes
@@ -35,6 +48,7 @@ const generateRecurringEvents = (event: Event) => {
 				break
 		}
 	}
+
 	return occurrences
 }
 
@@ -45,7 +59,9 @@ export async function fetchEvents() {
 
 	const expandedEvents = eventList.flatMap((event: Event) => generateRecurringEvents(event))
 
-	const sortedEvents = expandedEvents.sort((a, b) => {
+	const exceptionOccurrences = await applyExceptions(expandedEvents)
+
+	const sortedEvents = exceptionOccurrences.sort((a, b) => {
 		const dateA = new Date(a.attributes.startTime)
 		const dateB = new Date(b.attributes.startTime)
 		return dateA.getTime() - dateB.getTime()

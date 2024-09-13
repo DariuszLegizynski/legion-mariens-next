@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Event } from "@/types/Event"
 import BaseButton from "@/components/base/BaseButton"
 
-const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => void }) => {
+const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose: () => void; isAuth: boolean }) => {
 	if (!eventItem) return null
 
 	const handleModalClick = (e: React.MouseEvent) => {
@@ -32,7 +32,11 @@ const EventModal = ({ eventItem, onClose }: { eventItem: Event; onClose: () => v
 	return (
 		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
 			<div className="bg-white m-4 p-6 shadow-lg w-full max-h-full overflow-y-auto z-30" onClick={handleModalClick}>
-				<div onClick={onClose} className="flex justify-end">
+				<div onClick={onClose} className="flex justify-end items-center">
+					{isAuth && <p>EDIT</p>}
+					&nbsp;
+					{isAuth && <p>DEL</p>}
+					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
 				<section className="border-l-[3px] border-primary pl-1.5">
