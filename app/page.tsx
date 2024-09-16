@@ -22,7 +22,7 @@ export default async function Home() {
 	const events = await fetchEvents()
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between mx-4 my-20 md:mx-8">
+		<main className="flex min-h-screen flex-col items-center justify-between mx-4 my-20 md:mx-8 xl:mx-0">
 			<div className="md:grid md:grid-cols-2 md:gap-x-16">
 				{introduction && (
 					<section className="flex flex-col mb-8">
@@ -57,7 +57,7 @@ export default async function Home() {
 				)}
 			</div>
 			<Separator />
-			<div className="md:grid md:grid-cols-2 md:gap-x-16">
+			<div className="md:grid md:grid-cols-2 md:gap-x-8">
 				{termine && (
 					<section className="flex flex-col mb-8">
 						<div className="h2 my-2.5">{termine?.title}</div>
@@ -71,10 +71,11 @@ export default async function Home() {
 				)}
 				<section className="grid grid-cols-1 justify-items-center gap-y-8 mt-8 xl:grid-cols-2 xl:gap-x-8">
 					{events.length > 0 ? (
-						events.map((eventItem, index) => <EventComponent key={`event_${index}`} eventItem={eventItem} isVisible={true} />)
+						events.slice(0, 6).map((eventItem, index) => <EventComponent key={`event_${index}`} eventItem={eventItem} isVisible={true} />)
 					) : (
 						<p className="mt-16 text-center">Keine Ereignisse gefunden.</p>
 					)}
+
 					<div className="grid items-center justify-items-center xl:col-span-2 w-full">
 						<BaseButton text="Alle Termine" buttonType="accent" linkPath="/termine" />
 					</div>

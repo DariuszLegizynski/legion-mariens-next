@@ -7,8 +7,6 @@ const applyExceptions = async (events: any[]) => {
 
 	const exceptionDates = new Set(exceptions.map(exc => new Date(exc.attributes.exceptionDate).toDateString()))
 
-	console.log({ events, exceptions })
-
 	return events.filter(eventItem => {
 		return !exceptionDates.has(new Date(eventItem.attributes.startTime).toDateString())
 	})
