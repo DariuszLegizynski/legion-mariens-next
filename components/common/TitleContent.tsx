@@ -1,6 +1,6 @@
 import type { Content, Child } from "@/types/LandingPage"
 
-const TitleContext = ({ title, content }: { title: string; content?: Content }) => {
+const TitleContent = ({ title, content }: { title: string; content?: Content }) => {
 	return (
 		<section className="flex flex-col mb-8">
 			<div className="h2 my-2.5">{title}</div>
@@ -14,4 +14,4 @@ const TitleContext = ({ title, content }: { title: string; content?: Content }) 
 	)
 }
 
-export default TitleContext
+export default TitleContent
