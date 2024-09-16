@@ -1,17 +1,26 @@
 "use client"
 import { useState, useEffect } from "react"
+import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
+import Cookies from "js-cookie"
+
 import EventModal from "./EventModal"
 import { Event } from "@/types/Event"
 
 const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible: boolean }) => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [shouldAnimate, setShouldAnimate] = useState<boolean>(true)
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
 	useEffect(() => {
 		if (!isVisible) {
 			setShouldAnimate(false)
 		}
 	}, [isVisible])
+
+	const isCookie = Cookies.get("jwt")
+	useEffect(() => {
+		setIsAuthenticated(Cookies.get("jwt") ? true : false)
+	}, [isCookie])
 
 	const startTime = new Date(eventItem.attributes?.startTime)
 	const day = startTime.toLocaleDateString("de-DE", {
@@ -48,7 +57,14 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 					<div className="flex flex-col justify-between">
 						<div className="mb-2">
-							<small>{eventItem.attributes?.category?.data?.attributes?.category}</small>
+							<small>
+								{eventItem.attributes?.categories?.data?.map((cat, index) => (
+									<span key={index} className="after:content-['|'] last:after:content-none after:px-1">
+										{cat.attributes?.category}
+									</span>
+								))}
+							</small>
+
 							<div className="strong">{eventItem.attributes?.title}</div>
 						</div>
 						<div className="flex justify-between">
@@ -58,7 +74,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 				</section>
 			)}
-			{isModalOpen && <EventModal eventItem={eventItem} onClose={() => setIsModalOpen(false)} />}
+			{isModalOpen && <EventModal eventItem={eventItem} onClose={() => setIsModalOpen(false)} isAuth={isAuthenticated} />}
 		</>
 	)
 }
