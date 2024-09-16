@@ -39,6 +39,8 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 		minute: "numeric",
 	})
 
+	console.log({ eventItem })
+
 	return (
 		<>
 			{shouldAnimate && (
@@ -48,28 +50,29 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 						isVisible ? "slide-up" : "slide-down"
 					}`}
 				>
-					<div className="flex flex-col items-center justify-start ml-2">
-						<p className="h1 mb-1.5" style={{ fontFamily: "Open-Sans, sans-serif" }}>
+					<div className="flex flex-col items-center justify-between">
+						<p className="inline-flex items-start h1 !leading-none mb-1.5" style={{ fontFamily: "Open-Sans, sans-serif" }}>
 							{day}
 						</p>
-						<span className="uppercase">{month}</span>
-						<span>{year}</span>
-					</div>
-					<div className="flex flex-col justify-between">
-						<div className="mb-2">
-							<small>
-								{eventItem.attributes?.categories?.data?.map((cat, index) => (
-									<span key={index} className="after:content-['|'] last:after:content-none after:px-1">
-										{cat.attributes?.category}
-									</span>
-								))}
-							</small>
-
-							<div className="strong">{eventItem.attributes?.title}</div>
+						<div className="flex flex-col items-center gap-y-0.5">
+							<span className="uppercase">{month}</span>
+							<span>{year}</span>
 						</div>
-						<div className="flex justify-between">
-							<p>ab {time}</p>
-							<p>&rarr;</p>
+						<p>{time}</p>
+					</div>
+					<div className="grid grid-cols-1 grid-rows-[17px_1fr_auto_24px] justify-between">
+						<small>
+							{eventItem.attributes?.categories?.data?.map((cat, index) => (
+								<span key={index} className="after:content-['|'] last:after:content-none after:px-1">
+									{cat.attributes?.category}
+								</span>
+							))}
+						</small>
+						<div className="strong inline-flex items-start">{eventItem.attributes?.title}</div>
+						<small className="inline-flex items-center py-1">für {eventItem.attributes?.participantRestriction?.split("für")[1]?.trim()}</small>
+						<div className="flex justify-between items-end w-full">
+							<p>{eventItem.attributes?.event_state?.data?.attributes?.name}</p>
+							<p className="text-right">&rarr;</p>
 						</div>
 					</div>
 				</section>
