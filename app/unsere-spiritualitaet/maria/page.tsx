@@ -11,7 +11,7 @@ const Maria = async () => {
 	const archiveContentData = archiveData.data.attributes.archive
 	console.log({ archiveContentData })
 	return (
-		<article className="mt-24 mx-4">
+		<article className="my-24 mx-4 max-container">
 			<TitleContent title={mariaContentData?.title} content={mariaContentData?.content} />
 			<Separator />
 			<Links title={archiveContentData?.title} links={archiveContentData?.links} />
