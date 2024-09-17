@@ -1,5 +1,4 @@
 const Links = ({ title, links }) => {
-	console.log("@@@@@@@@@@", { title, links })
 	return (
 		<section className="mb-24">
 			<h3>{title}</h3>

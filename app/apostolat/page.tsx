@@ -9,7 +9,7 @@ const Apostolat = async () => {
 
 	const linksData = await getStrapiData("apostolat?populate[links][populate]=*")
 	const linksDataContent = linksData.data.attributes
-	console.log({ mainData, linksDataContent })
+
 	return (
 		<article className="my-24 mx-4 max-container">
 			<TitleContent title={mainData?.apostolat?.title} content={mainData?.apostolat?.content} />
