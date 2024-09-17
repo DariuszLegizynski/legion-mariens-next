@@ -1,7 +1,7 @@
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import Separator from "@/components/base/Separator"
 import TitleContent from "@/components/common/TitleContent"
-import Links from "./_components/Links"
+import Links from "@/app/_components/Links"
 
 const Maria = async () => {
 	const data = await getStrapiData("spiritualitaet-maria?populate=*")

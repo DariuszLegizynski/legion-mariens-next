@@ -2,7 +2,7 @@ import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import TitleImageContent from "@/components/common/TitleImageContent"
 
 const LegionImage = async () => {
-	const data = await getStrapiData("spiritualitaet-legion-image?populate[legion_image][populate][image][populate]=*")
+	const data = await getStrapiData("spiritualitaet-legionsbild?populate[legion_image][populate][image][populate]=*")
 	const legionImage = data.data.attributes.legion_image
 	console.log({ legionImage })
 	return (
