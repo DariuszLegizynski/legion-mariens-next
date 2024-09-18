@@ -10,29 +10,26 @@ import Separator from "@/components/base/Separator"
 import EventComponent from "@/app/termine/_components/EventComponent"
 import BaseButton from "@/components/base/BaseButton"
 import { fetchEvents } from "@/app/_components/EventFetcher"
+import TitleContent from "@/components/common/TitleContent"
 
 export default async function Home() {
 	const landingPageData: LandingPageData = await getStrapiData(
-		"landing-page?populate[introduction][populate][avatar][populate]=true&populate[about][populate]=true&populate[termine][populate]=true"
+		"landing-page?populate[introduction][populate][image][populate]=true&populate[about][populate]=true&populate[termine][populate]=true"
 	)
 
-	console.log({ landingPageData })
-	// const { introduction, about, termine } = await landingPageData.data?.attributes
+	const { introduction, about, termine } = await landingPageData.data?.attributes
 
-	// const today = new Date().toISOString()
-	// const eventsData = await getStrapiData(`events?filters[startTime][$gte]=${today}&pagination[pageSize]=10&populate=*&sort=startTime:ASC`)
 	const events = await fetchEvents()
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between mx-4 my-20 md:mx-8 xl:mx-0">
-			Landing Page
-			{/* <div className="md:grid md:grid-cols-2 md:gap-x-16">
+			<div className="md:grid md:grid-cols-2 md:gap-x-16">
 				{introduction && (
 					<section className="flex flex-col mb-8">
 						<div className="flex items-center">
 							<Image
-								src={`${process.env.API_URL}${introduction?.avatar.data?.attributes?.url}`}
-								alt={introduction?.avatar.data?.attributes?.alternativeText || "Avatar"}
+								src={`${process.env.API_URL}${introduction?.image.data?.attributes?.url}`}
+								alt={introduction?.image.data?.attributes?.alternativeText || "Avatar"}
 								width={64}
 								height={64}
 								className="float-left mr-5 rounded-full"
@@ -47,31 +44,12 @@ export default async function Home() {
 						/>
 					</section>
 				)}
-				{about && (
-					<section className="flex flex-col mb-8">
-						<div className="h2 my-2.5">{about?.title}</div>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: about?.content?.map(item => item.children.map(child => child.text).join("")).join(""),
-							}}
-							className="text-left mt-4 grid gap-y-4"
-						/>
-					</section>
-				)}
+				{about && <TitleContent title={about?.title} content={about?.content} />}
 			</div>
 			<Separator />
 			<div className="md:grid md:grid-cols-2 md:gap-x-8">
-				{termine && (
-					<section className="flex flex-col mb-8">
-						<div className="h2 my-2.5">{termine?.title}</div>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: termine?.content?.map(item => item.children.map(child => child.text).join("")).join(""),
-							}}
-							className="text-left mt-4 grid gap-y-4"
-						/>
-					</section>
-				)}
+				{termine && <TitleContent title={termine?.title} content={termine?.content} />}
+
 				<section className="grid grid-cols-1 justify-items-center gap-y-8 mt-8 xl:grid-cols-2 xl:gap-x-8">
 					{events.length > 0 ? (
 						events.slice(0, 6).map((eventItem, index) => <EventComponent key={`event_${index}`} eventItem={eventItem} isVisible={true} />)
@@ -83,7 +61,7 @@ export default async function Home() {
 						<BaseButton text="Alle Termine" buttonType="accent" linkPath="/termine" />
 					</div>
 				</section>
-			</div> */}
+			</div>
 		</main>
 	)
 }
