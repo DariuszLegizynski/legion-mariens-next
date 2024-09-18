@@ -22,12 +22,14 @@ const HeaderMobile = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await getStrapiData(`header?populate[headerContent][populate]=*`)
+			const response = await getStrapiData(`header?populate[headerContent][populate][subCategory][populate]=pdf`)
 			setHeaderData(response.data?.attributes?.headerContent)
 		}
 
 		fetchData()
 	}, [])
+
+	console.log({ headerData })
 
 	const isCookie = Cookies.get("jwt")
 	useEffect(() => {
@@ -120,15 +122,31 @@ const HeaderMobile = () => {
 										{item.subCategory &&
 											item.subCategory.map(subItem => (
 												<li key={subItem.id + subItem.linkName}>
-													<Link
-														onClick={() => {
-															setIsBurgerActive(false)
-															setIsUserIconActive(false)
-														}}
-														href={`${subItem.linkPath}`}
-													>
-														<span className="text-primary">{subItem.linkName}</span>
-													</Link>
+													{subItem.linkPath ? (
+														<Link
+															onClick={() => {
+																setIsBurgerActive(false)
+																setIsUserIconActive(false)
+															}}
+															href={`${subItem.linkPath}`}
+														>
+															<span className="text-primary">{subItem.linkName}</span>
+														</Link>
+													) : subItem.pdf?.data?.attributes?.url ? (
+														<a
+															onClick={() => {
+																setIsBurgerActive(false)
+																setIsUserIconActive(false)
+															}}
+															href={`${process.env.API_URL}${subItem.pdf.data.attributes.url}`}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															<span className="text-primary">{subItem.linkName} (PDF)</span>
+														</a>
+													) : (
+														<span className="text-primary">{subItem.linkName} (Kein link verfügbar)</span>
+													)}
 												</li>
 											))}
 									</ul>
