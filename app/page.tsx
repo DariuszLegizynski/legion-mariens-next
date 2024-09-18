@@ -1,7 +1,7 @@
 import Image from "next/image"
 
 // type
-import { LandingPageData, Content, Child } from "@/types/LandingPage"
+import { LandingPageData } from "@/types/LandingPage"
 
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 
@@ -15,7 +15,9 @@ export default async function Home() {
 	const landingPageData: LandingPageData = await getStrapiData(
 		"landing-page?populate[introduction][populate][avatar][populate]=true&populate[about][populate]=true&populate[termine][populate]=true"
 	)
-	const { introduction, about, termine } = await landingPageData.data?.attributes
+
+	console.log({ landingPageData })
+	// const { introduction, about, termine } = await landingPageData.data?.attributes
 
 	// const today = new Date().toISOString()
 	// const eventsData = await getStrapiData(`events?filters[startTime][$gte]=${today}&pagination[pageSize]=10&populate=*&sort=startTime:ASC`)
@@ -23,7 +25,8 @@ export default async function Home() {
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between mx-4 my-20 md:mx-8 xl:mx-0">
-			<div className="md:grid md:grid-cols-2 md:gap-x-16">
+			Landing Page
+			{/* <div className="md:grid md:grid-cols-2 md:gap-x-16">
 				{introduction && (
 					<section className="flex flex-col mb-8">
 						<div className="flex items-center">
@@ -80,7 +83,7 @@ export default async function Home() {
 						<BaseButton text="Alle Termine" buttonType="accent" linkPath="/termine" />
 					</div>
 				</section>
-			</div>
+			</div> */}
 		</main>
 	)
 }

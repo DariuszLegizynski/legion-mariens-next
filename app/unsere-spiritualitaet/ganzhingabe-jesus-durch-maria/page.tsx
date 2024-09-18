@@ -5,7 +5,6 @@ import TitleContent from "@/components/common/TitleContent"
 const GanzhingabeMaria = async () => {
 	const data = await getStrapiData("spiritualitaet-ganzhingabe-jesus-durch-maria?populate=*")
 	const totalDedicationData = data.data.attributes
-	console.log(totalDedicationData.dedication)
 
 	return (
 		<article className="my-24 mx-4 max-container">

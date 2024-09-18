@@ -29,8 +29,6 @@ const HeaderMobile = () => {
 		fetchData()
 	}, [])
 
-	console.log({ headerData })
-
 	const isCookie = Cookies.get("jwt")
 	useEffect(() => {
 		setIsAuthenticated(Cookies.get("jwt") ? true : false)

@@ -5,8 +5,6 @@ const LegionInternational = async () => {
 	const international = await getStrapiData("aufbau-legion-mariens-international?populate[international][populate]=*")
 	const internationalData = international.data.attributes
 
-	console.log({ internationalData })
-
 	return (
 		<article className="my-24 mx-4 max-container">
 			<h1 className="text-left mb-16">{internationalData.title}</h1>

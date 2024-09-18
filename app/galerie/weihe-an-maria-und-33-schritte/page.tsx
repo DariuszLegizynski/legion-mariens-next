@@ -4,7 +4,7 @@ import Image from "next/image"
 const Prayer = async () => {
 	const data = await getStrapiData("spiritualitaet-weihe-an-maria-und-33-schritte?populate[content][populate]=*")
 	const dedication = data.data.attributes.content
-	console.log({ dedication })
+
 	return (
 		<article className="my-24 mx-4 grid grid-cols-1 items-center gap-y-16 gap-x-8 max-container sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 			{dedication?.map(item => (
