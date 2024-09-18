@@ -7,7 +7,7 @@ const Prayer = async () => {
 	const prayerContentData = data.data.attributes
 
 	return (
-		<article className="mt-24 mx-4">
+		<article className="my-24 mx-4 max-container">
 			<h1>{prayerContentData.title}</h1>
 
 			{prayerContentData.content?.map((item, index) => (
