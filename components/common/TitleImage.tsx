@@ -1,7 +1,6 @@
 import Image from "next/image"
 
 const TitleImage = ({ title, image, width, height }: { title: string; image: any; width: number; height: number }) => {
-	console.log({ title, image })
 	return (
 		<section className="flex flex-col mb-8">
 			<h1 className="my-2.5">{title}</h1>

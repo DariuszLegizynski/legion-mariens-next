@@ -9,8 +9,6 @@ const StrukturLegion = async () => {
 	const descriptions = await getStrapiData("aufbau-struktur-der-legion-marien?populate[descriptions][populate]=*")
 	const descriptionsData = descriptions.data.attributes
 
-	// console.log({ organigramData, descriptionsData })
-
 	return (
 		<article className="my-24 mx-4 max-container">
 			<TitleImage title={organigramData?.title} image={organigramData?.image} width={815} height={752} />

@@ -5,11 +5,13 @@ import Links from "@/app/_components/Links"
 
 const Maria = async () => {
 	const data = await getStrapiData("spiritualitaet-maria?populate=*")
-	const mariaContentData = data.data.attributes.content
+	const mariaContentData = data.data.attributes.maria
 
-	const archiveData = await getStrapiData("spiritualitaet-maria?populate[archive][populate][links][populate]=*")
-	const archiveContentData = archiveData.data.attributes.archive
-	console.log({ archiveContentData })
+	const archiveData = await getStrapiData("spiritualitaet-maria?populate[links][populate]=*")
+	const archiveContentData = archiveData.data.attributes
+
+	console.log({ mariaContentData, archiveContentData })
+
 	return (
 		<article className="my-24 mx-4 max-container">
 			<TitleContent title={mariaContentData?.title} content={mariaContentData?.content} />

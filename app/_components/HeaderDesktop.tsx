@@ -21,7 +21,7 @@ const HeaderDesktop = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await getStrapiData(`header?populate[headerContent][populate]=*`)
+			const response = await getStrapiData(`header?populate[headerContent][populate][subCategory][populate]=pdf`)
 			setHeaderData(response.data?.attributes?.headerContent)
 		}
 
@@ -88,16 +88,24 @@ const HeaderDesktop = () => {
 									</Link>
 								)}
 								{item.subCategory && expandedCategoryId === item.id + item.linkName && (
-									<ul className="text-start slide-in-from-top absolute top-[2.2rem] xl:top-[2.3rem] -left-8 bg-white z-[3000] px-8 pb-8 w-auto flex flex-col items-start gap-y-2 pt-3">
+									<ul className="text-start slide-in-from-top absolute top-[2.2rem] xl:top-[2.275rem] -left-8 bg-white z-[3000] px-8 pb-8 w-auto flex flex-col items-start gap-y-2 pt-3">
 										<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>
 											<p className={`text-primary cursor-pointer text-nowrap`}>{item.linkName}</p>
 										</Link>
 										{item.subCategory &&
 											item.subCategory.map(subItem => (
 												<li key={subItem.id + subItem.linkName}>
-													<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
-														<p className="text-primary text-nowrap">{subItem.linkName}</p>
-													</Link>
+													{subItem.linkPath ? (
+														<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
+															<p className="text-primary text-nowrap">{subItem.linkName}</p>
+														</Link>
+													) : subItem.pdf?.data?.attributes?.url ? (
+														<a href={`${process.env.API_URL}${subItem.pdf.data.attributes.url}`} target="_blank" rel="noopener noreferrer">
+															<p className="text-primary text-nowrap">{subItem.linkName} (PDF)</p>
+														</a>
+													) : (
+														<p className="text-primary text-nowrap">{subItem.linkName} (Kein link verfügbar)</p>
+													)}
 												</li>
 											))}
 									</ul>
@@ -150,9 +158,17 @@ const HeaderDesktop = () => {
 											{item.subCategory &&
 												item.subCategory.map(subItem => (
 													<li key={subItem.id + subItem.linkName}>
-														<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
-															<span className="text-primary">{subItem.linkName}</span>
-														</Link>
+														{subItem.linkPath ? (
+															<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
+																<span className="text-primary">{subItem.linkName}</span>
+															</Link>
+														) : subItem.pdf?.data?.attributes?.url ? (
+															<a href={`${process.env.API_URL}${subItem.pdf.data.attributes.url}`} target="_blank" rel="noopener noreferrer">
+																<span className="text-primary">{subItem.linkName} (PDF)</span>
+															</a>
+														) : (
+															<p className="text-primary">{subItem.linkName} (No link available)</p>
+														)}
 													</li>
 												))}
 										</ul>
@@ -166,7 +182,7 @@ const HeaderDesktop = () => {
 							<Link href="/fuer-legionaere-mariens/cart" className="max-w-72" onClick={() => handleCategoryClick(null)}>
 								<p className="text-primary">Warenkorb</p>
 							</Link>
-							<BaseButton onClick={handleLogout} buttonType="logout" buttonType="logout" text="Abmelden" />
+							<BaseButton onClick={handleLogout} buttonType="logout" text="Abmelden" />
 						</nav>
 					)}
 				</section>
