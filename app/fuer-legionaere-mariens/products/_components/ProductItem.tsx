@@ -34,8 +34,8 @@ const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: b
 				className="h-80 p-1.5 w-full object-contain mx-auto"
 				src={`${process.env.API_URL}${productItem.attributes?.image.data?.attributes?.url}`}
 				alt={`${process.env.API_URL}/${productItem.attributes?.image.data?.attributes?.alternativeText}`}
-				width={100}
-				height={200}
+				width={800}
+				height={1600}
 			/>
 			<section className="flex flex-col justify-between">
 				<div className="mt-4 grid grid-rows-[auto_auto_auto] sm:grid-rows-[auto_auto_102px]">
