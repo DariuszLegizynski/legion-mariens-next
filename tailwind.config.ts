@@ -7,6 +7,8 @@ const config: Config = {
 			colors: {
 				primary: "hsl(227, 46%, 44%)",
 				"primary-light": "hsl(227, 46%, 64%)",
+				green: "#A4CC78",
+				"green-dark": "#78CC84",
 				accent: "hsl(339, 84%, 43%)",
 				black: "hsl(210, 11%, 15%)",
 				white: "hsl(5, 0%, 100%)",
