@@ -44,20 +44,18 @@ const CreateEvent = () => {
 	const jwt = Cookies.get("jwt")
 
 	const handleCreateEvent = async () => {
-		console.log("in handleCreateEvent")
 		setLoading(true)
 
-		console.log("hello from handleCreateEvent")
 		const eventData = {
 			data: {
 				title,
-				selectedCategories,
+				categories: selectedCategories.map(category => category.id),
 				startTime,
 				endTime,
-				event_assignment: selectedAssignments,
+				event_assignment: selectedAssignments.id,
 				description,
 				arrival,
-				event_state: selectedState,
+				event_state: selectedState.id,
 				repeat: isRecurrent
 					? {
 							recurrenceType: repeat.recurrenceType || null,
@@ -69,8 +67,6 @@ const CreateEvent = () => {
 			},
 		}
 
-		console.log({ eventData })
-
 		try {
 			await createStrapiAuthData("events", eventData, jwt)
 			setLoading(false)
@@ -78,14 +74,6 @@ const CreateEvent = () => {
 			setLoading(false)
 			console.error("Error creating event: ", error.message)
 		}
-	}
-
-	const handleSelectedAssignment = selectedAssignment => {
-		setSelectedAssignments(selectedAssignment)
-	}
-
-	const handleSelectedState = selectedState => {
-		setSelectedState(selectedState)
 	}
 
 	const categoriesOptions = categories.map(category => {
@@ -164,7 +152,7 @@ const CreateEvent = () => {
 						inputId="unique-select-assignment-id"
 						instanceId="unique-select-assignment-id"
 						defaultValue={selectedAssignments}
-						onChange={handleSelectedAssignment}
+						onChange={setSelectedAssignments}
 						options={assignmentOptions}
 					/>
 				</div>
@@ -226,7 +214,7 @@ const CreateEvent = () => {
 						inputId="unique-select-state-id"
 						instanceId="unique-select-state-id"
 						defaultValue={selectedState}
-						onChange={handleSelectedState}
+						onChange={setSelectedState}
 						options={stateOptions}
 					/>
 				</div>
