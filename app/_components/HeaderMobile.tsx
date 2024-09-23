@@ -160,6 +160,16 @@ const HeaderMobile = () => {
 								setIsBurgerActive(false)
 								setIsUserIconActive(false)
 							}}
+							href="/fuer-legionaere-mariens/neuer-termin"
+							className="max-w-72"
+						>
+							<p className="text-primary">Neuer Termin</p>
+						</Link>
+						<Link
+							onClick={() => {
+								setIsBurgerActive(false)
+								setIsUserIconActive(false)
+							}}
 							href="/fuer-legionaere-mariens/cart"
 							className="max-w-72"
 						>

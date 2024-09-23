@@ -34,7 +34,7 @@ export const createStrapiAuthData = async (query: string, data: any, jwt: string
 			body: JSON.stringify(data),
 			cache: "no-cache",
 		})
-
+		console.log({ response })
 		if (!response.ok) {
 			const errorText = await response.text()
 			console.error("Response error:", errorText)

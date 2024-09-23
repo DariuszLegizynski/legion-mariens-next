@@ -34,7 +34,12 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 				</Link>
 			)}
 			{buttonType === "submit" && (
-				<button disabled={isDisabled} type="submit" className="p-2 min-w-56 text-accent text-sm text-center uppercase border-2 border-accent w-full max-w-72">
+				<button
+					onClick={onClick}
+					disabled={isDisabled}
+					type="submit"
+					className="p-2 min-w-56 text-accent text-sm text-center uppercase border-2 border-accent w-full max-w-72"
+				>
 					<p>{text}</p>
 				</button>
 			)}
