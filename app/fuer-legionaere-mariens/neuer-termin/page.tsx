@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import BaseButton from "@/components/base/BaseButton"
 import { createStrapiAuthData, getStrapiData } from "@/app/_utils/services/getStrapiData"
-import Select from "react-select"
+import Select, { StylesConfig } from "react-select"
 
 const CreateEvent = () => {
 	const [title, setTitle] = useState("")
@@ -38,6 +38,38 @@ const CreateEvent = () => {
 		isRegistration: false,
 		registrationDescription: "",
 	})
+
+	const primaryColour = "hsl(227, 46%, 44%)"
+	const primaryLightColour = "hsl(227, 46%, 64%)"
+	const whiteColour = "hsl(5, 0%, 100%)"
+
+	const customStyles = {
+		control: provided => ({
+			...provided,
+			borderColor: primaryColour,
+			borderWidth: "2px",
+			"&:hover": {
+				borderColor: primaryLightColour,
+			},
+		}),
+		multiValue: provided => ({
+			...provided,
+			backgroundColor: primaryLightColour,
+		}),
+		multiValueLabel: styles => ({
+			...styles,
+			color: whiteColour,
+		}),
+		multiValueRemove: styles => ({
+			...styles,
+			color: primaryColour,
+			":hover": {
+				backgroundColor: primaryColour,
+				color: whiteColour,
+			},
+		}),
+		placeholder: styles => ({ ...styles, color: primaryColour }),
+	}
 
 	const [loading, setLoading] = useState(false)
 
@@ -128,29 +160,32 @@ const CreateEvent = () => {
 				</div>
 
 				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label htmlFor="description">Beschreibung:</label>
+					<label htmlFor="description">Termin Beschreibung:</label>
 					<textarea className="w-72 max-w-full" id="description" name="description" onChange={e => setDescription(e.target.value)} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label>Kategorie(n):</label>
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
 					<Select
 						id="unique-select-categories-id-"
 						inputId="unique-select-categories-id"
 						instanceId="unique-select-categories-id"
 						isMulti
+						placeholder="Kategorie(n) wählen:"
+						closeMenuOnSelect={false}
+						styles={customStyles}
 						defaultValue={selectedCategories}
 						onChange={setSelectedCategories}
 						options={categoriesOptions}
 					/>
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label>Zuordnung:</label>
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
 					<Select
 						id="unique-select-assignment-id-"
 						inputId="unique-select-assignment-id"
 						instanceId="unique-select-assignment-id"
+						placeholder="Zuordnen"
+						styles={customStyles}
 						defaultValue={selectedAssignments}
 						onChange={setSelectedAssignments}
 						options={assignmentOptions}
@@ -207,12 +242,13 @@ const CreateEvent = () => {
 					<input className="w-72 max-w-full" type="text" id="addressAddition" onChange={e => setArrival({ ...arrival, addressAddition: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label>Bundesland: *</label>
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
 					<Select
 						id="unique-select-state-id-"
 						inputId="unique-select-state-id"
 						instanceId="unique-select-state-id"
+						placeholder="Bundesland wählen"
+						styles={customStyles}
 						defaultValue={selectedState}
 						onChange={setSelectedState}
 						options={stateOptions}
