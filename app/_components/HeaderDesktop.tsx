@@ -179,6 +179,9 @@ const HeaderDesktop = () => {
 					)}
 					{isAuthenticated && isUserIconActive && (
 						<nav className={`text-center uppercase grid justify-items-end gap-y-4 my-8 pr-2`}>
+							<Link onClick={() => handleCategoryClick(null)} href="/fuer-legionaere-mariens/neuer-termin" className="max-w-72">
+								<p className="text-primary">Neuer Termin</p>
+							</Link>
 							<Link href="/fuer-legionaere-mariens/cart" className="max-w-72" onClick={() => handleCategoryClick(null)}>
 								<p className="text-primary">Warenkorb</p>
 							</Link>

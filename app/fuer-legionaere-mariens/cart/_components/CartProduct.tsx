@@ -10,7 +10,7 @@ const CartProduct = ({ cartProduct, cartId, onCartChange }: { cartProduct: CartI
 
 	const handleDelete = async () => {
 		await deleteStrapiAuthData("user-carts", jwt!, cartId)
-		onCartChange() // Re-fetch the cart data
+		onCartChange()
 	}
 
 	return (

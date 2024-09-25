@@ -1,6 +1,5 @@
 "use client"
 import { useState, useEffect } from "react"
-import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import Cookies from "js-cookie"
 
 import EventModal from "./EventModal"
@@ -60,16 +59,19 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 					<div className="grid grid-cols-1 grid-rows-[17px_1fr_auto_24px] justify-between">
 						<small>
-							{eventItem.attributes?.categories?.data?.map((cat, index) => (
+							{eventItem.attributes?.categories?.data.slice(0, 2).map((cat, index) => (
 								<span key={index} className="after:content-['|'] last:after:content-none after:px-1">
 									{cat.attributes?.category}
 								</span>
 							))}
+							{eventItem.attributes?.categories?.data.length > 2 && <span className="after:px-1">...</span>}
 						</small>
 						<div className="strong inline-flex items-start">{eventItem.attributes?.title}</div>
 						<small className="inline-flex items-center py-1">für {eventItem.attributes?.participantRestriction?.split("für")[1]?.trim()}</small>
 						<div className="flex justify-between items-end w-full">
-							<p>{eventItem.attributes?.event_state?.data?.attributes?.name}</p>
+							<p>
+								{eventItem?.attributes?.event_state?.data?.attributes?.abbreviation}&nbsp;|&nbsp;{eventItem?.attributes?.arrival?.city}
+							</p>
 							<p className="text-right">&rarr;</p>
 						</div>
 					</div>
