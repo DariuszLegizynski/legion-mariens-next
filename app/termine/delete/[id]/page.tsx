@@ -48,7 +48,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 		try {
 			await createStrapiAuthData(`delete-event-requests`, deleteEventData, jwt!)
 			setLoading(false)
-			// router.push("/termine")
+			router.push("/termine")
 		} catch (error) {
 			setLoading(false)
 			console.error("Error deleting event:", error.message)

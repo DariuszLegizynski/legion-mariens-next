@@ -1,6 +1,5 @@
 "use client"
 import { useState, useEffect } from "react"
-import { getStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import Cookies from "js-cookie"
 
 import EventModal from "./EventModal"

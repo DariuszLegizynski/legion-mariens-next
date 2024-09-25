@@ -79,7 +79,7 @@ const EventCalendar = ({
 				<DatePicker
 					selected={endDate}
 					locale="de"
-					onChange={date => setStartDate(date)}
+					onChange={date => setEndDate(date)}
 					minDate={new Date()}
 					dateFormat="dd MMMM yyyy"
 					placeholderText="Enddatum wählen"
