@@ -46,6 +46,11 @@ const CreateEvent = () => {
 		isRegistration: false,
 		registrationDescription: "",
 	})
+	const [applicant, setApplicant] = useState({
+		name: "",
+		surname: "",
+		email: "",
+	})
 
 	const primaryColour = "hsl(227, 46%, 44%)"
 	const primaryLightColour = "hsl(227, 46%, 64%)"
@@ -103,8 +108,10 @@ const CreateEvent = () => {
 							recurrenceEndDate: repeat.recurrenceEndDate || null,
 					  }
 					: null,
-				participantRestriction,
+				participantRestriction: participantRestriction?.value,
 				registration,
+				publishedAt: null,
+				applicant,
 			},
 		}
 
@@ -369,6 +376,29 @@ const CreateEvent = () => {
 						/>
 					</div>
 				)}
+
+				<div className="grid grid-rows-[26px_1fr_1fr] gap-2">
+					<label htmlFor="applicant-name">Termin Erstellt vom:</label>
+					<input
+						className="w-72 max-w-full"
+						type="text"
+						id="applicant-name"
+						placeholder="Vorame"
+						onChange={e => setApplicant({ ...applicant, name: e.target.value })}
+					/>
+					<input
+						className="w-72 max-w-full"
+						type="text"
+						id="surname"
+						placeholder="Zuname"
+						onChange={e => setApplicant({ ...applicant, surname: e.target.value })}
+					/>
+				</div>
+
+				<div className="grid grid-rows-[26px_1fr] gap-2">
+					<label htmlFor="applicantEmail">Email:</label>
+					<input className="w-72 max-w-full" type="email" id="applicantEmail" onChange={e => setApplicant({ ...applicant, email: e.target.value })} />
+				</div>
 
 				<div className="col-span-full mx-auto mt-12">
 					<BaseButton onClick={handleCreateEvent} isDisabled={loading} buttonType="submit" text="Create Event" />

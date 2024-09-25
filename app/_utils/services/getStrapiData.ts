@@ -34,7 +34,7 @@ export const createStrapiAuthData = async (query: string, data: any, jwt: string
 			body: JSON.stringify(data),
 			cache: "no-cache",
 		})
-		console.log({ response })
+
 		if (!response.ok) {
 			const errorText = await response.text()
 			console.error("Response error:", errorText)
@@ -67,7 +67,6 @@ export const updateStrapiAuthData = async (query: string, data: any, jwt: string
 }
 
 export const deleteStrapiAuthData = async (query: string, jwt: string, entryId: number) => {
-	console.log({ query, jwt, entryId })
 	try {
 		const response = await fetch(`${process.env.API_URL}/api/${query}/${entryId}`, {
 			method: "DELETE",

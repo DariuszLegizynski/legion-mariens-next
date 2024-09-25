@@ -10,8 +10,6 @@ const Maria = async () => {
 	const archiveData = await getStrapiData("spiritualitaet-maria?populate[links][populate]=*")
 	const archiveContentData = archiveData.data.attributes
 
-	console.log({ mariaContentData, archiveContentData })
-
 	return (
 		<article className="my-24 mx-4 max-container">
 			<TitleContent title={mariaContentData?.title} content={mariaContentData?.content} />
