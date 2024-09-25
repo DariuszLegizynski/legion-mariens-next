@@ -4,7 +4,7 @@ import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 const OurSpirituality = async () => {
 	const data = await getStrapiData("unsere-spiritualitaet?populate=*")
 	const ourSpirituality = data.data.attributes.content
-	console.log({ ourSpirituality })
+
 	return (
 		<article className="my-24 mx-4 max-container">
 			{ourSpirituality.map(spirit => (
