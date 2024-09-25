@@ -164,7 +164,7 @@ const CreateEvent = () => {
 		<article className="my-24 max-container mx-4">
 			<h1 className="text-center">Neuen Termin erstellen</h1>
 			<form className="grid grid-cols-1 sm:grid-cols-2 items-center mt-8 gap-4">
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="title">Titel: *</label>
 					<input className="w-72 max-w-full" id="title" name="title" required onChange={e => setTitle(e.target.value)} />
 				</div>
@@ -197,12 +197,12 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="description">Termin Beschreibung:</label>
 					<textarea className="w-72 max-w-full" id="description" name="description" onChange={e => setDescription(e.target.value)} />
 				</div>
 
-				<div className="grid grid-cols-1 justify-center w-72 max-w-full my-4 mx-auto">
+				<div className="grid grid-cols-1 w-72 max-w-full my-4 mx-auto">
 					<Select
 						id="unique-select-categories-id-"
 						inputId="unique-select-categories-id"
@@ -217,7 +217,7 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
+				<div className="grid grid-cols-1 w-72 max-w-full mx-auto">
 					<Select
 						id="unique-select-assignment-id-"
 						inputId="unique-select-assignment-id"
@@ -230,52 +230,52 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="street">Straße: *</label>
 					<input className="w-72 max-w-full" type="text" id="street" required onChange={e => setArrival({ ...arrival, street: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="number">Hausnummer:</label>
 					<input className="w-72 max-w-full" type="number" id="number" onChange={e => setArrival({ ...arrival, number: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="city">Stadt: *</label>
 					<input className="w-72 max-w-full" type="text" id="city" required onChange={e => setArrival({ ...arrival, city: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="country">Land:</label>
 					<input className="w-72 max-w-full" type="text" id="country" onChange={e => setArrival({ ...arrival, country: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="organiser">Organisator:</label>
 					<input className="w-72 max-w-full" type="text" id="organiser" onChange={e => setArrival({ ...arrival, organiser: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="contactPerson">Ansprechpartner:</label>
 					<input className="w-72 max-w-full" type="text" id="contactPerson" onChange={e => setArrival({ ...arrival, contactPerson: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="phone">Telefonnummer:</label>
 					<input className="w-72 max-w-full" type="text" id="phone" onChange={e => setArrival({ ...arrival, phone: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="email">Email:</label>
 					<input className="w-72 max-w-full" type="email" id="email" onChange={e => setArrival({ ...arrival, email: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="shortDescription">Kurzbeschreibung:</label>
 					<input className="w-72 max-w-full" type="text" id="shortDescription" onChange={e => setArrival({ ...arrival, shortDescription: e.target.value })} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+				<div className="grid grid-rows-[26px_1fr] gap-2">
 					<label htmlFor="addressAddition">Zusatz:</label>
 					<input className="w-72 max-w-full" type="text" id="addressAddition" onChange={e => setArrival({ ...arrival, addressAddition: e.target.value })} />
 				</div>
@@ -306,7 +306,7 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-cols-2">
+				<div className="grid grid-cols-[1fr_16px]">
 					<label className="text-nowrap" htmlFor="isRecurrent">
 						Ist ein Serientermin? *
 					</label>
@@ -346,7 +346,7 @@ const CreateEvent = () => {
 					</>
 				)}
 
-				<div className="grid grid-cols-2">
+				<div className="grid grid-cols-[1fr_16px]">
 					<label className="text-nowrap" htmlFor="isRegistration">
 						Registrierung notwendig? *
 					</label>

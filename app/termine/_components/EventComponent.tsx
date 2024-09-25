@@ -59,11 +59,12 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 					</div>
 					<div className="grid grid-cols-1 grid-rows-[17px_1fr_auto_24px] justify-between">
 						<small>
-							{eventItem.attributes?.categories?.data?.map((cat, index) => (
+							{eventItem.attributes?.categories?.data.slice(0, 2).map((cat, index) => (
 								<span key={index} className="after:content-['|'] last:after:content-none after:px-1">
 									{cat.attributes?.category}
 								</span>
 							))}
+							{eventItem.attributes?.categories?.data.length > 2 && <span className="after:px-1">...</span>}
 						</small>
 						<div className="strong inline-flex items-start">{eventItem.attributes?.title}</div>
 						<small className="inline-flex items-center py-1">für {eventItem.attributes?.participantRestriction?.split("für")[1]?.trim()}</small>
