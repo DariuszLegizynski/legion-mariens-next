@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import { Event } from "@/types/Event"
 import BaseButton from "@/components/base/BaseButton"
@@ -7,6 +8,12 @@ import { Child, Content } from "@/types/LandingPage"
 
 const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose: () => void; isAuth: boolean }) => {
 	if (!eventItem) return null
+
+	const router = useRouter()
+
+	const handleDeleteRedirect = () => {
+		router.push(`/termine/delete/${eventItem.id}`)
+	}
 
 	const handleModalClick = (e: React.MouseEvent) => {
 		e.stopPropagation()
@@ -36,7 +43,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 				<div onClick={onClose} className="flex justify-end items-center">
 					{isAuth && <p>EDIT</p>}
 					&nbsp;
-					{isAuth && <p>DEL</p>}
+					{isAuth && <BaseButton onClick={handleDeleteRedirect} buttonType="close" iconType="delete" width="1.2rem" height="1.2rem" />}
 					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>

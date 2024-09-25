@@ -3,13 +3,18 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import BaseButton from "@/components/base/BaseButton"
 import { createStrapiAuthData, getStrapiData } from "@/app/_utils/services/getStrapiData"
-import Select, { StylesConfig } from "react-select"
+import Select from "react-select"
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker"
+import { de } from "date-fns/locale/de"
+registerLocale("de", de)
+setDefaultLocale("de")
+import "react-datepicker/dist/react-datepicker.css"
 
 const CreateEvent = () => {
 	const [title, setTitle] = useState("")
 	const [categories, setCategories] = useState([])
-	const [startTime, setStartTime] = useState("")
-	const [endTime, setEndTime] = useState("")
+	const [startTime, setStartTime] = useState<Date>()
+	const [endTime, setEndTime] = useState<Date>()
 	const [description, setDescription] = useState("")
 	const [arrival, setArrival] = useState({
 		street: "",
@@ -24,9 +29,12 @@ const CreateEvent = () => {
 		addressAddition: "",
 	})
 	const [isRecurrent, setIsRecurrent] = useState(false)
-	const [repeat, setRepeat] = useState({
+	const [repeat, setRepeat] = useState<{
+		recurrenceType: string
+		recurrenceEndDate: Date | null
+	}>({
 		recurrenceType: "",
-		recurrenceEndDate: "",
+		recurrenceEndDate: null,
 	})
 	const [participantRestriction, setParticipantRestriction] = useState(null)
 	const [assignments, setAssignments] = useState([])
@@ -46,6 +54,7 @@ const CreateEvent = () => {
 	const customStyles = {
 		control: provided => ({
 			...provided,
+			borderRadius: "0",
 			borderColor: primaryColour,
 			borderWidth: "2px",
 			"&:hover": {
@@ -120,6 +129,17 @@ const CreateEvent = () => {
 		return { id: state.id, value: state.attributes.name, label: state.attributes?.name }
 	})
 
+	const restrictions = [
+		{ id: 0, name: "Diese Veranstaltung ist ausschließlich für Legionäre" },
+		{ id: 1, name: "Diese Veranstaltung ist ausschließlich für Hilfslegionäre" },
+		{ id: 2, name: "Diese Veranstaltung ist ausschließlich für Legionäre und Hilfslegionäre" },
+		{ id: 3, name: "Diese Veranstaltung ist für alle" },
+	]
+
+	const restrictionOptions = restrictions.map(restriction => {
+		return { id: restriction.id, value: restriction.name, label: restriction.name }
+	})
+
 	useEffect(() => {
 		const fetchCategories = async () => {
 			const response = await getStrapiData("categories?populate=*&sort=category:ASC")
@@ -149,14 +169,32 @@ const CreateEvent = () => {
 					<input className="w-72 max-w-full" id="title" name="title" required onChange={e => setTitle(e.target.value)} />
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label htmlFor="startTime">Anfangszeit: *</label>
-					<input className="w-72 max-w-full" type="datetime-local" id="startTime" name="startTime" onChange={e => setStartTime(e.target.value)} />
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full mt-4 mb-2 mx-auto">
+					<DatePicker
+						selected={startTime}
+						locale="de"
+						timeFormat="HH:mm"
+						timeIntervals={15}
+						showTimeSelect
+						onChange={date => setStartTime(date)}
+						minDate={new Date()}
+						dateFormat="dd MMMM yyyy | HH:mm"
+						placeholderText="Bitte Startdatum auswählen *"
+					/>
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label htmlFor="endTime">Endzeit:</label>
-					<input className="w-72 max-w-full" type="datetime-local" id="endTime" name="endTime" onChange={e => setEndTime(e.target.value)} />
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full mt-2 mb-4 mx-auto">
+					<DatePicker
+						selected={endTime}
+						locale="de"
+						timeFormat="HH:mm"
+						timeIntervals={15}
+						showTimeSelect
+						onChange={date => setEndTime(date)}
+						minDate={new Date()}
+						dateFormat="dd MMMM yyyy | HH:mm"
+						placeholderText="Bitte Enddatum auswählen"
+					/>
 				</div>
 
 				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
@@ -164,7 +202,7 @@ const CreateEvent = () => {
 					<textarea className="w-72 max-w-full" id="description" name="description" onChange={e => setDescription(e.target.value)} />
 				</div>
 
-				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full my-4 mx-auto">
 					<Select
 						id="unique-select-categories-id-"
 						inputId="unique-select-categories-id"
@@ -242,7 +280,7 @@ const CreateEvent = () => {
 					<input className="w-72 max-w-full" type="text" id="addressAddition" onChange={e => setArrival({ ...arrival, addressAddition: e.target.value })} />
 				</div>
 
-				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full my-4 mx-auto">
 					<Select
 						id="unique-select-state-id-"
 						inputId="unique-select-state-id"
@@ -255,26 +293,23 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-					<label htmlFor="participantRestriction">Participant Restriction: *</label>
-					<select
-						className="w-72 max-w-full"
-						id="participantRestriction"
-						name="participantRestriction"
-						onChange={e => setParticipantRestriction(e.target.value)}
-					>
-						<option value="">Select a restriction</option>
-						<option value="Diese Veranstaltung ist ausschließlich für Legionäre">Diese Veranstaltung ist ausschließlich für Legionäre</option>
-						<option value="Diese Veranstaltung ist ausschließlich für Hilfslegionäre">Diese Veranstaltung ist ausschließlich für Hilfslegionäre</option>
-						<option value="Diese Veranstaltung ist ausschließlich für Legionäre und Hilfslegionäre">
-							Diese Veranstaltung ist ausschließlich für Legionäre und Hilfslegionäre
-						</option>
-						<option value="Diese Veranstaltung ist für alle">Diese Veranstaltung ist für alle</option>
-					</select>
+				<div className="grid grid-cols-1 justify-center w-72 max-w-full mx-auto">
+					<Select
+						id="unique-select-state-id-"
+						inputId="unique-select-state-id"
+						instanceId="unique-select-state-id"
+						placeholder="Teilnehmerbeschränkung"
+						styles={customStyles}
+						defaultValue={participantRestriction}
+						onChange={setParticipantRestriction}
+						options={restrictionOptions}
+					/>
 				</div>
 
-				<div className="flex gap-2">
-					<label htmlFor="isRecurrent">Ist ein Serientermin? *</label>
+				<div className="grid grid-cols-2">
+					<label className="text-nowrap" htmlFor="isRecurrent">
+						Ist ein Serientermin? *
+					</label>
 					<input type="checkbox" id="isRecurrent" checked={isRecurrent} onChange={e => setIsRecurrent(e.target.checked)} />
 				</div>
 
@@ -295,21 +330,26 @@ const CreateEvent = () => {
 							</select>
 						</div>
 
-						<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-							<label htmlFor="recurrenceEndDate">Enddatum vom Serientermin:</label>
-							<input
-								className="w-72 max-w-full"
-								type="date"
-								id="recurrenceEndDate"
-								name="recurrenceEndDate"
-								onChange={e => setRepeat({ ...repeat, recurrenceEndDate: e.target.value })}
+						<div className="grid grid-cols-1 justify-center w-72 max-w-full mt-2 mb-4 mx-auto">
+							<DatePicker
+								selected={repeat.recurrenceEndDate}
+								locale="de"
+								timeFormat="HH:mm"
+								timeIntervals={15}
+								showTimeSelect
+								onChange={date => setRepeat({ ...repeat, recurrenceEndDate: date })}
+								minDate={new Date()}
+								dateFormat="dd MMMM yyyy | HH:mm"
+								placeholderText="Enddatum vom Serientermin"
 							/>
 						</div>
 					</>
 				)}
 
-				<div className="flex gap-2">
-					<label htmlFor="isRegistration">Registrierung notwendig? *</label>
+				<div className="grid grid-cols-2">
+					<label className="text-nowrap" htmlFor="isRegistration">
+						Registrierung notwendig? *
+					</label>
 					<input
 						type="checkbox"
 						id="isRegistration"

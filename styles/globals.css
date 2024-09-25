@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.react-datepicker__time-container {
+	@apply !w-[75px];
+}
+
 *,
 *::before,
 *::after {

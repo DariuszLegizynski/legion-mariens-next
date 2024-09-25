@@ -66,9 +66,10 @@ export const updateStrapiAuthData = async (query: string, data: any, jwt: string
 	}
 }
 
-export const deleteStrapiAuthData = async (query: string, jwt: string, productId: number) => {
+export const deleteStrapiAuthData = async (query: string, jwt: string, entryId: number) => {
+	console.log({ query, jwt, entryId })
 	try {
-		const response = await fetch(`${process.env.API_URL}/api/${query}/${productId}`, {
+		const response = await fetch(`${process.env.API_URL}/api/${query}/${entryId}`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

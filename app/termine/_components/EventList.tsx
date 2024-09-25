@@ -16,8 +16,8 @@ const EventList = () => {
 	const [eventList, setEventList] = useState<Event[]>([])
 	const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
 	const [categories, setCategories] = useState<Category[]>([])
-	const [startDate, setStartDate] = useState<string>("")
-	const [endDate, setEndDate] = useState<string>("")
+	const [startDate, setStartDate] = useState<Date>()
+	const [endDate, setEndDate] = useState<Date>()
 	const [category, setCategory] = useState<string>("Alle Kategorien")
 	const [states, setStates] = useState<Category[]>([])
 	const [state, setState] = useState<string>("Alle Bundesländer")
@@ -38,7 +38,7 @@ const EventList = () => {
 		fetchCategories()
 
 		const fetchStates = async () => {
-			const response = await getStrapiData("event-states?populate=*")
+			const response = await getStrapiData("event-states?populate=*&sort=name:ASC")
 			setStates(response.data)
 		}
 		fetchStates()
@@ -81,7 +81,9 @@ const EventList = () => {
 			<EventCalendar
 				categories={categories}
 				setCategory={setCategory}
+				startDate={startDate}
 				setStartDate={setStartDate}
+				endDate={endDate}
 				setEndDate={setEndDate}
 				states={states}
 				setState={setState}
