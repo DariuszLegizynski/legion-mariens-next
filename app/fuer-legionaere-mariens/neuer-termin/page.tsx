@@ -393,7 +393,7 @@ const CreateEvent = () => {
 
 				<div className="col-span-full mx-auto mt-12">
 					{!request.error && !request.complete && (
-						<BaseButton onClick={handleCreateEvent} isDisabled={request.loading || request.error} buttonType="submit" text="Create Event" />
+						<BaseButton onClick={handleCreateEvent} isDisabled={request.loading || request.error} buttonType="submit" text="Neuen Termin erstellen" />
 					)}
 					{request.error && <p>{request.error}</p>}
 					{request.complete && <p>Neuer Termin erstellt</p>}
