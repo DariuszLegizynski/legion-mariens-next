@@ -39,16 +39,16 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 
 	return (
 		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
-			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-full max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
+			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
 				<div onClick={onClose} className="flex justify-end items-center">
-					{isAuth && <p>EDIT</p>}
+					{/* {isAuth && <p>EDIT</p>} */}
 					&nbsp;
 					{isAuth && <BaseButton onClick={handleDeleteRedirect} buttonType="close" iconType="delete" width="1.2rem" height="1.2rem" />}
 					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
 				<section className="grid md:grid-cols-2">
-					<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0">
+					<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0 md:grid md:grid-cols-1 md:justify-items-end md:pr-8">
 						<div className="grid auto-rows-auto grid-cols-1">
 							<p className="text-[1.375rem] text-primary mb-1.5">{startDate}</p>
 							{endDate && <p className="text-[1.375rem] text-primary mb-1.5">&nbsp;- {endDate}</p>}

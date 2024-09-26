@@ -43,7 +43,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 			{shouldAnimate && (
 				<section
 					onClick={() => setIsModalOpen(true)}
-					className={`grid grid-cols-[auto_1fr] gap-x-8 min-h-[8.5rem] border border-grey border-b-primary border-b-[3px] py-3 px-4 w-full max-w-96 ${
+					className={`grid grid-cols-[auto_1fr] gap-x-8 min-h-[8.5rem] border border-grey border-b-primary border-b-[3px] py-3 px-4 w-full max-w-96 cursor-pointer ${
 						isVisible ? "slide-up" : "slide-down"
 					}`}
 				>
