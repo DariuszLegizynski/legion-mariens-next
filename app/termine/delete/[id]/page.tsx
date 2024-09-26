@@ -60,29 +60,31 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 	if (error) return <p>{error}</p>
 
 	return (
-		<div className="container mx-auto my-8">
-			<h1>Sind sie sich sicher, dass sie diesen Termin löschen wollen?</h1>
-			<p>Titel: {eventData.attributes?.title}</p>
+		<div className="container px-4 my-8">
+			<h1 className="my-4">Sind sie sich sicher, dass sie diesen Termin löschen wollen?</h1>
+			<p>
+				Titel: <b>{eventData.attributes?.title}</b>
+			</p>
 			<p>Am: {eventData.attributes?.startTime.split("T")[0]}</p>
-			<div>
+			<div className="my-4">
 				<label htmlFor="name">Vorname:</label>
 				<input id="name" onChange={e => setName(e.target.value)} />
 			</div>
-			<div>
+			<div className="mb-4">
 				<label htmlFor="surname">Zuname:</label>
 				<input id="surname" onChange={e => setSurname(e.target.value)} />
 			</div>
-			<div>
+			<div className="mb-4">
 				<label htmlFor="reasonEmail">Email:</label>
 				<input id="reasonEmail" onChange={e => setUserEmail(e.target.value)} />
 			</div>
-			<div>
+			<div className="mb-4">
 				<label htmlFor="reasonDescription">Begründung:</label>
 				<textarea id="reasonDescription" onChange={e => setReason(e.target.value)} />
 			</div>
 
-			<div className="mt-4">
-				<BaseButton buttonType="submit" onClick={handleDeleteEvent} disabled={loading} text={loading ? "Deleting..." : "Delete Event"} />
+			<div className="mt-4 flex flex-col items-center sm:my-12">
+				<BaseButton buttonType="submit" onClick={handleDeleteEvent} disabled={loading} text={loading ? "Löschen..." : "Termin Löschen"} />
 			</div>
 		</div>
 	)

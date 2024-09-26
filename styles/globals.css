@@ -41,7 +41,7 @@ textarea,
 select,
 input:not([type="checkbox"]),
 option {
-	@apply cursor-pointer border-2 border-primary py-1.5 px-2.5 w-full min-w-72;
+	@apply cursor-pointer border-2 border-primary py-1.5 px-2.5 w-full sm:min-w-72;
 }
 
 input[type="checkbox"] {

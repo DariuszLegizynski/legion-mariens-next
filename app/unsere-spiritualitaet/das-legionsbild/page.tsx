@@ -6,7 +6,7 @@ const LegionImage = async () => {
 	const legionImage = data?.data?.attributes?.legion_image
 
 	return (
-		<article className="my-24 mx-4 grid grid-cols-1 items-center gap-y-16 gap-x-8 max-container sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+		<article className="my-24 mx-4 max-container">
 			<TitleImageContent title={legionImage?.title} image={legionImage?.image} content={legionImage?.content} />
 		</article>
 	)
