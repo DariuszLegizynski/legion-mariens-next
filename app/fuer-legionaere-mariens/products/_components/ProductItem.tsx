@@ -12,16 +12,26 @@ const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: b
 
 	const handleDecrease = () => {
 		if (amount > 0) {
-			setAmount(amount - 1)
-			setWarehouseQuantity(warehouseQuantity + 1)
+			setAmount(prevAmount => prevAmount - 1)
+			setWarehouseQuantity(prevQuantity => prevQuantity + 1)
 		}
 	}
 
 	const handleIncrease = () => {
 		if (warehouseQuantity > 0) {
-			setAmount(amount + 1)
-			setWarehouseQuantity(warehouseQuantity - 1)
+			setAmount(prevAmount => prevAmount + 1)
+			setWarehouseQuantity(prevQuantity => prevQuantity - 1)
 		}
+	}
+
+	const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let value = parseInt(e.target.value, 10)
+		if (isNaN(value)) value = 0 // Handle non-numeric inputs
+		if (value < 0) value = 0 // Ensure the amount is not negative
+		if (value > productItem.attributes?.quantity) value = productItem.attributes?.quantity // Limit to available stock
+
+		setAmount(value)
+		setWarehouseQuantity(productItem.attributes?.quantity - value) // Adjust warehouse quantity
 	}
 
 	useEffect(() => {
@@ -55,7 +65,14 @@ const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: b
 							<button className="px-4 py-2" onClick={handleDecrease}>
 								-
 							</button>
-							<p className="px-4 py-2">{amount}</p>
+							<input
+								type="number"
+								className="px-4 py-2 text-center w-16 !border-none"
+								value={amount}
+								onChange={handleAmountChange}
+								min={0}
+								max={productItem.attributes?.quantity}
+							/>
 							<button className="px-4 py-2" onClick={handleIncrease}>
 								+
 							</button>
