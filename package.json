@@ -22,7 +22,8 @@
     "react-dom": "^18",
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
-    "react-select": "^5.8.1"
+    "react-select": "^5.8.1",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

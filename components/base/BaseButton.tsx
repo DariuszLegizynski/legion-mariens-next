@@ -45,7 +45,7 @@ const BaseButton: React.FC<BaseButtonProps> = ({ buttonType, iconType, text, wid
 			)}
 			{buttonType === "logout" && (
 				<div>
-					<button type="button" onClick={onClick} className="p-2 text-accent uppercase w-full max-w-72">
+					<button type="button" onClick={onClick} className="text-accent uppercase w-full max-w-72">
 						<p>{text}</p>
 					</button>
 				</div>

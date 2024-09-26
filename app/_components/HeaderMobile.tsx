@@ -154,7 +154,7 @@ const HeaderMobile = () => {
 					</nav>
 				)}
 				{isAuthenticated && isUserIconActive && (
-					<nav className={`text-center uppercase grid justify-items-start justify-end gap-y-4 my-8 pr-2`}>
+					<nav className={`text-center uppercase grid justify-items-end justify-end gap-y-4 my-8 pr-2`}>
 						<Link
 							onClick={() => {
 								setIsBurgerActive(false)
@@ -163,7 +163,7 @@ const HeaderMobile = () => {
 							href="/fuer-legionaere-mariens/neuer-termin"
 							className="max-w-72"
 						>
-							<p className="text-primary">Neuer Termin</p>
+							<p className="text-primary text-center">Neuer Termin</p>
 						</Link>
 						<Link
 							onClick={() => {
