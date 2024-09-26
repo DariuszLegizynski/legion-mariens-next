@@ -51,6 +51,12 @@ const CreateEvent = () => {
 		surname: "",
 		email: "",
 	})
+	const [loading, setLoading] = useState(false)
+	const [request, setRequest] = useState({
+		loading: false,
+		complete: false,
+		error: false,
+	})
 
 	const primaryColour = "hsl(227, 46%, 44%)"
 	const primaryLightColour = "hsl(227, 46%, 64%)"
@@ -85,12 +91,10 @@ const CreateEvent = () => {
 		placeholder: styles => ({ ...styles, color: primaryColour }),
 	}
 
-	const [loading, setLoading] = useState(false)
-
 	const jwt = Cookies.get("jwt")
 
 	const handleCreateEvent = async () => {
-		setLoading(true)
+		setRequest({ ...request, loading: true })
 
 		const eventData = {
 			data: {
@@ -117,10 +121,9 @@ const CreateEvent = () => {
 
 		try {
 			await createStrapiAuthData("events", eventData, jwt)
-			setLoading(false)
+			setRequest({ ...request, loading: false, complete: true })
 		} catch (error) {
-			setLoading(false)
-			console.error("Error creating event: ", error.message)
+			setRequest({ ...request, loading: false, error: error.message })
 		}
 	}
 
@@ -401,7 +404,11 @@ const CreateEvent = () => {
 				</div>
 
 				<div className="col-span-full mx-auto mt-12">
-					<BaseButton onClick={handleCreateEvent} isDisabled={loading} buttonType="submit" text="Create Event" />
+					{!request.error && !request.complete && (
+						<BaseButton onClick={handleCreateEvent} isDisabled={request.loading || request.error} buttonType="submit" text="Create Event" />
+					)}
+					{request.error && <p>{request.error}</p>}
+					{request.complete && <p>Neuer Termin erstellt</p>}
 				</div>
 			</form>
 		</article>

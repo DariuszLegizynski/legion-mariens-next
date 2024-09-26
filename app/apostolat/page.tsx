@@ -5,10 +5,10 @@ import Links from "@/app/_components/Links"
 
 const Apostolat = async () => {
 	const data = await getStrapiData("apostolat?populate[apostolat][populate][titleLinks][populate]=*")
-	const mainData = data.data.attributes
+	const mainData = data?.data?.attributes
 
 	const linksData = await getStrapiData("apostolat?populate[links][populate]=*")
-	const linksDataContent = linksData.data.attributes
+	const linksDataContent = linksData?.data?.attributes
 
 	return (
 		<article className="my-24 mx-4 max-container">

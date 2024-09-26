@@ -136,7 +136,7 @@ const HeaderMobile = () => {
 																setIsBurgerActive(false)
 																setIsUserIconActive(false)
 															}}
-															href={`${process.env.API_URL}${subItem.pdf.data.attributes.url}`}
+															href={`${process.env.API_URL}${subItem?.pdf?.data?.attributes?.url}`}
 															target="_blank"
 															rel="noopener noreferrer"
 														>

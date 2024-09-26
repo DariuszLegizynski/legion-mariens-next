@@ -5,7 +5,7 @@ const Links = ({ title, links }) => {
 			<ul>
 				{links.map(link => (
 					<li className="my-4" key={link.id}>
-						<a className="text-primary hover:text-accent transition-colors duration-300" href={`${process.env.API_URL}${link.pdf.data.attributes.url}`}>
+						<a className="text-primary hover:text-accent transition-colors duration-300" href={`${process.env.API_URL}${link?.pdf?.data?.attributes?.url}`}>
 							{link.name}
 						</a>
 					</li>

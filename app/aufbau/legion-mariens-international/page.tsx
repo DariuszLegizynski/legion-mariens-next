@@ -3,7 +3,7 @@ import TitleContent from "@/components/common/TitleContent"
 
 const LegionInternational = async () => {
 	const international = await getStrapiData("aufbau-legion-mariens-international?populate[international][populate]=*")
-	const internationalData = international.data.attributes
+	const internationalData = international?.data?.attributes
 
 	return (
 		<article className="my-24 mx-4 max-container">

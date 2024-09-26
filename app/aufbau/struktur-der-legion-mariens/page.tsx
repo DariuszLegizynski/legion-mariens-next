@@ -4,10 +4,10 @@ import TitleImage from "@/components/common/TitleImage"
 
 const StrukturLegion = async () => {
 	const organigram = await getStrapiData("aufbau-struktur-der-legion-marien?populate[organigram][populate]=*")
-	const organigramData = organigram.data.attributes.organigram
+	const organigramData = organigram?.data?.attributes?.organigram
 
 	const descriptions = await getStrapiData("aufbau-struktur-der-legion-marien?populate[descriptions][populate]=*")
-	const descriptionsData = descriptions.data.attributes
+	const descriptionsData = descriptions?.data?.attributes
 
 	return (
 		<article className="my-24 mx-4 max-container">

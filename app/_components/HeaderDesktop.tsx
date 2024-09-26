@@ -96,15 +96,15 @@ const HeaderDesktop = () => {
 											item.subCategory.map(subItem => (
 												<li key={subItem.id + subItem.linkName}>
 													{subItem.linkPath ? (
-														<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
-															<p className="text-primary text-nowrap">{subItem.linkName}</p>
+														<Link href={`${subItem?.linkPath}`} onClick={() => handleCategoryClick(null)}>
+															<p className="text-primary text-nowrap">{subItem?.linkName}</p>
 														</Link>
 													) : subItem.pdf?.data?.attributes?.url ? (
-														<a href={`${process.env.API_URL}${subItem.pdf.data.attributes.url}`} target="_blank" rel="noopener noreferrer">
-															<p className="text-primary text-nowrap">{subItem.linkName} (PDF)</p>
+														<a href={`${process.env.API_URL}${subItem?.pdf?.data?.attributes?.url}`} target="_blank" rel="noopener noreferrer">
+															<p className="text-primary text-nowrap">{subItem?.linkName} (PDF)</p>
 														</a>
 													) : (
-														<p className="text-primary text-nowrap">{subItem.linkName} (Kein link verfügbar)</p>
+														<p className="text-primary text-nowrap">{subItem?.linkName} (Kein link verfügbar)</p>
 													)}
 												</li>
 											))}
@@ -160,14 +160,14 @@ const HeaderDesktop = () => {
 													<li key={subItem.id + subItem.linkName}>
 														{subItem.linkPath ? (
 															<Link href={`${subItem.linkPath}`} onClick={() => handleCategoryClick(null)}>
-																<span className="text-primary">{subItem.linkName}</span>
+																<span className="text-primary">{subItem?.linkName}</span>
 															</Link>
 														) : subItem.pdf?.data?.attributes?.url ? (
-															<a href={`${process.env.API_URL}${subItem.pdf.data.attributes.url}`} target="_blank" rel="noopener noreferrer">
-																<span className="text-primary">{subItem.linkName} (PDF)</span>
+															<a href={`${process.env.API_URL}${subItem?.pdf?.data?.attributes?.url}`} target="_blank" rel="noopener noreferrer">
+																<span className="text-primary">{subItem?.linkName} (PDF)</span>
 															</a>
 														) : (
-															<p className="text-primary">{subItem.linkName} (No link available)</p>
+															<p className="text-primary">{subItem?.linkName} (No link available)</p>
 														)}
 													</li>
 												))}

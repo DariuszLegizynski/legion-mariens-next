@@ -73,7 +73,7 @@ const Checkout = () => {
 
 				// Fetch current product data
 				const productData = await getStrapiAuthData(`products/${productId}`, jwt)
-				const currentQuantity = productData.data.attributes?.quantity
+				const currentQuantity = productData?.data?.attributes?.quantity
 
 				const newQuantity = currentQuantity - purchasedAmount
 
