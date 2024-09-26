@@ -17,7 +17,7 @@ const Materialstelle = () => {
 	const [productCategories, setProductCategories] = useState<any[]>([])
 	const [productCategory, setProductCategory] = useState<string>("")
 	const [cartData, setCartData] = useState<any[]>([])
-	const [searchTerm, setSearchTerm] = useState<string>("") // <-- Add this state
+	const [searchTerm, setSearchTerm] = useState<string>("")
 	const [loading, setLoading] = useState(false)
 
 	const jwt = Cookies.get("jwt")
@@ -60,7 +60,7 @@ const Materialstelle = () => {
 		}
 
 		setFilteredProducts(filtered)
-	}, [productCategory, productsData, searchTerm]) // <-- Add searchTerm as a dependency
+	}, [productCategory, productsData, searchTerm])
 
 	// add to cart logic
 	const handleToCart = async (productItem: Product, amount: number, warehouseQuantity: number) => {
