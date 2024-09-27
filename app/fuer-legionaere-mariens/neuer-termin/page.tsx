@@ -396,7 +396,7 @@ const CreateEvent = () => {
 						<BaseButton onClick={handleCreateEvent} isDisabled={request.loading || request.error} buttonType="submit" text="Neuen Termin erstellen" />
 					)}
 					{request.error && <p>{request.error}</p>}
-					{request.complete && <p>Neuer Termin erstellt</p>}
+					{request.complete && <p>Anfrage gesendet.</p>}
 				</div>
 			</form>
 		</article>
