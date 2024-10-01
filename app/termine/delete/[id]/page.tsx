@@ -4,18 +4,13 @@ import { useEffect, useState } from "react"
 import { getStrapiData, createStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import BaseButton from "@/components/base/BaseButton"
 import Cookies from "js-cookie"
+import { format } from "date-fns"
 
 const DeleteEvent = ({ params }: { params: { id: string } }) => {
 	const router = useRouter()
-	let startTime = null
-	startTime ? sessionStorage.removeItem("deleteSingleStartTime") : null
-	startTime = sessionStorage.getItem("deleteSingleStartTime")
-
-	const startDate = new Date(startTime)
-
 	const jwt = Cookies.get("jwt")
 
-	const [eventData, setEventData] = useState(new Date())
+	const [eventData, setEventData] = useState()
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState("")
 	const [reason, setReason] = useState("")
@@ -37,6 +32,10 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 		fetchEventData()
 	}, [params.id])
 
+	let startTime = null
+	sessionStorage.removeItem("deleteSingleStartTime")
+	startTime = sessionStorage.getItem("deleteSingleStartTime") ? sessionStorage.getItem("deleteSingleStartTime") : eventData?.attributes?.startTime
+
 	// Handle event deletion
 	const handleDeleteEvent = async () => {
 		setLoading(true)
@@ -48,6 +47,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 				events: params.id,
 				name,
 				surname,
+				publishedAt: null,
 			},
 		}
 
@@ -58,21 +58,19 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 				events: params.id,
 				name,
 				surname,
-				exceptionDate: startDate,
+				exceptionDate: startTime,
 				publishedAt: null,
 			},
 		}
 
 		try {
-			if (startTime) {
-				console.log("occurence delete: ", deleteOcurrenceEventData)
+			if (eventData?.attributes?.repeat) {
 				await createStrapiAuthData(`event-exceptions`, deleteOcurrenceEventData, jwt!)
 				sessionStorage.removeItem("deleteSingleStartTime")
 				setLoading(false)
 				router.push("/termine")
 				return
 			}
-			console.log("delete: ", deleteEventData)
 			await createStrapiAuthData(`delete-event-requests`, deleteEventData, jwt!)
 			sessionStorage.removeItem("deleteSingleStartTime")
 			setLoading(false)
@@ -83,6 +81,8 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 			setError(error.message)
 		}
 	}
+	console.log("eventData: ", eventData)
+	console.log("start Time: ", eventData?.attributes?.startTime)
 
 	if (!eventData) return <p className="text-center my-24">Loading...</p>
 	if (error) return <p className="text-center my-24">{error}</p>
@@ -93,16 +93,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 			<p className="mt-8">
 				Titel: <b>{eventData.attributes?.title}</b>
 			</p>
-			<p className="mt-2 mb-8">
-				Am:{" "}
-				{startDate
-					? startDate.toLocaleDateString("de-DE", {
-							day: "2-digit",
-							month: "2-digit",
-							year: "numeric",
-					  })
-					: eventData.attributes?.startTime.split("T")[0]}
-			</p>
+			<p className="mt-2 mb-8">Am: {startTime ? format(new Date(startTime), "dd.MM.yyyy") : format(new Date(eventData.attributes?.startTime), "dd.MM.yyyy")}</p>
 			<section className="max-w-72 mx-auto">
 				<div className="my-4">
 					<label htmlFor="name">Vorname:</label>

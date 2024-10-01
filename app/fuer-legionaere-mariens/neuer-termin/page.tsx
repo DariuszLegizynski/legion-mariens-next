@@ -90,6 +90,15 @@ const CreateEvent = () => {
 		placeholder: styles => ({ ...styles, color: primaryColour }),
 	}
 
+	console.log({ repeat })
+	console.log("repeat.recurrenceType: ", repeat.recurrenceType)
+
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		console.log("Selected value:", e.target.value) // Logs the selected value
+		// setRepeat({ ...repeat, recurrenceType: e.target.value })
+		// console.log("Updated state:", repeat) // Logs the updated state after change
+	}
+
 	const jwt = Cookies.get("jwt")
 
 	const handleCreateEvent = async () => {
@@ -136,6 +145,16 @@ const CreateEvent = () => {
 
 	const stateOptions = states.map(state => {
 		return { id: state.id, value: state.attributes.name, label: state.attributes?.name }
+	})
+
+	const recurrenceTypes = [
+		{ id: 0, name: "Wöchentlich", value: "weekly" },
+		{ id: 1, name: "Monatlich", value: "monthly" },
+		{ id: 2, name: "Jährlich", value: "yearly" },
+	]
+
+	const recurrenceTypeOptions = recurrenceTypes.map(recurrenceType => {
+		return { id: recurrenceType.id, value: recurrenceType.value, label: recurrenceType.name }
 	})
 
 	const restrictions = [
@@ -197,7 +216,7 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-cols-1 justify-center  mt-2 mb-4 mx-auto">
+				<div className="grid grid-cols-1 justify-center mt-4 mb-2">
 					<DatePicker
 						selected={endTime}
 						locale="de"
@@ -315,7 +334,7 @@ const CreateEvent = () => {
 					/>
 				</div>
 
-				<div className="grid grid-cols-[1fr_16px] sm:min-w-72">
+				<div className="grid grid-cols-[1fr_16px] mt-4 sm:mt-0 sm:min-w-72">
 					<label className="text-nowrap" htmlFor="isRecurrent">
 						Ist ein Serientermin? *
 					</label>
@@ -325,17 +344,31 @@ const CreateEvent = () => {
 				{isRecurrent ? (
 					<>
 						<div className="hidden sm:block" />
-						<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
-							<label htmlFor="recurrenceType">Serientyp: *</label>
-							<select className="" id="recurrenceType" name="recurrenceType" onChange={e => setRepeat({ ...repeat, recurrenceType: e.target.value })}>
-								<option value="">Serientyp wählen</option>
+						{/* <div className="grid grid-cols-1 justify-center mb-2">
+							<label className="mb-2" htmlFor="recurrenceType">
+								Serientyp: *
+							</label>
+							<select id="recurrenceType" name="recurrenceType" value={repeat.recurrenceType} required onChange={handleChange}>
+								<option value="">Serientyp wählen *</option>
 								<option value="weekly">Wöchentlich</option>
 								<option value="monthly">Monatlich</option>
 								<option value="yearly">Jährlich</option>
 							</select>
+						</div> */}
+
+						<div className="grid grid-cols-1 justify-center my-4 sm:min-w-72">
+							<Select
+								id="unique-select-recurrenceType"
+								inputId="unique-select-recurrenceType"
+								instanceId="unique-select-recurrenceType"
+								placeholder="Serientyp wählen"
+								styles={customStyles}
+								onChange={option => setRepeat({ ...repeat, recurrenceType: option.value })}
+								options={recurrenceTypeOptions}
+							/>
 						</div>
 
-						<div className="grid grid-cols-1 gap-2 justify-center grid-rows-[26px_1fr] sm:mt-2 mb-4 mx-auto">
+						<div className="grid grid-cols-1 justify-center sm:mt-4 mb-2">
 							<div className="hidden sm:block sm:mb-2" />
 							<DatePicker
 								selected={repeat.recurrenceEndDate}
