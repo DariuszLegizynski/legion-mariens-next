@@ -1,14 +1,14 @@
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { Event } from "@/types/Event"
+import { format, addDays, addMonths, addYears, isBefore } from "date-fns"
 
 const applyExceptions = async (events: any[]) => {
 	const response = await getStrapiData(`event-exceptions?populate=*`)
 	const exceptions = response?.data ? response.data : []
-
-	const exceptionDates = new Set(exceptions.map(exc => new Date(exc.attributes.exceptionDate).toDateString()))
+	const exceptionDates = new Set(exceptions.map(exc => format(new Date(exc.attributes.exceptionDate), "yyyy-MM-dd")))
 
 	return events.filter(eventItem => {
-		return !exceptionDates.has(new Date(eventItem.attributes.startTime).toDateString())
+		return !exceptionDates.has(format(new Date(eventItem.attributes.startTime), "yyyy-MM-dd"))
 	})
 }
 
@@ -20,27 +20,31 @@ const generateRecurringEvents = (event: Event) => {
 
 	const recurrenceType = repeat.recurrenceType
 	const recurrenceEndDate = new Date(repeat.recurrenceEndDate)
-	const currentDate = new Date(startTime)
-	const endDate = endTime ? new Date(endTime) : null
+	let currentDate = new Date(startTime)
+	let eventEndDate = endTime ? new Date(endTime) : null
 
-	while (currentDate <= recurrenceEndDate) {
+	while (!isBefore(recurrenceEndDate, currentDate)) {
 		occurrences.push({
 			...event,
-			attributes: { ...event.attributes, startTime: currentDate.toISOString(), endTime: endDate?.toISOString() },
+			attributes: {
+				...event.attributes,
+				startTime: format(currentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+				endTime: eventEndDate ? format(eventEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") : null,
+			},
 		})
 
 		switch (recurrenceType) {
 			case "weekly":
-				currentDate.setDate(currentDate.getDate() + 7)
-				endDate?.setDate(endDate.getDate() + 7)
+				currentDate = addDays(currentDate, 7)
+				if (eventEndDate) eventEndDate = addDays(eventEndDate, 7)
 				break
 			case "monthly":
-				currentDate.setMonth(currentDate.getMonth() + 1)
-				endDate?.setMonth(endDate.getMonth() + 1)
+				currentDate = addMonths(currentDate, 1)
+				if (eventEndDate) eventEndDate = addMonths(eventEndDate, 1)
 				break
 			case "yearly":
-				currentDate.setFullYear(currentDate.getFullYear() + 1)
-				endDate?.setFullYear(endDate.getFullYear() + 1)
+				currentDate = addYears(currentDate, 1)
+				if (eventEndDate) eventEndDate = addYears(eventEndDate, 1)
 				break
 			default:
 				break
@@ -51,7 +55,7 @@ const generateRecurringEvents = (event: Event) => {
 }
 
 export async function fetchEvents() {
-	const today = new Date().toISOString()
+	const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 	const response = await getStrapiData(`events?filters[startTime][$gte]=${today}&populate=*&sort=startTime:ASC`)
 	const eventList = response.data
 

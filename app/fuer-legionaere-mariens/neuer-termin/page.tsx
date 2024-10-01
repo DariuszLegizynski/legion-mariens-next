@@ -205,7 +205,7 @@ const CreateEvent = () => {
 						timeIntervals={15}
 						showTimeSelect
 						onChange={date => setEndTime(date)}
-						minDate={new Date()}
+						minDate={startTime ? startTime : new Date()}
 						dateFormat="dd MMMM yyyy | HH:mm"
 						placeholderText="Bitte Enddatum auswählen"
 					/>

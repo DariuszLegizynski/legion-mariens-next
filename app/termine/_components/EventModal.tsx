@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 import { Event } from "@/types/Event"
 import BaseButton from "@/components/base/BaseButton"
@@ -8,23 +9,51 @@ import { Child, Content } from "@/types/LandingPage"
 
 const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose: () => void; isAuth: boolean }) => {
 	if (!eventItem) return null
-
+	const [showDeleteOptions, setShowDeleteOptions] = useState(false)
 	const router = useRouter()
 
-	const handleDeleteRedirect = () => {
+	const handleDeleteRedirect = (e: React.MouseEvent) => {
+		e.stopPropagation()
+		if (eventItem?.attributes?.repeat) {
+			setShowDeleteOptions(true)
+			return
+		}
+
+		handleDeleteSingleEventAndRecurringEvent()
+	}
+
+	const handleDeleteSingleEventAndRecurringEvent = () => {
 		router.push(`/termine/delete/${eventItem.id}`)
+	}
+
+	const handleDeleteSingleOcurrence = (startTime: string) => {
+		sessionStorage.setItem("deleteSingleStartTime", startTime)
+		router.push(`/termine/delete/${eventItem.id}`)
+	}
+
+	const stepBack = (e: React.MouseEvent) => {
+		e.stopPropagation()
+		setShowDeleteOptions(false)
 	}
 
 	const handleModalClick = (e: React.MouseEvent) => {
 		e.stopPropagation()
 	}
-
-	const startTime = new Date(eventItem.attributes?.startTime)
+	console.log("eventItem.attributes?.startTime: ", eventItem.attributes?.startTime)
+	let startTime = new Date(eventItem.attributes?.startTime)
 	const startDate = startTime.toLocaleDateString("de-DE", {
 		day: "numeric",
 		month: "long",
 		year: "numeric",
 	})
+
+	// const startTimeISO = startTime.toLocaleDateString("de-DE", {
+	// 	day: "2-digit",
+	// 	month: "2-digit",
+	// 	year: "numeric",
+	// 	hour: "2-digit",
+	// 	minute: "2-digit",
+	// })
 
 	let endDate: string | undefined
 
@@ -47,48 +76,68 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
-				<section className="grid md:grid-cols-2">
-					<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0 md:grid md:grid-cols-1 md:justify-items-end md:pr-8">
-						<div className="grid auto-rows-auto grid-cols-1">
-							<p className="text-[1.375rem] text-primary mb-1.5">{startDate}</p>
-							{endDate && <p className="text-[1.375rem] text-primary mb-1.5">&nbsp;- {endDate}</p>}
+				{showDeleteOptions ? (
+					// Show the delete options (buttons) in the DOM
+					<div className="flex flex-col items-center">
+						<p className="mb-4">Wollen sie die ganze Serie löschen oder nur diesen Termin?</p>
+						<div className="flex flex-col gap-4">
+							<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer">
+								Diesen Termin löschen
+							</div>
+							<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer">
+								Ganze Serie löschen
+							</div>
+							<div onClick={stepBack} className="cursor-pointer">
+								Zurück
+							</div>
 						</div>
-						<p>
-							{eventItem.attributes?.arrival?.street} {eventItem.attributes?.arrival?.number}
-							{eventItem.attributes?.arrival?.addressAddition}
-						</p>
-						<p>
-							{eventItem.attributes?.arrival?.city}, {eventItem.attributes?.arrival?.country}
-						</p>
-						<i className="normal-case">{eventItem.attributes?.arrival?.shortDescription}</i>
-						<p>
-							<b>Veranstalter: </b>
-							{eventItem.attributes?.arrival?.organiser}
-						</p>
-						<p>
-							<b>Kontaktperson: </b>
-						</p>
-						<p>{eventItem.attributes?.arrival?.contactPerson}</p>
-						<p>
-							<Link href={`tel:${eventItem.attributes?.arrival?.phone}`}>{eventItem.attributes?.arrival?.phone}</Link>
-						</p>
-						<p>
-							<Link href={`mailto:${eventItem.attributes?.arrival?.email}`}>{eventItem.attributes?.arrival?.email}</Link>
-						</p>
 					</div>
-					<div className="py-4 md:border-primary md:border-l-[3px] md:pl-6 md:h-fit md:py-0">
-						<div className="h1 !normal-case">{eventItem.attributes?.title}</div>
-						<i>{eventItem?.attributes?.categories?.data?.map(cat => cat.attributes?.category)}</i>
-						<div
-							className="mb-6"
-							dangerouslySetInnerHTML={{
-								__html: eventItem.attributes?.description?.content?.map((item: Content) => item.children.map((child: Child) => child.text).join("")).join(""),
-							}}
-						/>
-						{eventItem.attributes?.description?.registration && <b className="text-primary">Eine Anmeldung ist notwendig.</b>}
-						{eventItem.attributes?.description?.registrationDescription && <p className="mt-2">{eventItem.attributes?.description?.registrationDescription}</p>}
-					</div>
-				</section>
+				) : (
+					<section className="grid md:grid-cols-2">
+						<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0 md:grid md:grid-cols-1 md:justify-items-end md:pr-8">
+							<div className="grid auto-rows-auto grid-cols-1">
+								<p className="text-[1.375rem] text-primary mb-1.5">{startDate}</p>
+								{endDate && <p className="text-[1.375rem] text-primary mb-1.5">&nbsp;- {endDate}</p>}
+							</div>
+							<p>
+								{eventItem.attributes?.arrival?.street} {eventItem.attributes?.arrival?.number}
+								{eventItem.attributes?.arrival?.addressAddition}
+							</p>
+							<p>
+								{eventItem.attributes?.arrival?.city}, {eventItem.attributes?.arrival?.country}
+							</p>
+							<i className="normal-case">{eventItem.attributes?.arrival?.shortDescription}</i>
+							<p>
+								<b>Veranstalter: </b>
+								{eventItem.attributes?.arrival?.organiser}
+							</p>
+							<p>
+								<b>Kontaktperson: </b>
+							</p>
+							<p>{eventItem.attributes?.arrival?.contactPerson}</p>
+							<p>
+								<Link href={`tel:${eventItem.attributes?.arrival?.phone}`}>{eventItem.attributes?.arrival?.phone}</Link>
+							</p>
+							<p>
+								<Link href={`mailto:${eventItem.attributes?.arrival?.email}`}>{eventItem.attributes?.arrival?.email}</Link>
+							</p>
+						</div>
+						<div className="py-4 md:border-primary md:border-l-[3px] md:pl-6 md:h-fit md:py-0">
+							<div className="h1 !normal-case">{eventItem.attributes?.title}</div>
+							<i>{eventItem?.attributes?.categories?.data?.map(cat => cat.attributes?.category)}</i>
+							<div
+								className="mb-6"
+								dangerouslySetInnerHTML={{
+									__html: eventItem.attributes?.description?.content?.map((item: Content) => item.children.map((child: Child) => child.text).join("")).join(""),
+								}}
+							/>
+							{eventItem.attributes?.description?.registration && <b className="text-primary">Eine Anmeldung ist notwendig.</b>}
+							{eventItem.attributes?.description?.registrationDescription && (
+								<p className="mt-2">{eventItem.attributes?.description?.registrationDescription}</p>
+							)}
+						</div>
+					</section>
+				)}
 			</div>
 			<div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
 		</section>

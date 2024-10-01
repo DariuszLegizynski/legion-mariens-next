@@ -80,7 +80,7 @@ const EventCalendar = ({
 					selected={endDate}
 					locale="de"
 					onChange={date => setEndDate(date)}
-					minDate={new Date()}
+					minDate={startDate ? startDate : new Date()}
 					dateFormat="dd MMMM yyyy"
 					placeholderText="Enddatum wählen"
 				/>
