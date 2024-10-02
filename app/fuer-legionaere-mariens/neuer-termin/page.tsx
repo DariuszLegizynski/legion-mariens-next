@@ -344,17 +344,6 @@ const CreateEvent = () => {
 				{isRecurrent ? (
 					<>
 						<div className="hidden sm:block" />
-						{/* <div className="grid grid-cols-1 justify-center mb-2">
-							<label className="mb-2" htmlFor="recurrenceType">
-								Serientyp: *
-							</label>
-							<select id="recurrenceType" name="recurrenceType" value={repeat.recurrenceType} required onChange={handleChange}>
-								<option value="">Serientyp wählen *</option>
-								<option value="weekly">Wöchentlich</option>
-								<option value="monthly">Monatlich</option>
-								<option value="yearly">Jährlich</option>
-							</select>
-						</div> */}
 
 						<div className="grid grid-cols-1 justify-center my-4 sm:min-w-72">
 							<Select
@@ -368,7 +357,7 @@ const CreateEvent = () => {
 							/>
 						</div>
 
-						<div className="grid grid-cols-1 justify-center sm:mt-4 mb-2">
+						<div className="grid grid-cols-1 justify-center mb-2 self-center">
 							<div className="hidden sm:block sm:mb-2" />
 							<DatePicker
 								selected={repeat.recurrenceEndDate}
@@ -400,7 +389,7 @@ const CreateEvent = () => {
 				</div>
 
 				{registration.isRegistration ? (
-					<div className="grid grid-rows-[26px_1fr] justify-center gap-2">
+					<div className="grid grid-cols-1 justify-center sm:mt-4 mb-2">
 						<label htmlFor="registrationDescription">Registrierungsbeschreibung:</label>
 						<textarea
 							className=""
