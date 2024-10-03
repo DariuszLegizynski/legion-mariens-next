@@ -39,21 +39,22 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 	const handleModalClick = (e: React.MouseEvent) => {
 		e.stopPropagation()
 	}
-	console.log("eventItem.attributes?.startTime: ", eventItem.attributes?.startTime)
+
+	const handleEditRedirect = (e: React.MouseEvent) => {
+		e.stopPropagation()
+		// if (eventItem?.attributes?.repeat) {
+		// 	router.push(`/termine/edit/${eventItem.id}`)
+		// }
+
+		router.push(`/termine/edit/${eventItem.id}`)
+	}
+
 	let startTime = new Date(eventItem.attributes?.startTime)
 	const startDate = startTime.toLocaleDateString("de-DE", {
 		day: "numeric",
 		month: "long",
 		year: "numeric",
 	})
-
-	// const startTimeISO = startTime.toLocaleDateString("de-DE", {
-	// 	day: "2-digit",
-	// 	month: "2-digit",
-	// 	year: "numeric",
-	// 	hour: "2-digit",
-	// 	minute: "2-digit",
-	// })
 
 	let endDate: string | undefined
 
@@ -70,7 +71,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
 			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
 				<div onClick={onClose} className="flex justify-end items-center">
-					{/* {isAuth && <p>EDIT</p>} */}
+					{isAuth && <BaseButton onClick={handleEditRedirect} buttonType="close" iconType="edit" width="1.2rem" height="1.2rem" />}
 					&nbsp;
 					{isAuth && <BaseButton onClick={handleDeleteRedirect} buttonType="close" iconType="delete" width="1.2rem" height="1.2rem" />}
 					&nbsp;

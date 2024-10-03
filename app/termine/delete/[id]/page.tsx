@@ -81,8 +81,6 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 			setError(error.message)
 		}
 	}
-	console.log("eventData: ", eventData)
-	console.log("start Time: ", eventData?.attributes?.startTime)
 
 	if (!eventData) return <p className="text-center my-24">Loading...</p>
 	if (error) return <p className="text-center my-24">{error}</p>

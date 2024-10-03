@@ -13,6 +13,12 @@ interface IconItemsProps {
 const IconItems: FC<IconItemsProps> = ({ type, fillColor = "none", strokeColor = "#000", width, height, baseClass = "", rotation = "rotate-0" }) => {
 	return (
 		<>
+			{type === "edit" && (
+				<svg xmlns="http://www.w3.org/2000/svg" fill={fillColor} width={width} height={height} stroke={strokeColor} strokeLinecap="round" viewBox="0 0 24 24">
+					<path d="m18 2 4 4-11 11H7v-4L18 2z" />
+					<path d="M21 14v8H2V3h8" />
+				</svg>
+			)}
 			{type === "dove" && (
 				<svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" fill={fillColor} width={width} height={height} viewBox="0 0 512 512">
 					<path
