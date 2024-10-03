@@ -10,8 +10,6 @@ import "react-datepicker/dist/react-datepicker.css"
 
 const EditEvent = ({ params }: { params: { id: string } }) => {
 	const [eventData, setEventData] = useState()
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState("")
 	const [title, setTitle] = useState("")
 	const [categories, setCategories] = useState([])
 	const [startTime, setStartTime] = useState<Date>()
@@ -114,58 +112,55 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 				setEventData(response.data.attributes)
 			} catch (err) {
 				console.error(err)
-				setError("Error fetching event data")
+				setRequest({ ...request, error: true })
 			}
 		}
 		fetchEventData()
 	}, [params.id])
 
-	console.log({ eventData })
-
 	useEffect(() => {
 		if (eventData) {
-			setTitle(eventData?.title || "")
+			setTitle(eventData?.title)
 			setStartTime(eventData?.startTime ? new Date(eventData?.startTime) : null)
 			setEndTime(eventData?.endTime ? new Date(eventData?.endTime) : null)
-			setDescription(eventData?.description || "")
+			setDescription(eventData?.description)
 
 			setArrival({
-				street: eventData?.arrival?.street || "",
-				number: eventData?.arrival?.number || "",
-				city: eventData?.arrival?.city || "",
-				country: eventData?.arrival?.country || "",
-				organiser: eventData?.arrival?.organiser || "",
-				contactPerson: eventData?.arrival?.contactPerson || "",
-				phone: eventData?.arrival?.phone || "",
-				email: eventData?.arrival?.email || "",
-				shortDescription: eventData?.arrival?.shortDescription || "",
-				addressAddition: eventData?.arrival?.addressAddition || "",
+				street: eventData?.arrival?.street,
+				number: eventData?.arrival?.number,
+				city: eventData?.arrival?.city,
+				country: eventData?.arrival?.country,
+				organiser: eventData?.arrival?.organiser,
+				contactPerson: eventData?.arrival?.contactPerson,
+				phone: eventData?.arrival?.phone,
+				email: eventData?.arrival?.email,
+				shortDescription: eventData?.arrival?.shortDescription,
+				addressAddition: eventData?.arrival?.addressAddition,
 			})
 
-			setIsRecurrent(eventData?.isRecurrent || false)
+			setIsRecurrent(eventData?.isRecurrent)
 			setRepeat({
-				recurrenceType: eventData?.repeat?.recurrenceType || "",
+				recurrenceType: eventData?.repeat?.recurrenceType,
 				recurrenceEndDate: eventData?.repeat?.recurrenceEndDate ? new Date(eventData?.repeat.recurrenceEndDate) : null,
 			})
 
-			setParticipantRestriction(eventData?.participantRestriction || null)
+			setParticipantRestriction(restrictionOptions.find(option => option.value === eventData?.participantRestriction))
 
 			setCategories(eventData?.categories || [])
 			// setSelectedCategories(eventData?.categories?.map(category => category.id) || [])
-			// setAssignments(eventData?.assignments || [])
-			setSelectedAssignment(eventData?.event_assignment?.data.attributes?.name)
+			setSelectedAssignment(assignmentOptions.find(option => option.value === eventData?.event_assignment?.data.attributes?.name))
 			// setStates(eventData?.states || [])
-			setSelectedState(eventData?.event_state?.data?.attributes?.name || null)
+			setSelectedState(stateOptions.find(option => option.value === eventData?.event_state?.data?.attributes?.name))
 
 			setRegistration({
-				isRegistration: eventData?.registration?.isRegistration || false,
-				registrationDescription: eventData?.registration?.registrationDescription || "",
+				isRegistration: eventData?.registration?.isRegistration,
+				registrationDescription: eventData?.registration?.registrationDescription,
 			})
 
 			setApplicant({
-				name: eventData?.applicant?.name || "",
-				surname: eventData?.applicant?.surname || "",
-				email: eventData?.applicant?.email || "",
+				name: eventData?.applicant?.name,
+				surname: eventData?.applicant?.surname,
+				email: eventData?.applicant?.email,
 			})
 
 			setRequest({
@@ -205,8 +200,59 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		return { id: restriction.id, value: restriction.name, label: restriction.name }
 	})
 
-	console.log({ selectedState })
-	console.log({ stateOptions })
+	const handleUpdateEvent = async () => {
+		setRequest({ ...request, loading: true })
+
+		const updateData = {
+			data: {
+				title,
+				// categories: selectedCategoryIds, // Defined as an array of category IDs
+				startTime: startTime ? format(startTime, "yyyy-MM-dd'T'HH:mm:ss") : null, // Ensure the date is formatted
+				endTime: endTime ? format(endTime, "yyyy-MM-dd'T'HH:mm:ss") : null,
+				event_assignment: selectedAssignment.id,
+				description,
+				arrival: {
+					street: arrival.street,
+					number: arrival.number,
+					city: arrival.city,
+					country: arrival.country,
+					organiser: arrival.organiser,
+					contactPerson: arrival.contactPerson,
+					phone: arrival.phone,
+					email: arrival.email,
+					shortDescription: arrival.shortDescription,
+					addressAddition: arrival.addressAddition,
+				},
+				event_state: selectedState.id,
+				repeat: isRecurrent
+					? {
+							recurrenceType: repeat.recurrenceType,
+							recurrenceEndDate: repeat.recurrenceEndDate,
+					  }
+					: null,
+				participantRestriction: participantRestriction?.value,
+				registration: {
+					isRegistration: registration.isRegistration,
+					registrationDescription: registration.registrationDescription,
+				},
+				publishedAt: null,
+				applicant: {
+					name: applicant.name,
+					surname: applicant.surname,
+					email: applicant.email,
+				},
+			},
+		}
+
+		console.log({ updateData })
+
+		// try {
+		// 	await createStrapiAuthData("events", updateData, jwt)
+		// 	setRequest({ ...request, loading: false, complete: true })
+		// } catch (error) {
+		// 	setRequest({ ...request, loading: false, error: error.message })
+		// }
+	}
 
 	return (
 		<article className="container px-4 my-8 mx-auto">
@@ -381,7 +427,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 						instanceId="unique-select-state-id"
 						placeholder="Teilnehmerbeschränkung"
 						styles={customStyles}
-						value={restrictionOptions.find(option => option.value === participantRestriction)}
+						value={participantRestriction}
 						onChange={setParticipantRestriction}
 						options={restrictionOptions}
 					/>
@@ -394,7 +440,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 						instanceId="unique-select-assignment-id"
 						placeholder="Zuordnen"
 						styles={customStyles}
-						value={assignmentOptions.find(option => option.value === selectedAssignment)}
+						value={selectedAssignment}
 						onChange={setSelectedAssignment}
 						options={assignmentOptions}
 					/>
@@ -407,7 +453,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 						instanceId="unique-select-state-id"
 						placeholder="Bundesland wählen"
 						styles={customStyles}
-						value={stateOptions.find(option => option.value === selectedState)}
+						value={selectedState}
 						onChange={setSelectedState}
 						options={stateOptions}
 					/>
@@ -470,7 +516,16 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 				</div>
 
 				<div className="mt-4 flex flex-col items-center sm:my-12">
-					<BaseButton buttonType="submit" isDisabled={loading} text={loading ? "Löschen..." : "Termin Löschen"} />
+					{!request.error && !request.complete && (
+						<BaseButton
+							buttonType="submit"
+							onClick={handleUpdateEvent}
+							isDisabled={request.loading}
+							text={request.loading ? "Bearbeitung Abgesendet..." : "Termin Bearbeiten"}
+						/>
+					)}
+					{request.error && <p>{request.error}</p>}
+					{request.complete && <p>Anfrage gesendet.</p>}
 				</div>
 			</form>
 		</article>

@@ -37,7 +37,7 @@ const CreateEvent = () => {
 	const [assignments, setAssignments] = useState([])
 	const [states, setStates] = useState([])
 	const [selectedCategories, setSelectedCategories] = useState([])
-	const [selectedAssignments, setSelectedAssignments] = useState([])
+	const [selectedAssignment, setSelectedAssignment] = useState([])
 	const [selectedState, setSelectedState] = useState([])
 	const [registration, setRegistration] = useState({
 		isRegistration: false,
@@ -89,6 +89,8 @@ const CreateEvent = () => {
 
 	const jwt = Cookies.get("jwt")
 
+	console.log({ selectedAssignment })
+
 	const handleCreateEvent = async () => {
 		setRequest({ ...request, loading: true })
 
@@ -98,7 +100,7 @@ const CreateEvent = () => {
 				categories: selectedCategories.map(category => category.id),
 				startTime,
 				endTime,
-				event_assignment: selectedAssignments.id,
+				event_assignment: selectedAssignment.id,
 				description,
 				arrival,
 				event_state: selectedState.id,
@@ -238,8 +240,8 @@ const CreateEvent = () => {
 						instanceId="unique-select-assignment-id"
 						placeholder="Zuordnen"
 						styles={customStyles}
-						defaultValue={selectedAssignments}
-						onChange={setSelectedAssignments}
+						defaultValue={selectedAssignment}
+						onChange={setSelectedAssignment}
 						options={assignmentOptions}
 					/>
 				</div>
