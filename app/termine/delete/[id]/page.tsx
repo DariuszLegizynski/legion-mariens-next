@@ -71,7 +71,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 				router.push("/termine")
 				return
 			}
-			await createStrapiAuthData(`delete-event-requests`, deleteEventData, jwt!)
+			await createStrapiAuthData(`event-delete-requests`, deleteEventData, jwt!)
 			sessionStorage.removeItem("deleteSingleStartTime")
 			setLoading(false)
 			router.push("/termine")
