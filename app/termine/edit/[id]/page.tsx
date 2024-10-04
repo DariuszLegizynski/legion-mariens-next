@@ -2,13 +2,16 @@
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import BaseButton from "@/components/base/BaseButton"
-import { createStrapiAuthData, getStrapiData } from "@/app/_utils/services/getStrapiData"
+import { useRouter } from "next/navigation"
+import { getStrapiData, updateStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import Select from "react-select"
 import { format } from "date-fns"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
 const EditEvent = ({ params }: { params: { id: string } }) => {
+	const router = useRouter()
+
 	const [eventData, setEventData] = useState()
 	const [title, setTitle] = useState("")
 	const [categories, setCategories] = useState([])
@@ -203,7 +206,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	const handleUpdateEvent = async () => {
 		setRequest({ ...request, loading: true })
 
-		const updateData = {
+		const updatedData = {
 			data: {
 				title,
 				// categories: selectedCategoryIds, // Defined as an array of category IDs
@@ -243,15 +246,15 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 				},
 			},
 		}
+		console.log("params.id: ", params.id)
+		console.log({ updatedData })
 
-		console.log({ updateData })
-
-		// try {
-		// 	await createStrapiAuthData("events", updateData, jwt)
-		// 	setRequest({ ...request, loading: false, complete: true })
-		// } catch (error) {
-		// 	setRequest({ ...request, loading: false, error: error.message })
-		// }
+		try {
+			await updateStrapiAuthData(`events/${params?.id}`, updatedData, jwt)
+			router.push("/termine")
+		} catch (error) {
+			console.error("Error updating event:", error)
+		}
 	}
 
 	return (
@@ -459,7 +462,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 					/>
 				</div>
 
-				<div className="grid grid-rows-[26px_1fr] gap-2">
+				<div className="grid grid-cols-[1fr_16px] sm:mt-4 sm:min-w-72">
 					<label htmlFor="isRegistration">Anmeldung erforderlich:</label>
 					<input
 						id="isRegistration"
@@ -521,7 +524,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 							buttonType="submit"
 							onClick={handleUpdateEvent}
 							isDisabled={request.loading}
-							text={request.loading ? "Bearbeitung Abgesendet..." : "Termin Bearbeiten"}
+							text={request.loading ? "Bearbeitung Abgesendet..." : "Bearbeitung absenden"}
 						/>
 					)}
 					{request.error && <p>{request.error}</p>}
