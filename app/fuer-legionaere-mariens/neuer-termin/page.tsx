@@ -365,7 +365,7 @@ const CreateEvent = () => {
 
 				<div className="grid grid-cols-[1fr_16px] sm:mt-4 sm:min-w-72">
 					<label className="text-nowrap" htmlFor="isRegistration">
-						Registrierung notwendig? *
+						Anmeldung erforderlich? *
 					</label>
 					<input
 						type="checkbox"

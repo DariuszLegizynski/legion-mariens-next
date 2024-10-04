@@ -12,9 +12,8 @@ import "react-datepicker/dist/react-datepicker.css"
 const EditEvent = ({ params }: { params: { id: string } }) => {
 	const router = useRouter()
 
-	const [eventData, setEventData] = useState()
+	const [eventData, setEventData] = useState<any>()
 	const [title, setTitle] = useState("")
-	const [categories, setCategories] = useState([])
 	const [startTime, setStartTime] = useState<Date>()
 	const [endTime, setEndTime] = useState<Date>()
 	const [description, setDescription] = useState("")
@@ -40,6 +39,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	})
 	const [participantRestriction, setParticipantRestriction] = useState(null)
 	const [selectedCategories, setSelectedCategories] = useState([])
+	const [categories, setCategories] = useState([])
 	const [selectedAssignment, setSelectedAssignment] = useState([])
 	const [assignments, setAssignments] = useState([])
 	const [selectedState, setSelectedState] = useState([])
@@ -95,6 +95,12 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	const jwt = Cookies.get("jwt")
 
 	useEffect(() => {
+		const fetchCategories = async () => {
+			const response = await getStrapiData("categories?populate=*&sort=category:ASC")
+			setCategories(response.data)
+		}
+		fetchCategories()
+
 		const fetchAssignments = async () => {
 			const response = await getStrapiData("event-assignments?populate=*")
 			setAssignments(response.data)
@@ -123,47 +129,48 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 
 	useEffect(() => {
 		if (eventData) {
-			setTitle(eventData?.title)
+			setTitle(eventData?.title || "")
 			setStartTime(eventData?.startTime ? new Date(eventData?.startTime) : null)
 			setEndTime(eventData?.endTime ? new Date(eventData?.endTime) : null)
-			setDescription(eventData?.description)
+			setDescription(eventData?.description || "")
 
 			setArrival({
-				street: eventData?.arrival?.street,
-				number: eventData?.arrival?.number,
-				city: eventData?.arrival?.city,
-				country: eventData?.arrival?.country,
-				organiser: eventData?.arrival?.organiser,
-				contactPerson: eventData?.arrival?.contactPerson,
-				phone: eventData?.arrival?.phone,
-				email: eventData?.arrival?.email,
-				shortDescription: eventData?.arrival?.shortDescription,
-				addressAddition: eventData?.arrival?.addressAddition,
+				street: eventData?.arrival?.street || "",
+				number: eventData?.arrival?.number || "",
+				city: eventData?.arrival?.city || "",
+				country: eventData?.arrival?.country || "",
+				organiser: eventData?.arrival?.organiser || "",
+				contactPerson: eventData?.arrival?.contactPerson || "",
+				phone: eventData?.arrival?.phone || "",
+				email: eventData?.arrival?.email || "",
+				shortDescription: eventData?.arrival?.shortDescription || "",
+				addressAddition: eventData?.arrival?.addressAddition || "",
 			})
 
-			setIsRecurrent(eventData?.isRecurrent)
+			setIsRecurrent(eventData?.repeat || false)
 			setRepeat({
-				recurrenceType: eventData?.repeat?.recurrenceType,
+				recurrenceType: eventData?.repeat?.recurrenceType || "",
 				recurrenceEndDate: eventData?.repeat?.recurrenceEndDate ? new Date(eventData?.repeat.recurrenceEndDate) : null,
 			})
 
-			setParticipantRestriction(restrictionOptions.find(option => option.value === eventData?.participantRestriction))
-
-			setCategories(eventData?.categories || [])
-			// setSelectedCategories(eventData?.categories?.map(category => category.id) || [])
-			setSelectedAssignment(assignmentOptions.find(option => option.value === eventData?.event_assignment?.data.attributes?.name))
-			// setStates(eventData?.states || [])
-			setSelectedState(stateOptions.find(option => option.value === eventData?.event_state?.data?.attributes?.name))
+			setParticipantRestriction(restrictionOptions.find(option => option.value === eventData?.participantRestriction) || null)
+			setSelectedCategories(
+				eventData?.categories?.data?.map((category: any) => {
+					return categoriesOptions.find(option => option.value === category.attributes.category) || null
+				}) || []
+			)
+			setSelectedAssignment(assignmentOptions.find(option => option.value === eventData?.event_assignment?.data.attributes?.name) || null)
+			setSelectedState(stateOptions.find(option => option.value === eventData?.event_state?.data?.attributes?.name) || null)
 
 			setRegistration({
-				isRegistration: eventData?.registration?.isRegistration,
-				registrationDescription: eventData?.registration?.registrationDescription,
+				isRegistration: eventData?.registration?.isRegistration || false,
+				registrationDescription: eventData?.registration?.registrationDescription || "",
 			})
 
 			setApplicant({
-				name: eventData?.applicant?.name,
-				surname: eventData?.applicant?.surname,
-				email: eventData?.applicant?.email,
+				name: eventData?.applicant?.name || "",
+				surname: eventData?.applicant?.surname || "",
+				email: eventData?.applicant?.email || "",
 			})
 
 			setRequest({
@@ -174,6 +181,8 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		}
 	}, [eventData])
 
+	console.log({ eventData })
+
 	const recurrenceTypes = [
 		{ id: 0, name: "Wöchentlich", value: "weekly" },
 		{ id: 1, name: "Monatlich", value: "monthly" },
@@ -182,6 +191,10 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 
 	const recurrenceTypeOptions = recurrenceTypes.map(recurrenceType => {
 		return { id: recurrenceType.id, value: recurrenceType.value, label: recurrenceType.name }
+	})
+
+	const categoriesOptions = categories.map(category => {
+		return { id: category.id, value: category?.attributes?.category, label: category.attributes?.category }
 	})
 
 	const assignmentOptions = assignments.map(assignment => {
@@ -209,7 +222,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		const updatedData = {
 			data: {
 				title,
-				// categories: selectedCategoryIds, // Defined as an array of category IDs
+				categories: selectedCategories.map(category => category.id),
 				startTime: startTime ? format(startTime, "yyyy-MM-dd'T'HH:mm:ss") : null, // Ensure the date is formatted
 				endTime: endTime ? format(endTime, "yyyy-MM-dd'T'HH:mm:ss") : null,
 				event_assignment: selectedAssignment.id,
@@ -397,42 +410,19 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 						className="input-class"
 					/>
 				</div>
-				<div className="grid grid-cols-1 justify-center my-4 sm:min-w-72">
-					<Select
-						id="unique-select-recurrenceType"
-						inputId="unique-select-recurrenceType"
-						instanceId="unique-select-recurrenceType"
-						placeholder="Serientyp wählen"
-						value={recurrenceTypeOptions.find(option => option.value === repeat.recurrenceType)}
-						styles={customStyles}
-						onChange={option => setRepeat({ ...repeat, recurrenceType: option.value })}
-						options={recurrenceTypeOptions}
-					/>
-				</div>
-				<div className="grid grid-cols-1 justify-center mb-2 self-center">
-					<div className="hidden sm:block sm:mb-2" />
-					<DatePicker
-						selected={repeat.recurrenceEndDate}
-						timeFormat="HH:mm"
-						timeIntervals={15}
-						showTimeSelect
-						onChange={date => setRepeat({ ...repeat, recurrenceEndDate: date })}
-						minDate={new Date()}
-						dateFormat="dd MMMM yyyy | HH:mm"
-						placeholderText="Enddatum vom Serientermin"
-					/>
-				</div>
 
-				<div className="grid grid-cols-1 justify-center sm:max-w-72">
+				<div className="grid grid-cols-1 my-4 sm:min-w-72">
 					<Select
-						id="unique-select-state-id-"
-						inputId="unique-select-state-id"
-						instanceId="unique-select-state-id"
-						placeholder="Teilnehmerbeschränkung"
+						id="unique-select-categories-id-"
+						inputId="unique-select-categories-id"
+						instanceId="unique-select-categories-id"
+						isMulti
+						placeholder="Kategorie(n) wählen:"
+						closeMenuOnSelect={false}
 						styles={customStyles}
-						value={participantRestriction}
-						onChange={setParticipantRestriction}
-						options={restrictionOptions}
+						value={selectedCategories}
+						onChange={setSelectedCategories}
+						options={categoriesOptions}
 					/>
 				</div>
 
@@ -462,8 +452,62 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 					/>
 				</div>
 
+				<div className="grid grid-cols-1 justify-center sm:max-w-72">
+					<Select
+						id="unique-select-state-id-"
+						inputId="unique-select-state-id"
+						instanceId="unique-select-state-id"
+						placeholder="Teilnehmerbeschränkung"
+						styles={customStyles}
+						value={participantRestriction}
+						onChange={setParticipantRestriction}
+						options={restrictionOptions}
+					/>
+				</div>
+
+				<div className="grid grid-cols-[1fr_16px] mt-4 sm:mt-0 sm:min-w-72">
+					<label className="text-nowrap" htmlFor="isRecurrent">
+						Ist ein Serientermin? *
+					</label>
+					<input type="checkbox" id="isRecurrent" checked={isRecurrent} onChange={e => setIsRecurrent(e.target.checked)} />
+				</div>
+
+				{isRecurrent ? (
+					<>
+						<div className="hidden sm:block" />
+
+						<div className="grid grid-cols-1 justify-center my-4 sm:min-w-72">
+							<Select
+								id="unique-select-recurrenceType"
+								inputId="unique-select-recurrenceType"
+								instanceId="unique-select-recurrenceType"
+								placeholder="Serientyp wählen"
+								styles={customStyles}
+								onChange={option => setRepeat({ ...repeat, recurrenceType: option.value })}
+								options={recurrenceTypeOptions}
+							/>
+						</div>
+
+						<div className="grid grid-cols-1 justify-center mb-2 self-center">
+							<div className="hidden sm:block sm:mb-2" />
+							<DatePicker
+								selected={repeat.recurrenceEndDate}
+								timeFormat="HH:mm"
+								timeIntervals={15}
+								showTimeSelect
+								onChange={date => setRepeat({ ...repeat, recurrenceEndDate: date })}
+								minDate={new Date()}
+								dateFormat="dd MMMM yyyy | HH:mm"
+								placeholderText="Enddatum vom Serientermin"
+							/>
+						</div>
+					</>
+				) : (
+					<div />
+				)}
+
 				<div className="grid grid-cols-[1fr_16px] sm:mt-4 sm:min-w-72">
-					<label htmlFor="isRegistration">Anmeldung erforderlich:</label>
+					<label htmlFor="isRegistration">Anmeldung erforderlich?</label>
 					<input
 						id="isRegistration"
 						name="isRegistration"
