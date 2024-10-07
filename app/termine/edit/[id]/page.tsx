@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import BaseButton from "@/components/base/BaseButton"
 import { useRouter } from "next/navigation"
-import { getStrapiData, updateStrapiAuthData } from "@/app/_utils/services/getStrapiData"
+import { createStrapiAuthData, getStrapiData, updateStrapiAuthData } from "@/app/_utils/services/getStrapiData"
 import Select from "react-select"
 import { format } from "date-fns"
 import DatePicker from "react-datepicker"
@@ -58,6 +58,8 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		complete: false,
 		error: false,
 	})
+
+	// setStartTime(sessionStorage.getItem("editSingleStartTime") ? sessionStorage.getItem("editSingleStartTime") : eventData?.attributes?.startTime)
 
 	const primaryColour = "hsl(227, 46%, 44%)"
 	const primaryLightColour = "hsl(227, 46%, 64%)"
@@ -130,7 +132,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	useEffect(() => {
 		if (eventData) {
 			setTitle(eventData?.title || "")
-			setStartTime(eventData?.startTime ? new Date(eventData?.startTime) : null)
+			setStartTime(sessionStorage.getItem("editSingleStartTime") ? sessionStorage.getItem("editSingleStartTime") : eventData?.startTime)
 			setEndTime(eventData?.endTime ? new Date(eventData?.endTime) : null)
 			setDescription(eventData?.description || "")
 
@@ -149,8 +151,8 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 
 			setIsRecurrent(eventData?.repeat || false)
 			setRepeat({
-				recurrenceType: eventData?.repeat?.recurrenceType || "",
-				recurrenceEndDate: eventData?.repeat?.recurrenceEndDate ? new Date(eventData?.repeat.recurrenceEndDate) : null,
+				recurrenceType: recurrenceTypeOptions.find(option => option.value === eventData?.repeat?.recurrenceType) || null,
+				recurrenceEndDate: eventData?.repeat?.recurrenceEndDate ? new Date(eventData?.repeat?.recurrenceEndDate) : null,
 			})
 
 			setParticipantRestriction(restrictionOptions.find(option => option.value === eventData?.participantRestriction) || null)
@@ -223,9 +225,10 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 			data: {
 				title,
 				categories: selectedCategories.map(category => category.id),
-				startTime: startTime ? format(startTime, "yyyy-MM-dd'T'HH:mm:ss") : null, // Ensure the date is formatted
+				exceptionDate: startTime ? format(startTime, "yyyy-MM-dd") : null,
+				startTime: startTime ? format(startTime, "yyyy-MM-dd'T'HH:mm:ss") : null,
 				endTime: endTime ? format(endTime, "yyyy-MM-dd'T'HH:mm:ss") : null,
-				event_assignment: selectedAssignment.id,
+				event_assignment: selectedAssignment?.id,
 				description,
 				arrival: {
 					street: arrival.street,
@@ -242,7 +245,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 				event_state: selectedState.id,
 				repeat: isRecurrent
 					? {
-							recurrenceType: repeat.recurrenceType,
+							recurrenceType: repeat?.recurrenceType?.value,
 							recurrenceEndDate: repeat.recurrenceEndDate,
 					  }
 					: null,
@@ -263,7 +266,16 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		console.log({ updatedData })
 
 		try {
-			await updateStrapiAuthData(`events/${params?.id}`, updatedData, jwt)
+			if (eventData?.repeat) {
+				await createStrapiAuthData(`event-exceptions`, updatedData, jwt!)
+				sessionStorage.removeItem("editSingleStartTime")
+				setRequest({ ...request, loading: false })
+				router.push("/termine")
+				return
+			}
+
+			await updateStrapiAuthData(`events/${params?.id}`, updatedData, jwt!)
+			sessionStorage.removeItem("editSingleStartTime")
 			router.push("/termine")
 		} catch (error) {
 			console.error("Error updating event:", error)
@@ -483,6 +495,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 								instanceId="unique-select-recurrenceType"
 								placeholder="Serientyp wählen"
 								styles={customStyles}
+								value={repeat.recurrenceType}
 								onChange={option => setRepeat({ ...repeat, recurrenceType: option.value })}
 								options={recurrenceTypeOptions}
 							/>

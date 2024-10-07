@@ -1,15 +1,59 @@
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { Event } from "@/types/Event"
 import { format, addDays, addMonths, addYears, isBefore } from "date-fns"
+import { desc } from "framer-motion/client"
+import { title } from "process"
 
 const applyExceptions = async (events: any[]) => {
 	const response = await getStrapiData(`event-exceptions?populate=*`)
 	const exceptions = response?.data ? response.data : []
-	const exceptionDates = new Set(exceptions.map(exc => format(new Date(exc.attributes.exceptionDate), "yyyy-MM-dd")))
 
-	return events.filter(eventItem => {
-		return !exceptionDates.has(format(new Date(eventItem.attributes.startTime), "yyyy-MM-dd"))
-	})
+	return events
+		.map(eventItem => {
+			const occurrenceDate = format(new Date(eventItem.attributes.startTime), "yyyy-MM-dd")
+
+			// Find if there's an exception for this occurrence
+			const eventException = exceptions.find(exc => {
+				const exceptionDate = format(new Date(exc.attributes.exceptionDate), "yyyy-MM-dd")
+				return exc.attributes.event.data.id === eventItem.id && exceptionDate === occurrenceDate
+			})
+
+			// If exception exists and it's marked as excluded, skip this occurrence
+			if (eventException?.attributes?.isExcluded) {
+				return null
+			}
+
+			// If there's an exception and it's modifying the event, update the occurrence
+			if (eventException) {
+				console.log({ eventItem, eventException })
+				return {
+					...eventItem,
+					attributes: {
+						...eventItem.attributes,
+						startTime: eventException.attributes.startDate || eventItem.attributes.startTime,
+						endTime: eventException.attributes.endDate || eventItem.attributes.endTime,
+						description: eventException.attributes.description || eventItem.attributes.description,
+						title: eventException.attributes.title || eventItem.attributes.title,
+						applicant: eventException.attributes.applicant || eventItem.attributes.applicant,
+						createdAt: eventException.attributes.createdAt || eventItem.attributes.createdAt,
+						endDate: eventException.attributes.endDate || eventItem.attributes.endDate,
+						event: eventException.attributes.event || eventItem.attributes.event,
+						eventData: eventException.attributes.eventData || eventItem.attributes.eventData,
+						event_state: eventException.attributes.event_state || eventItem.attributes.event_state,
+						event_assignment: eventException.attributes.event_assignment || eventItem.attributes.event_assignment,
+						event_categories: eventException.attributes.event_categories || eventItem.attributes.event_categories,
+						participantRestriction: eventException.attributes.participantRestriction || eventItem.attributes.participantRestriction,
+						publishedAt: eventException.attributes.publishedAt || eventItem.attributes.publishedAt,
+						registration: eventException.attributes.registration || eventItem.attributes.registration,
+						repeat: eventException.attributes.repeat || eventItem.attributes.repeat,
+					},
+				}
+			}
+
+			// No exception found, return the original eventItem
+			return eventItem
+		})
+		.filter(Boolean)
 }
 
 const generateRecurringEvents = (event: Event) => {

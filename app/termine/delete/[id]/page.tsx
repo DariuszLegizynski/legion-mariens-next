@@ -32,9 +32,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 		fetchEventData()
 	}, [params.id])
 
-	let startTime = null
-	sessionStorage.removeItem("deleteSingleStartTime")
-	startTime = sessionStorage.getItem("deleteSingleStartTime") ? sessionStorage.getItem("deleteSingleStartTime") : eventData?.attributes?.startTime
+	let startTime = sessionStorage.getItem("deleteSingleStartTime") ? sessionStorage.getItem("deleteSingleStartTime") : eventData?.attributes?.startTime
 
 	// Handle event deletion
 	const handleDeleteEvent = async () => {
@@ -59,6 +57,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 				name,
 				surname,
 				exceptionDate: startTime,
+				isExcluded: true,
 				publishedAt: null,
 			},
 		}

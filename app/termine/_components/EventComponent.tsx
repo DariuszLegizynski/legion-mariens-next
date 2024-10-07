@@ -10,7 +10,8 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 	const [shouldAnimate, setShouldAnimate] = useState<boolean>(true)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
-	sessionStorage.removeItem("deleteSingleStartDate")
+	sessionStorage.removeItem("deleteSingleStartTime")
+	sessionStorage.removeItem("editSingleStartTime")
 
 	useEffect(() => {
 		if (!isVisible) {

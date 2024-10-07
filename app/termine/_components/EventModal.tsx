@@ -10,6 +10,7 @@ import { Child, Content } from "@/types/LandingPage"
 const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose: () => void; isAuth: boolean }) => {
 	if (!eventItem) return null
 	const [showDeleteOptions, setShowDeleteOptions] = useState(false)
+	const [showEditOptions, setShowEditOptions] = useState(false)
 	const router = useRouter()
 
 	const handleDeleteRedirect = (e: React.MouseEvent) => {
@@ -40,13 +41,23 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 		e.stopPropagation()
 	}
 
+	const handleEditSingleEventAndRecurringEvent = () => {
+		router.push(`/termine/edit/${eventItem.id}`)
+	}
+
+	const handleEditSingleOcurrence = (startTime: string) => {
+		sessionStorage.setItem("editSingleStartTime", startTime)
+		router.push(`/termine/edit/${eventItem.id}`)
+	}
+
 	const handleEditRedirect = (e: React.MouseEvent) => {
 		e.stopPropagation()
-		// if (eventItem?.attributes?.repeat) {
-		// 	router.push(`/termine/edit/${eventItem.id}`)
-		// }
+		if (eventItem?.attributes?.repeat) {
+			setShowEditOptions(true)
+			return
+		}
 
-		router.push(`/termine/edit/${eventItem.id}`)
+		handleEditSingleEventAndRecurringEvent()
 	}
 
 	let startTime = new Date(eventItem.attributes?.startTime)
@@ -77,17 +88,33 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
-				{showDeleteOptions ? (
-					// Show the delete options (buttons) in the DOM
+				{showDeleteOptions || showEditOptions ? (
 					<div className="flex flex-col items-center">
-						<p className="mb-4">Wollen sie die ganze Serie löschen oder nur diesen Termin?</p>
+						<p className="mb-4">
+							Wollen sie die ganze Serie {showDeleteOptions && `löschen`}
+							{showEditOptions && `bearbeiten`} oder nur diesen Termin?
+						</p>
 						<div className="flex flex-col gap-4">
-							<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer">
-								Diesen Termin löschen
-							</div>
-							<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer">
-								Ganze Serie löschen
-							</div>
+							{showDeleteOptions && (
+								<>
+									<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer">
+										Diesen Termin löschen
+									</div>
+									<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer">
+										Ganze Serie löschen
+									</div>
+								</>
+							)}
+							{showEditOptions && (
+								<>
+									<div onClick={() => handleEditSingleOcurrence(startTime)} className="cursor-pointer">
+										Diesen Termin bearbeiten
+									</div>
+									<div onClick={handleEditSingleEventAndRecurringEvent} className="cursor-pointer">
+										Ganze Serie bearbeiten
+									</div>
+								</>
+							)}
 							<div onClick={stepBack} className="cursor-pointer">
 								Zurück
 							</div>
