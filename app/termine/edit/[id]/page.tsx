@@ -121,25 +121,22 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 
 	useEffect(() => {
 		const fetchEventData = async () => {
-			try {
-				const response = await getStrapiData(`event-exceptions?filters[occurrenceId][$eq]=${occurrenceId}&populate=*`)
-				console.log({ response })
-				setEventData(response?.data[0]?.attributes)
-				setUpdatedEventDataId(response?.data[0]?.id)
-
-				if (!response.data.length) {
+			if (occurrenceId) {
+				try {
+					const response = await getStrapiData(`event-exceptions?filters[occurrenceId][$eq]=${occurrenceId}&populate=*`)
+					setEventData(response?.data[0]?.attributes)
+					setUpdatedEventDataId(response?.data[0]?.id)
 					setIsAnotherChange(true)
 					return
+				} catch (err) {
+					console.error(err)
+					setRequest({ ...request, error: true })
 				}
-			} catch (err) {
-				console.error(err)
-				setRequest({ ...request, error: true })
 			}
 
-			if (!response.data.length) {
+			if (!occurrenceId) {
 				try {
 					const response = await getStrapiData(`events/${params.id}?populate=*`)
-					console.log({ response })
 					setEventData(response.data.attributes)
 				} catch (err) {
 					console.error(err)
