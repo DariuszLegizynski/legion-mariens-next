@@ -59,7 +59,6 @@ export const updateStrapiAuthData = async (query: string, data: any, jwt: string
 			cache: "no-cache",
 		})
 		const result = await response.json()
-		console.log({ result })
 		return result
 	} catch (error) {
 		throw new Error(`Fehler bei fetchen der Daten: ${error}`)

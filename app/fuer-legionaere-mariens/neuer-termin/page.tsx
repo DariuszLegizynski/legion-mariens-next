@@ -89,8 +89,6 @@ const CreateEvent = () => {
 
 	const jwt = Cookies.get("jwt")
 
-	console.log({ selectedAssignment })
-
 	const handleCreateEvent = async () => {
 		setRequest({ ...request, loading: true })
 

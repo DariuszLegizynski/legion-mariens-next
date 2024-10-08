@@ -16,6 +16,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	const [title, setTitle] = useState("")
 	const [startTime, setStartTime] = useState<Date>()
 	const [endTime, setEndTime] = useState<Date>()
+	const [occurrenceId, setOccurrenceId] = useState("")
 	const [description, setDescription] = useState("")
 	const [arrival, setArrival] = useState({
 		street: "",
@@ -59,8 +60,6 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		error: false,
 	})
 
-	// setStartTime(sessionStorage.getItem("editSingleStartTime") ? sessionStorage.getItem("editSingleStartTime") : eventData?.attributes?.startTime)
-
 	const primaryColour = "hsl(227, 46%, 44%)"
 	const primaryLightColour = "hsl(227, 46%, 64%)"
 	const whiteColour = "hsl(5, 0%, 100%)"
@@ -97,6 +96,8 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	const jwt = Cookies.get("jwt")
 
 	useEffect(() => {
+		setOccurrenceId(sessionStorage.getItem("editSingleOccurrenceId") || "")
+
 		const fetchCategories = async () => {
 			const response = await getStrapiData("categories?populate=*&sort=category:ASC")
 			setCategories(response.data)
@@ -119,6 +120,15 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 	useEffect(() => {
 		const fetchEventData = async () => {
 			try {
+				const response = await getStrapiData(`event-exceptions?filters[occurrenceId][$eq]=${occurrenceId}&populate=*`)
+				setEventData(response?.data[0]?.attributes)
+				return
+			} catch (err) {
+				console.error(err)
+				setRequest({ ...request, error: true })
+			}
+
+			try {
 				const response = await getStrapiData(`events/${params.id}?populate=*`)
 				setEventData(response.data.attributes)
 			} catch (err) {
@@ -127,12 +137,18 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 			}
 		}
 		fetchEventData()
-	}, [params.id])
+	}, [params.id, occurrenceId])
 
 	useEffect(() => {
 		if (eventData) {
 			setTitle(eventData?.title || "")
-			setStartTime(sessionStorage.getItem("editSingleStartTime") ? sessionStorage.getItem("editSingleStartTime") : eventData?.startTime)
+			setStartTime(
+				sessionStorage.getItem("editSingleStartTime")
+					? new Date(sessionStorage.getItem("editSingleStartTime"))
+					: eventData?.startTime
+					? new Date(eventData.startTime)
+					: null
+			)
 			setEndTime(eventData?.endTime ? new Date(eventData?.endTime) : null)
 			setDescription(eventData?.description || "")
 
@@ -183,8 +199,6 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		}
 	}, [eventData])
 
-	console.log({ eventData })
-
 	const recurrenceTypes = [
 		{ id: 0, name: "Wöchentlich", value: "weekly" },
 		{ id: 1, name: "Monatlich", value: "monthly" },
@@ -223,7 +237,9 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 
 		const updatedData = {
 			data: {
+				occurrenceId,
 				title,
+				event: params?.id,
 				categories: selectedCategories.map(category => category.id),
 				exceptionDate: startTime ? format(startTime, "yyyy-MM-dd") : null,
 				startTime: startTime ? format(startTime, "yyyy-MM-dd'T'HH:mm:ss") : null,
@@ -262,8 +278,6 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 				},
 			},
 		}
-		console.log("params.id: ", params.id)
-		console.log({ updatedData })
 
 		try {
 			if (eventData?.repeat) {

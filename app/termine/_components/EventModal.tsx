@@ -45,8 +45,9 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 		router.push(`/termine/edit/${eventItem.id}`)
 	}
 
-	const handleEditSingleOcurrence = (startTime: string) => {
+	const handleEditSingleOcurrence = (startTime: string, occurrenceId: string) => {
 		sessionStorage.setItem("editSingleStartTime", startTime)
+		sessionStorage.setItem("editSingleOccurrenceId", occurrenceId)
 		router.push(`/termine/edit/${eventItem.id}`)
 	}
 
@@ -107,7 +108,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 							)}
 							{showEditOptions && (
 								<>
-									<div onClick={() => handleEditSingleOcurrence(startTime)} className="cursor-pointer">
+									<div onClick={() => handleEditSingleOcurrence(startTime, eventItem?.attributes?.occurrenceId)} className="cursor-pointer">
 										Diesen Termin bearbeiten
 									</div>
 									<div onClick={handleEditSingleEventAndRecurringEvent} className="cursor-pointer">

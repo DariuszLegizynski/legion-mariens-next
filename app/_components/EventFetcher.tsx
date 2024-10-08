@@ -1,8 +1,6 @@
 import { getStrapiData } from "@/app/_utils/services/getStrapiData"
 import { Event } from "@/types/Event"
 import { format, addDays, addMonths, addYears, isBefore } from "date-fns"
-import { desc } from "framer-motion/client"
-import { title } from "process"
 
 const applyExceptions = async (events: any[]) => {
 	const response = await getStrapiData(`event-exceptions?populate=*`)
@@ -10,48 +8,44 @@ const applyExceptions = async (events: any[]) => {
 
 	return events
 		.map(eventItem => {
-			const occurrenceDate = format(new Date(eventItem.attributes.startTime), "yyyy-MM-dd")
+			const occurrenceId = eventItem.attributes.occurrenceId
 
-			// Find if there's an exception for this occurrence
-			const eventException = exceptions.find(exc => {
-				const exceptionDate = format(new Date(exc.attributes.exceptionDate), "yyyy-MM-dd")
-				return exc.attributes.event.data.id === eventItem.id && exceptionDate === occurrenceDate
+			const eventExceptions = exceptions.filter(exc => exc.attributes.occurrenceId === occurrenceId)
+
+			if (eventExceptions.length === 0) {
+				return eventItem
+			}
+
+			let updatedEvent = { ...eventItem }
+			eventExceptions.forEach(eventException => {
+				if (eventException?.attributes?.isExcluded) {
+					updatedEvent = null
+				} else {
+					updatedEvent = {
+						...eventItem,
+						attributes: {
+							...eventItem.attributes,
+							startTime: eventException?.attributes?.startTime || eventItem?.attributes?.startTime,
+							endTime: eventException?.attributes?.endTime || eventItem?.attributes?.endTime,
+							description: eventException?.attributes?.description || eventItem?.attributes?.description,
+							title: eventException?.attributes?.title || eventItem?.attributes?.title,
+							applicant: eventException?.attributes?.applicant || eventItem?.attributes?.applicant,
+							createdAt: eventException?.attributes?.createdAt || eventItem?.attributes?.createdAt,
+							event: eventException?.attributes?.event || eventItem?.attributes?.event,
+							eventData: eventException?.attributes?.eventData || eventItem?.attributes?.eventData,
+							event_state: eventException?.attributes?.event_state || eventItem?.attributes?.event_state,
+							event_assignment: eventException?.attributes?.event_assignment || eventItem?.attributes?.event_assignment,
+							event_categories: eventException?.attributes?.event_categories || eventItem?.attributes?.event_categories,
+							participantRestriction: eventException?.attributes?.participantRestriction || eventItem?.attributes?.participantRestriction,
+							publishedAt: eventException?.attributes?.publishedAt || eventItem?.attributes?.publishedAt,
+							registration: eventException?.attributes?.registration || eventItem?.attributes?.registration,
+							repeat: eventException?.attributes?.repeat || eventItem?.attributes?.repeat,
+						},
+					}
+				}
 			})
 
-			// If exception exists and it's marked as excluded, skip this occurrence
-			if (eventException?.attributes?.isExcluded) {
-				return null
-			}
-
-			// If there's an exception and it's modifying the event, update the occurrence
-			if (eventException) {
-				console.log({ eventItem, eventException })
-				return {
-					...eventItem,
-					attributes: {
-						...eventItem.attributes,
-						startTime: eventException.attributes.startDate || eventItem.attributes.startTime,
-						endTime: eventException.attributes.endDate || eventItem.attributes.endTime,
-						description: eventException.attributes.description || eventItem.attributes.description,
-						title: eventException.attributes.title || eventItem.attributes.title,
-						applicant: eventException.attributes.applicant || eventItem.attributes.applicant,
-						createdAt: eventException.attributes.createdAt || eventItem.attributes.createdAt,
-						endDate: eventException.attributes.endDate || eventItem.attributes.endDate,
-						event: eventException.attributes.event || eventItem.attributes.event,
-						eventData: eventException.attributes.eventData || eventItem.attributes.eventData,
-						event_state: eventException.attributes.event_state || eventItem.attributes.event_state,
-						event_assignment: eventException.attributes.event_assignment || eventItem.attributes.event_assignment,
-						event_categories: eventException.attributes.event_categories || eventItem.attributes.event_categories,
-						participantRestriction: eventException.attributes.participantRestriction || eventItem.attributes.participantRestriction,
-						publishedAt: eventException.attributes.publishedAt || eventItem.attributes.publishedAt,
-						registration: eventException.attributes.registration || eventItem.attributes.registration,
-						repeat: eventException.attributes.repeat || eventItem.attributes.repeat,
-					},
-				}
-			}
-
-			// No exception found, return the original eventItem
-			return eventItem
+			return updatedEvent
 		})
 		.filter(Boolean)
 }
@@ -64,31 +58,32 @@ const generateRecurringEvents = (event: Event) => {
 
 	const recurrenceType = repeat.recurrenceType
 	const recurrenceEndDate = new Date(repeat.recurrenceEndDate)
-	let currentDate = new Date(startTime)
-	let eventEndDate = endTime ? new Date(endTime) : null
+	let currentTime = new Date(startTime)
+	let eventEndTime = endTime ? new Date(endTime) : null
 
-	while (!isBefore(recurrenceEndDate, currentDate)) {
+	while (!isBefore(recurrenceEndDate, currentTime)) {
 		occurrences.push({
 			...event,
 			attributes: {
 				...event.attributes,
-				startTime: format(currentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
-				endTime: eventEndDate ? format(eventEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") : null,
+				startTime: format(currentTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+				endTime: eventEndTime ? format(eventEndTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") : null,
+				occurrenceId: `${event.id}-${format(currentTime, "yyyy-MM-dd'T'HH-mm-ss-SSS'Z'")}`,
 			},
 		})
 
 		switch (recurrenceType) {
 			case "weekly":
-				currentDate = addDays(currentDate, 7)
-				if (eventEndDate) eventEndDate = addDays(eventEndDate, 7)
+				currentTime = addDays(currentTime, 7)
+				if (eventEndTime) eventEndTime = addDays(eventEndTime, 7)
 				break
 			case "monthly":
-				currentDate = addMonths(currentDate, 1)
-				if (eventEndDate) eventEndDate = addMonths(eventEndDate, 1)
+				currentTime = addMonths(currentTime, 1)
+				if (eventEndTime) eventEndTime = addMonths(eventEndTime, 1)
 				break
 			case "yearly":
-				currentDate = addYears(currentDate, 1)
-				if (eventEndDate) eventEndDate = addYears(eventEndDate, 1)
+				currentTime = addYears(currentTime, 1)
+				if (eventEndTime) eventEndTime = addYears(eventEndTime, 1)
 				break
 			default:
 				break

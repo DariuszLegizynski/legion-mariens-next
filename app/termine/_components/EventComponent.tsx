@@ -12,6 +12,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 
 	sessionStorage.removeItem("deleteSingleStartTime")
 	sessionStorage.removeItem("editSingleStartTime")
+	sessionStorage.removeItem("editSingleOccurrenceId")
 
 	useEffect(() => {
 		if (!isVisible) {
