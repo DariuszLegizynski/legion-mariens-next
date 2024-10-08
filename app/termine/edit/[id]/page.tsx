@@ -12,6 +12,8 @@ import "react-datepicker/dist/react-datepicker.css"
 const EditEvent = ({ params }: { params: { id: string } }) => {
 	const router = useRouter()
 
+	const [updatedEventDataId, setUpdatedEventDataId] = useState<number>(0)
+	const [isAnotherChange, setIsAnotherChange] = useState(false)
 	const [eventData, setEventData] = useState<any>()
 	const [title, setTitle] = useState("")
 	const [startTime, setStartTime] = useState<Date>()
@@ -121,19 +123,28 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 		const fetchEventData = async () => {
 			try {
 				const response = await getStrapiData(`event-exceptions?filters[occurrenceId][$eq]=${occurrenceId}&populate=*`)
+				console.log({ response })
 				setEventData(response?.data[0]?.attributes)
-				return
+				setUpdatedEventDataId(response?.data[0]?.id)
+
+				if (!response.data.length) {
+					setIsAnotherChange(true)
+					return
+				}
 			} catch (err) {
 				console.error(err)
 				setRequest({ ...request, error: true })
 			}
 
-			try {
-				const response = await getStrapiData(`events/${params.id}?populate=*`)
-				setEventData(response.data.attributes)
-			} catch (err) {
-				console.error(err)
-				setRequest({ ...request, error: true })
+			if (!response.data.length) {
+				try {
+					const response = await getStrapiData(`events/${params.id}?populate=*`)
+					console.log({ response })
+					setEventData(response.data.attributes)
+				} catch (err) {
+					console.error(err)
+					setRequest({ ...request, error: true })
+				}
 			}
 		}
 		fetchEventData()
@@ -144,12 +155,12 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 			setTitle(eventData?.title || "")
 			setStartTime(
 				sessionStorage.getItem("editSingleStartTime")
-					? new Date(sessionStorage.getItem("editSingleStartTime"))
+					? new Date(sessionStorage.getItem("editSingleStartTime") || "")
 					: eventData?.startTime
 					? new Date(eventData.startTime)
-					: null
+					: undefined
 			)
-			setEndTime(eventData?.endTime ? new Date(eventData?.endTime) : null)
+			setEndTime(eventData?.endTime ? new Date(eventData?.endTime) : undefined)
 			setDescription(eventData?.description || "")
 
 			setArrival({
@@ -281,7 +292,9 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 
 		try {
 			if (eventData?.repeat) {
-				await createStrapiAuthData(`event-exceptions`, updatedData, jwt!)
+				isAnotherChange
+					? await updateStrapiAuthData(`event-exceptions/${updatedEventDataId}`, updatedData, jwt!)
+					: await createStrapiAuthData(`event-exceptions`, updatedData, jwt!)
 				sessionStorage.removeItem("editSingleStartTime")
 				setRequest({ ...request, loading: false })
 				router.push("/termine")
@@ -510,7 +523,7 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 								placeholder="Serientyp wählen"
 								styles={customStyles}
 								value={repeat.recurrenceType}
-								onChange={option => setRepeat({ ...repeat, recurrenceType: option.value })}
+								onChange={option => setRepeat({ ...repeat, recurrenceType: option })}
 								options={recurrenceTypeOptions}
 							/>
 						</div>
