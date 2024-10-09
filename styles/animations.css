@@ -58,6 +58,19 @@
 	animation: slideInFromTop 0.5s ease-out;
 }
 
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0px);
+	}
+}
+
+.fade-in {
+	animation: fadeIn 0.25s ease-out;
+}
+
 .scale-on-hover {
 	@apply hover:scale-105 transition-transform duration-200 ease-in-out;
 }

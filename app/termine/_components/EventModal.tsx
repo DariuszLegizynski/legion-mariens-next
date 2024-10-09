@@ -84,7 +84,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 	}
 
 	return (
-		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
+		<section className="fixed inset-0 flex items-center justify-center z-20 fade-in" onClick={onClose}>
 			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
 				<div onClick={onClose} className="flex justify-end items-center gap-x-1 pb-4">
 					{isAuth && <BaseButton onClick={handleEditRedirect} buttonType="close" iconType="edit" width="1.2rem" height="1.2rem" />}
@@ -93,7 +93,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
 				{showDeleteOptions || showEditOptions ? (
-					<div className="flex flex-col items-center">
+					<div className="flex flex-col items-center fade-in">
 						<p className="mb-4">
 							Wollen sie die ganze Serie {showDeleteOptions && `löschen`}
 							{showEditOptions && `bearbeiten`} oder nur diesen Termin?
@@ -133,7 +133,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 						</div>
 					</div>
 				) : (
-					<section className="grid md:grid-cols-2">
+					<section className="grid md:grid-cols-2 fade-in">
 						<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0 md:grid md:grid-cols-1 md:justify-items-end md:pr-8">
 							<div className="grid auto-rows-auto grid-cols-1">
 								<p className="text-[1.375rem] text-primary mb-1.5">{startDate}</p>
