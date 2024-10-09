@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Event } from "@/types/Event"
 import BaseButton from "@/components/base/BaseButton"
 import { Child, Content } from "@/types/LandingPage"
+import IconItems from "@/components/base/IconItems"
 
 const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose: () => void; isAuth: boolean }) => {
 	if (!eventItem) return null
@@ -17,6 +18,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 		e.stopPropagation()
 		if (eventItem?.attributes?.repeat) {
 			setShowDeleteOptions(true)
+			setShowEditOptions(false)
 			return
 		}
 
@@ -35,6 +37,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 	const stepBack = (e: React.MouseEvent) => {
 		e.stopPropagation()
 		setShowDeleteOptions(false)
+		setShowEditOptions(false)
 	}
 
 	const handleModalClick = (e: React.MouseEvent) => {
@@ -55,6 +58,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 		e.stopPropagation()
 		if (eventItem?.attributes?.repeat) {
 			setShowEditOptions(true)
+			setShowDeleteOptions(false)
 			return
 		}
 
@@ -82,11 +86,10 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 	return (
 		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
 			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
-				<div onClick={onClose} className="flex justify-end items-center">
+				<div onClick={onClose} className="flex justify-end items-center gap-x-1 pb-4">
 					{isAuth && <BaseButton onClick={handleEditRedirect} buttonType="close" iconType="edit" width="1.2rem" height="1.2rem" />}
-					&nbsp;
+					<div className="pr-1" />
 					{isAuth && <BaseButton onClick={handleDeleteRedirect} buttonType="close" iconType="delete" width="1.2rem" height="1.2rem" />}
-					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
 				{showDeleteOptions || showEditOptions ? (
@@ -98,25 +101,33 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 						<div className="flex flex-col gap-4">
 							{showDeleteOptions && (
 								<>
-									<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer">
-										Diesen Termin löschen
+									<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer flex gap-x-4 items-center scale-on-hover">
+										<IconItems type="remove" width="1.2rem" height="1.2rem" />
+										<p>Diesen Termin löschen</p>
 									</div>
-									<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer">
-										Ganze Serie löschen
+									<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer flex gap-x-4 items-center scale-on-hover">
+										<IconItems type="remove-multiple" width="1.2rem" height="1.2rem" />
+										<p>Ganze Serie löschen</p>
 									</div>
 								</>
 							)}
 							{showEditOptions && (
 								<>
-									<div onClick={() => handleEditSingleOcurrence(startTime, eventItem?.attributes?.occurrenceId)} className="cursor-pointer">
-										Diesen Termin bearbeiten
+									<div
+										onClick={() => handleEditSingleOcurrence(startTime, eventItem?.attributes?.occurrenceId)}
+										className="cursor-pointer flex gap-x-2 items-center scale-on-hover"
+									>
+										<IconItems type="edit" width="1.2rem" height="1.2rem" />
+										<p>Diesen Termin bearbeiten</p>
 									</div>
-									<div onClick={handleEditSingleEventAndRecurringEvent} className="cursor-pointer">
-										Ganze Serie bearbeiten
+									<div onClick={handleEditSingleEventAndRecurringEvent} className="cursor-pointer flex gap-x-2 items-center scale-on-hover">
+										<IconItems type="edit-multiple" fillColor="#000" width="1.4rem" height="1.4rem" />
+										<p>Ganze Serie bearbeiten</p>
 									</div>
 								</>
 							)}
-							<div onClick={stepBack} className="cursor-pointer">
+							<div onClick={stepBack} className="cursor-pointer flex gap-x-2 items-center self-center scale-on-hover pt-2">
+								<IconItems type="back" fillColor="#000" width="1.4rem" height="1.4rem" />
 								Zurück
 							</div>
 						</div>
