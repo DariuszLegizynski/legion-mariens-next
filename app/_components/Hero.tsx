@@ -20,13 +20,15 @@ const Hero = async () => {
 				</Link>
 			)}
 			{centerImage?.data?.attributes && (
-				<Image
-					className="max-w-[400px] w-full md:max-w-[640px]"
-					src={`${process.env.API_URL}${centerImage?.data?.attributes?.url}`}
-					alt={`${process.env.API_URL}/${centerImage?.data?.attributes?.alternativeText}`}
-					width={400}
-					height={600}
-				/>
+				<Link href="/unsere-spiritualitaet/das-legionsbild">
+					<Image
+						className="max-w-[400px] w-full md:max-w-[640px] cursor-pointer"
+						src={`${process.env.API_URL}${centerImage?.data?.attributes?.url}`}
+						alt={`${process.env.API_URL}/${centerImage?.data?.attributes?.alternativeText}`}
+						width={400}
+						height={600}
+					/>
+				</Link>
 			)}
 			{rightImage?.data?.attributes && (
 				<Image
