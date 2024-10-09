@@ -77,7 +77,7 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 						<div className="strong inline-flex items-start">{eventItem.attributes?.title}</div>
 						<small className="inline-flex items-center py-1">für {eventItem.attributes?.participantRestriction?.split("für")[1]?.trim()}</small>
 						<div className="flex justify-between items-end w-full">
-							<p>
+							<p className="truncate">
 								{eventItem?.attributes?.event_state?.data?.attributes?.abbreviation}&nbsp;|&nbsp;{eventItem?.attributes?.arrival?.city}
 							</p>
 							<p className="text-right">&rarr;</p>
