@@ -42,12 +42,6 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 		minute: "numeric",
 	})
 
-	// const startTime = format(new Date(eventItem.attributes?.startTime), "dd.MM.yyyy")
-	// const day = format(new Date(startTime), "d")
-	// const month = format(new Date(startTime), "MMM")
-	// const year = format(new Date(startTime), "yyyy")
-	// const time = format(new Date(startTime), "HH:mm")
-
 	return (
 		<>
 			{shouldAnimate && (

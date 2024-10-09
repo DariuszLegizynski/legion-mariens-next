@@ -18,7 +18,6 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 	const [name, setName] = useState("")
 	const [surname, setSurname] = useState("")
 
-	// Fetch event details
 	useEffect(() => {
 		const fetchEventData = async () => {
 			try {
