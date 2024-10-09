@@ -18,7 +18,6 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 	const [name, setName] = useState("")
 	const [surname, setSurname] = useState("")
 
-	// Fetch event details
 	useEffect(() => {
 		const fetchEventData = async () => {
 			try {
@@ -32,9 +31,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 		fetchEventData()
 	}, [params.id])
 
-	let startTime = null
-	sessionStorage.removeItem("deleteSingleStartTime")
-	startTime = sessionStorage.getItem("deleteSingleStartTime") ? sessionStorage.getItem("deleteSingleStartTime") : eventData?.attributes?.startTime
+	let startTime = sessionStorage.getItem("deleteSingleStartTime") ? sessionStorage.getItem("deleteSingleStartTime") : eventData?.attributes?.startTime
 
 	// Handle event deletion
 	const handleDeleteEvent = async () => {
@@ -59,6 +56,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 				name,
 				surname,
 				exceptionDate: startTime,
+				isExcluded: true,
 				publishedAt: null,
 			},
 		}
@@ -71,7 +69,7 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 				router.push("/termine")
 				return
 			}
-			await createStrapiAuthData(`delete-event-requests`, deleteEventData, jwt!)
+			await createStrapiAuthData(`event-delete-requests`, deleteEventData, jwt!)
 			sessionStorage.removeItem("deleteSingleStartTime")
 			setLoading(false)
 			router.push("/termine")
@@ -81,8 +79,6 @@ const DeleteEvent = ({ params }: { params: { id: string } }) => {
 			setError(error.message)
 		}
 	}
-	console.log("eventData: ", eventData)
-	console.log("start Time: ", eventData?.attributes?.startTime)
 
 	if (!eventData) return <p className="text-center my-24">Loading...</p>
 	if (error) return <p className="text-center my-24">{error}</p>

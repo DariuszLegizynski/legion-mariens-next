@@ -6,16 +6,19 @@ import { useState } from "react"
 import { Event } from "@/types/Event"
 import BaseButton from "@/components/base/BaseButton"
 import { Child, Content } from "@/types/LandingPage"
+import IconItems from "@/components/base/IconItems"
 
 const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose: () => void; isAuth: boolean }) => {
 	if (!eventItem) return null
 	const [showDeleteOptions, setShowDeleteOptions] = useState(false)
+	const [showEditOptions, setShowEditOptions] = useState(false)
 	const router = useRouter()
 
 	const handleDeleteRedirect = (e: React.MouseEvent) => {
 		e.stopPropagation()
 		if (eventItem?.attributes?.repeat) {
 			setShowDeleteOptions(true)
+			setShowEditOptions(false)
 			return
 		}
 
@@ -34,26 +37,40 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 	const stepBack = (e: React.MouseEvent) => {
 		e.stopPropagation()
 		setShowDeleteOptions(false)
+		setShowEditOptions(false)
 	}
 
 	const handleModalClick = (e: React.MouseEvent) => {
 		e.stopPropagation()
 	}
-	console.log("eventItem.attributes?.startTime: ", eventItem.attributes?.startTime)
+
+	const handleEditSingleEventAndRecurringEvent = () => {
+		router.push(`/termine/edit/${eventItem.id}`)
+	}
+
+	const handleEditSingleOcurrence = (startTime: string, occurrenceId: string) => {
+		sessionStorage.setItem("editSingleStartTime", startTime)
+		sessionStorage.setItem("editSingleOccurrenceId", occurrenceId)
+		router.push(`/termine/edit/${eventItem.id}`)
+	}
+
+	const handleEditRedirect = (e: React.MouseEvent) => {
+		e.stopPropagation()
+		if (eventItem?.attributes?.repeat) {
+			setShowEditOptions(true)
+			setShowDeleteOptions(false)
+			return
+		}
+
+		handleEditSingleEventAndRecurringEvent()
+	}
+
 	let startTime = new Date(eventItem.attributes?.startTime)
 	const startDate = startTime.toLocaleDateString("de-DE", {
 		day: "numeric",
 		month: "long",
 		year: "numeric",
 	})
-
-	// const startTimeISO = startTime.toLocaleDateString("de-DE", {
-	// 	day: "2-digit",
-	// 	month: "2-digit",
-	// 	year: "numeric",
-	// 	hour: "2-digit",
-	// 	minute: "2-digit",
-	// })
 
 	let endDate: string | undefined
 
@@ -67,33 +84,56 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 	}
 
 	return (
-		<section className="fixed inset-0 flex items-center justify-center z-20" onClick={onClose}>
+		<section className="fixed inset-0 flex items-center justify-center z-20 fade-in" onClick={onClose}>
 			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
-				<div onClick={onClose} className="flex justify-end items-center">
-					{/* {isAuth && <p>EDIT</p>} */}
-					&nbsp;
+				<div onClick={onClose} className="flex justify-end items-center gap-x-1 pb-4">
+					{isAuth && <BaseButton onClick={handleEditRedirect} buttonType="close" iconType="edit" width="1.2rem" height="1.2rem" />}
+					<div className="pr-1" />
 					{isAuth && <BaseButton onClick={handleDeleteRedirect} buttonType="close" iconType="delete" width="1.2rem" height="1.2rem" />}
-					&nbsp;
 					<BaseButton buttonType="close" iconType="close" width="2rem" height="2rem" />
 				</div>
-				{showDeleteOptions ? (
-					// Show the delete options (buttons) in the DOM
-					<div className="flex flex-col items-center">
-						<p className="mb-4">Wollen sie die ganze Serie löschen oder nur diesen Termin?</p>
+				{showDeleteOptions || showEditOptions ? (
+					<div className="flex flex-col items-center fade-in">
+						<p className="mb-4">
+							Wollen sie die ganze Serie {showDeleteOptions && `löschen`}
+							{showEditOptions && `bearbeiten`} oder nur diesen Termin?
+						</p>
 						<div className="flex flex-col gap-4">
-							<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer">
-								Diesen Termin löschen
-							</div>
-							<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer">
-								Ganze Serie löschen
-							</div>
-							<div onClick={stepBack} className="cursor-pointer">
+							{showDeleteOptions && (
+								<>
+									<div onClick={() => handleDeleteSingleOcurrence(startTime)} className="cursor-pointer flex gap-x-4 items-center scale-on-hover">
+										<IconItems type="remove" width="1.2rem" height="1.2rem" />
+										<p>Diesen Termin löschen</p>
+									</div>
+									<div onClick={handleDeleteSingleEventAndRecurringEvent} className="cursor-pointer flex gap-x-4 items-center scale-on-hover">
+										<IconItems type="remove-multiple" width="1.2rem" height="1.2rem" />
+										<p>Ganze Serie löschen</p>
+									</div>
+								</>
+							)}
+							{showEditOptions && (
+								<>
+									<div
+										onClick={() => handleEditSingleOcurrence(startTime, eventItem?.attributes?.occurrenceId)}
+										className="cursor-pointer flex gap-x-2 items-center scale-on-hover"
+									>
+										<IconItems type="edit" width="1.2rem" height="1.2rem" />
+										<p>Diesen Termin bearbeiten</p>
+									</div>
+									<div onClick={handleEditSingleEventAndRecurringEvent} className="cursor-pointer flex gap-x-2 items-center scale-on-hover">
+										<IconItems type="edit-multiple" fillColor="#000" width="1.4rem" height="1.4rem" />
+										<p>Ganze Serie bearbeiten</p>
+									</div>
+								</>
+							)}
+							<div onClick={stepBack} className="cursor-pointer flex gap-x-2 items-center self-center scale-on-hover pt-2">
+								<IconItems type="back" fillColor="#000" width="1.4rem" height="1.4rem" />
 								Zurück
 							</div>
 						</div>
 					</div>
 				) : (
-					<section className="grid md:grid-cols-2">
+					<section className="grid md:grid-cols-2 fade-in">
 						<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0 md:grid md:grid-cols-1 md:justify-items-end md:pr-8">
 							<div className="grid auto-rows-auto grid-cols-1">
 								<p className="text-[1.375rem] text-primary mb-1.5">{startDate}</p>

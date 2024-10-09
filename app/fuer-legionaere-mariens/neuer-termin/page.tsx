@@ -4,10 +4,7 @@ import Cookies from "js-cookie"
 import BaseButton from "@/components/base/BaseButton"
 import { createStrapiAuthData, getStrapiData } from "@/app/_utils/services/getStrapiData"
 import Select from "react-select"
-import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker"
-import { de } from "date-fns/locale/de"
-registerLocale("de", de)
-setDefaultLocale("de")
+import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
 const CreateEvent = () => {
@@ -40,7 +37,7 @@ const CreateEvent = () => {
 	const [assignments, setAssignments] = useState([])
 	const [states, setStates] = useState([])
 	const [selectedCategories, setSelectedCategories] = useState([])
-	const [selectedAssignments, setSelectedAssignments] = useState([])
+	const [selectedAssignment, setSelectedAssignment] = useState([])
 	const [selectedState, setSelectedState] = useState([])
 	const [registration, setRegistration] = useState({
 		isRegistration: false,
@@ -90,15 +87,6 @@ const CreateEvent = () => {
 		placeholder: styles => ({ ...styles, color: primaryColour }),
 	}
 
-	console.log({ repeat })
-	console.log("repeat.recurrenceType: ", repeat.recurrenceType)
-
-	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		console.log("Selected value:", e.target.value) // Logs the selected value
-		// setRepeat({ ...repeat, recurrenceType: e.target.value })
-		// console.log("Updated state:", repeat) // Logs the updated state after change
-	}
-
 	const jwt = Cookies.get("jwt")
 
 	const handleCreateEvent = async () => {
@@ -110,7 +98,7 @@ const CreateEvent = () => {
 				categories: selectedCategories.map(category => category.id),
 				startTime,
 				endTime,
-				event_assignment: selectedAssignments.id,
+				event_assignment: selectedAssignment.id,
 				description,
 				arrival,
 				event_state: selectedState.id,
@@ -136,11 +124,11 @@ const CreateEvent = () => {
 	}
 
 	const categoriesOptions = categories.map(category => {
-		return { id: category.id, value: category.attributes.category, label: category.attributes?.category }
+		return { id: category.id, value: category?.attributes?.category, label: category.attributes?.category }
 	})
 
 	const assignmentOptions = assignments.map(assignment => {
-		return { id: assignment.id, value: assignment.attributes.name, label: assignment.attributes?.name }
+		return { id: assignment.id, value: assignment?.attributes?.name, label: assignment.attributes?.name }
 	})
 
 	const stateOptions = states.map(state => {
@@ -205,7 +193,6 @@ const CreateEvent = () => {
 				<div className="grid grid-cols-1 justify-center mt-4 mb-2">
 					<DatePicker
 						selected={startTime}
-						locale="de"
 						timeFormat="HH:mm"
 						timeIntervals={15}
 						showTimeSelect
@@ -219,7 +206,6 @@ const CreateEvent = () => {
 				<div className="grid grid-cols-1 justify-center mt-4 mb-2">
 					<DatePicker
 						selected={endTime}
-						locale="de"
 						timeFormat="HH:mm"
 						timeIntervals={15}
 						showTimeSelect
@@ -252,8 +238,8 @@ const CreateEvent = () => {
 						instanceId="unique-select-assignment-id"
 						placeholder="Zuordnen"
 						styles={customStyles}
-						defaultValue={selectedAssignments}
-						onChange={setSelectedAssignments}
+						defaultValue={selectedAssignment}
+						onChange={setSelectedAssignment}
 						options={assignmentOptions}
 					/>
 				</div>
@@ -361,7 +347,6 @@ const CreateEvent = () => {
 							<div className="hidden sm:block sm:mb-2" />
 							<DatePicker
 								selected={repeat.recurrenceEndDate}
-								locale="de"
 								timeFormat="HH:mm"
 								timeIntervals={15}
 								showTimeSelect
@@ -378,7 +363,7 @@ const CreateEvent = () => {
 
 				<div className="grid grid-cols-[1fr_16px] sm:mt-4 sm:min-w-72">
 					<label className="text-nowrap" htmlFor="isRegistration">
-						Registrierung notwendig? *
+						Anmeldung erforderlich? *
 					</label>
 					<input
 						type="checkbox"

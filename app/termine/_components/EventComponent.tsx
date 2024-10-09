@@ -10,7 +10,9 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 	const [shouldAnimate, setShouldAnimate] = useState<boolean>(true)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
-	sessionStorage.removeItem("deleteSingleStartDate")
+	sessionStorage.removeItem("deleteSingleStartTime")
+	sessionStorage.removeItem("editSingleStartTime")
+	sessionStorage.removeItem("editSingleOccurrenceId")
 
 	useEffect(() => {
 		if (!isVisible) {
@@ -40,18 +42,12 @@ const EventComponent = ({ eventItem, isVisible }: { eventItem: Event; isVisible:
 		minute: "numeric",
 	})
 
-	// const startTime = format(new Date(eventItem.attributes?.startTime), "dd.MM.yyyy")
-	// const day = format(new Date(startTime), "d")
-	// const month = format(new Date(startTime), "MMM")
-	// const year = format(new Date(startTime), "yyyy")
-	// const time = format(new Date(startTime), "HH:mm")
-
 	return (
 		<>
 			{shouldAnimate && (
 				<section
 					onClick={() => setIsModalOpen(true)}
-					className={`grid grid-cols-[auto_1fr] gap-x-8 min-h-[8.5rem] border border-grey border-b-primary border-b-[3px] py-3 px-4 w-full max-w-96 cursor-pointer ${
+					className={`grid grid-cols-[auto_1fr] gap-x-8 min-h-[8.5rem] border border-grey border-b-primary border-b-[3px] py-3 px-4 w-full max-w-96 cursor-pointer scale-on-hover ${
 						isVisible ? "slide-up" : "slide-down"
 					}`}
 				>
