@@ -8,7 +8,7 @@ const TitleContent = ({ title, content, headerType = "h2" }: { title: string; co
 				dangerouslySetInnerHTML={{
 					__html: content?.map((item: Content) => item.children.map((child: Child) => child.text).join("")).join(""),
 				}}
-				className="text-left mt-4 grid gap-y-4"
+				className="text-left mt-4"
 			/>
 		</section>
 	)
