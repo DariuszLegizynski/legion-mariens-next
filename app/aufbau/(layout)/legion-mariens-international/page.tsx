@@ -7,8 +7,8 @@ const LegionInternational = async () => {
 	const internationalData = international?.data?.attributes
 
 	return (
-		<article className="my-24 max-container">
-			<section className="mx-4">
+		<article className="my-24">
+			<section className="mx-4 max-container">
 				<h1 className="text-left mb-16">{internationalData.title}</h1>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
 					{internationalData.international.map(internationalItem => (
@@ -18,21 +18,21 @@ const LegionInternational = async () => {
 			</section>
 
 			<section className="bg-grey-light w-screen h-auto pt-12">
-				<div className="grid gap-y-4 pl-8 pb-12">
+				<div className="grid gap-y-4 pl-8 pb-12 lg:grid-cols-3 max-container">
 					<div className="flex items-center gap-x-2">
 						<div className="size-4 bg-accent" />
-						<span>Vom Senatus Österreich mitbetreute Länder</span>
+						<span>Vom Senatus Österreich mitbetreute Länder.</span>
 					</div>
 					<div className="flex items-center gap-x-2">
 						<div className="size-4 bg-blue" />
-						<span>Länder in denen die Legion Mariens vertreten ist.</span>
+						<span>Länder in denen die Legion Mariens vertreten&nbsp;ist.</span>
 					</div>
 					<div className="flex items-center gap-x-2">
 						<div className="size-4 bg-white" />
-						<span>Vom Senatus Österreich mitbetreute Länder</span>
+						<span>Vom Senatus Österreich mitbetreute Länder.</span>
 					</div>
 				</div>
-				<div className="">
+				<div className="max-container">
 					<WorldMapLegion width="100%" height="100%" />
 				</div>
 			</section>
