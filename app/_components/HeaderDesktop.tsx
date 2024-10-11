@@ -66,13 +66,20 @@ const HeaderDesktop = () => {
 								{item.subCategory ? (
 									<p
 										onClick={() => handleCategoryClick(item.id + item.linkName)}
-										className={`text-primary text-xs xl:text-sm cursor-pointer ${
+										className={`text-primary text-nowrap text-xs xl:text-sm cursor-pointer flex items-center ${
 											index === headerData.length - 1
 												? ""
-												: 'after:pl-[0.25rem] after:pr-[0.45rem] xl:after:pl-[0.35rem] xl:after:pr-[0.55rem] after:content-["|"]'
+												: 'after:pl-[0.1rem] after:pr-[0.25rem] xl:after:pl-[0.15rem] xl:after:pr-[0.25rem] after:content-["|"]'
 										}`}
 									>
 										{item.linkName}
+										<IconItems
+											type="rarr"
+											fillColor="#3C52A3"
+											width="1.3rem"
+											height="1.3rem"
+											rotation={expandedCategoryId === item.id + item.linkName ? true : false}
+										/>
 									</p>
 								) : (
 									<Link onClick={() => handleCategoryClick(null)} href={`${item.linkPath}`}>

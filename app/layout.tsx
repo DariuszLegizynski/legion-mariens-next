@@ -4,6 +4,7 @@ import HeaderDesktop from "@/app/_components/HeaderDesktop"
 import HeaderMobile from "@/app/_components/HeaderMobile"
 import Hero from "@/app/_components/Hero"
 import Footer from "@/app/_components/Footer"
+import ClientLayout from "@/app/_components/ClientLayout"
 
 export const metadata: Metadata = {
 	title: "Legion Mariens Österreich",
@@ -16,15 +17,13 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang="en">
+		<html lang="de">
 			<body>
 				<article className="mt-8">
 					<HeaderMobile />
 					<HeaderDesktop />
-					<div className="max-container">
-						<Hero />
-						{children}
-					</div>
+					<Hero />
+					<ClientLayout>{children}</ClientLayout>
 					<Footer />
 				</article>
 			</body>
