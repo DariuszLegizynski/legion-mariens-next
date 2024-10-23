@@ -278,7 +278,6 @@ const EditEvent = ({ params }: { params: { id: string } }) => {
 					isRegistration: registration.isRegistration,
 					registrationDescription: registration.registrationDescription,
 				},
-				publishedAt: null,
 				applicant: {
 					name: applicant.name,
 					surname: applicant.surname,
