@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import Cookies from "js-cookie"
@@ -18,6 +18,8 @@ const HeaderDesktop = () => {
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+
+	const headerRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -53,8 +55,21 @@ const HeaderDesktop = () => {
 		setIsHeaderActive(false)
 	}
 
+	const handleClickOutside = (event: MouseEvent) => {
+		if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+			setExpandedCategoryId(null)
+		}
+	}
+
+	useEffect(() => {
+		document.addEventListener("mousedown", handleClickOutside)
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [])
+
 	return (
-		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[5000] bg-white border-b-2 border-grey w-full hidden lg:block`}>
+		<header ref={headerRef} className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[5000] bg-white border-b-2 border-grey w-full hidden lg:block`}>
 			<div className="max-container">
 				<section className="grid grid-cols-[auto_auto_auto]">
 					<Link href="/" onClick={() => handleCategoryClick(null)}>

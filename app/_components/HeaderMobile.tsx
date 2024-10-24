@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import Cookies from "js-cookie"
@@ -19,6 +19,8 @@ const HeaderMobile = () => {
 	const [headerData, setHeaderData] = useState([])
 	const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null)
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+
+	const headerRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -51,8 +53,21 @@ const HeaderMobile = () => {
 		}
 	}
 
+	const handleClickOutside = (event: MouseEvent) => {
+		if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+			setIsBurgerActive(false)
+		}
+	}
+
+	useEffect(() => {
+		document.addEventListener("mousedown", handleClickOutside)
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [])
+
 	return (
-		<header className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[5000] bg-white border-b-2 border-grey w-full lg:hidden`}>
+		<header ref={headerRef} className={`fixed top-0 left-0 items-center px-2 pt-4 pb-2 h-auto z-[5000] bg-white border-b-2 border-grey w-full lg:hidden`}>
 			<section className="grid grid-cols-[1fr_1fr_1fr]">
 				<div
 					onClick={() => {
