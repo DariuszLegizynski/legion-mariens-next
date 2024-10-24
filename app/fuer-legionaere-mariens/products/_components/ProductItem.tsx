@@ -39,7 +39,7 @@ const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: b
 	}, [amount])
 
 	return (
-		<article className="border border-grey rounded-lg p-2 max-w-64 w-full sm:max-w-72 h-full">
+		<article className="border-2 border-grey rounded-lg p-2 max-w-64 w-full sm:max-w-72 h-full hover:border-primary active:border-primary hover:shadow-primary hover:shadow-md">
 			<Image
 				className="h-80 p-1.5 w-full object-contain mx-auto"
 				src={`${process.env.API_URL}${productItem.attributes?.image.data?.attributes?.url}`}
@@ -61,19 +61,19 @@ const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: b
 				<div className="flex flex-col mt-4">
 					<p>Auf Lager: {warehouseQuantity}</p>
 					<div className="flex justify-start items-center my-4">
-						<div className="grid grid-cols-3 border">
-							<button className="px-4 py-2" onClick={handleDecrease}>
+						<div className="grid grid-cols-[1fr_auto_1fr] border">
+							<button className="px-3 py-1.5" onClick={handleDecrease}>
 								-
 							</button>
 							<input
 								type="number"
-								className="px-4 py-2 text-center w-16 !border-none"
+								className="text-center !min-w-max !p-0 !border-none"
 								value={amount}
 								onChange={handleAmountChange}
 								min={0}
 								max={productItem.attributes?.quantity}
 							/>
-							<button className="px-4 py-2" onClick={handleIncrease}>
+							<button className="px-3 py-1.5" onClick={handleIncrease}>
 								+
 							</button>
 						</div>

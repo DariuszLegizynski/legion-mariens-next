@@ -123,8 +123,8 @@ const Checkout = () => {
 						<input className="w-72 max-w-full" type="place" id="place" name="place" onChange={e => setPlace(e.target.value)} />
 					</div>
 					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
-						<label htmlFor="email">Legionsrat:</label>
-						<input className="w-72 max-w-full" type="legion" id="legion" name="legion" onChange={e => setLegion(e.target.value)} />
+						<label htmlFor="email">Legionsrat/Presidium: *</label>
+						<input className="w-72 max-w-full" type="legion" id="legion" name="legion" required onChange={e => setLegion(e.target.value)} />
 					</div>
 					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
 						<label htmlFor="email">PLZ: *</label>
@@ -139,8 +139,8 @@ const Checkout = () => {
 						<input className="w-72 max-w-full" type="phone" name="phone" required onChange={e => setPhone(e.target.value)} />
 					</div>
 					<div className="grid grid-rows-[26px_1fr] justify-center gap-2 w-full">
-						<label htmlFor="email">Email:</label>
-						<input className="w-72 max-w-full" type="email" id="email" name="email" onChange={e => setEmail(e.target.value)} />
+						<label htmlFor="email">Email: *</label>
+						<input className="w-72 max-w-full" type="email" id="email" name="email" required onChange={e => setEmail(e.target.value)} />
 					</div>
 					<div className="col-span-full mx-auto mt-12">
 						<BaseButton onClick={handleOrder} isDisabled={loading} buttonType="cart" text="Kostenpflichtig bestellen" />
