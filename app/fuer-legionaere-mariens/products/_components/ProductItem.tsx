@@ -39,7 +39,7 @@ const ProductComponent: FC<{ productItem: Product; handleToCart: any; loading: b
 	}, [amount])
 
 	return (
-		<article className="border border-grey rounded-lg p-2 max-w-64 w-full sm:max-w-72 h-full">
+		<article className="border-2 border-grey rounded-lg p-2 max-w-64 w-full sm:max-w-72 h-full hover:border-primary active:border-primary hover:shadow-primary hover:shadow-md">
 			<Image
 				className="h-80 p-1.5 w-full object-contain mx-auto"
 				src={`${process.env.API_URL}${productItem.attributes?.image.data?.attributes?.url}`}
