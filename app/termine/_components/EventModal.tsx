@@ -85,7 +85,10 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 
 	return (
 		<section className="fixed inset-0 flex items-center justify-center z-20 fade-in" onClick={onClose}>
-			<div className="bg-white mx-4 px-6 py-16 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6" onClick={handleModalClick}>
+			<div
+				className="bg-white mx-4 px-6 py-16 md:max-w-[800px] lg:max-w-[960px] xl:max-w-[1024px] lg:pb-24 shadow-lg w-auto max-h-full overflow-y-auto z-30 xs:py-6"
+				onClick={handleModalClick}
+			>
 				<div onClick={onClose} className="flex justify-end items-center gap-x-1 pb-4">
 					{isAuth && <BaseButton onClick={handleEditRedirect} buttonType="close" iconType="edit" width="1.2rem" height="1.2rem" />}
 					<div className="pr-1" />
@@ -135,14 +138,14 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 				) : (
 					<section className="grid md:grid-cols-2 fade-in">
 						<div className="border-l-[3px] border-primary pl-1.5 md:border-l-0 md:grid md:grid-cols-1 md:justify-items-end md:pr-8">
-							<div className="grid auto-rows-auto grid-cols-1">
-								<p className="text-[1.375rem] text-primary mb-1.5">{startDate}</p>
-								{endDate && <p className="text-[1.375rem] text-primary mb-1.5">&nbsp;- {endDate}</p>}
+							<div className="flex flex-col sm:flex-row md:flex-col lg:flex-row ">
+								<span className="text-[1.375rem] text-primary mb-3">{startDate}</span>
+								{endDate && <span className="text-[1.375rem] text-primary mb-3">&nbsp;- {endDate}</span>}
 							</div>
 							<p>
 								{eventItem.attributes?.arrival?.street} {eventItem.attributes?.arrival?.number}
-								{eventItem.attributes?.arrival?.addressAddition}
 							</p>
+							<p>{eventItem.attributes?.arrival?.addressAddition}</p>
 							<p>
 								{eventItem.attributes?.arrival?.city}, {eventItem.attributes?.arrival?.country}
 							</p>
@@ -162,7 +165,7 @@ const EventModal = ({ eventItem, onClose, isAuth }: { eventItem: Event; onClose:
 								<Link href={`mailto:${eventItem.attributes?.arrival?.email}`}>{eventItem.attributes?.arrival?.email}</Link>
 							</p>
 						</div>
-						<div className="py-4 md:border-primary md:border-l-[3px] md:pl-6 md:h-fit md:py-0">
+						<div className="py-4 md:border-primary md:border-l-[3px] md:pl-6 md:pr-24 md:h-fit md:py-0">
 							<div className="h1 !normal-case">{eventItem.attributes?.title}</div>
 							<i>{eventItem?.attributes?.categories?.data?.map(cat => cat.attributes?.category)}</i>
 							<div
